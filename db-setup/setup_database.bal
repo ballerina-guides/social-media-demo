@@ -17,6 +17,9 @@ public function main() returns sql:Error? {
     _ = check mysqlClient->execute(`CREATE TABLE social_media_database.post (
                                         id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                         description varchar(255),
+                                        category varchar(255),
+                                        created_date date,
+                                        tags varchar(255),
                                         user_id int
                                     );`);
 
@@ -35,14 +38,14 @@ public function main() returns sql:Error? {
 
 
     // Adds the records to the `artists` table.
-    _ = check mysqlClient->execute(`INSERT INTO social_media_database.post(description, user_id)
-                                    VALUES ('I want to learn AWS', 1);`);
-    _ = check mysqlClient->execute(`INSERT INTO social_media_database.post(description, user_id)
-                                    VALUES ('I want to learn DevOps', 1);`);
-    _ = check mysqlClient->execute(`INSERT INTO social_media_database.post(description, user_id)
-                                    VALUES ('I want to learn GCP', 2);`);
-    _ = check mysqlClient->execute(`INSERT INTO social_media_database.post(description, user_id)
-                                    VALUES ('I want to learn multi cloud', 3);`);
+    _ = check mysqlClient->execute(`INSERT INTO social_media_database.post(description, category, created_date, tags, user_id)
+                                    VALUES ('I want to learn AWS', 'education', CURDATE(), 'aws, cloud, learn',1);`);
+    _ = check mysqlClient->execute(`INSERT INTO social_media_database.post(description, category, created_date, tags, user_id)
+                                    VALUES ('I want to learn DevOps', 'education', CURDATE(), 'devops, infra, learn', 1);`);
+    _ = check mysqlClient->execute(`INSERT INTO social_media_database.post(description, category, created_date, tags, user_id)
+                                    VALUES ('I want to learn GCP', 'education', CURDATE(), 'gcp, google, learn', 2);`);
+    _ = check mysqlClient->execute(`INSERT INTO social_media_database.post(description, category, created_date, tags, user_id)
+                                    VALUES ('I want to learn multi cloud', 'education', CURDATE(), 'gcp, aws, azure, infra, learn', 3);`);
 
     check mysqlClient.close();
 }

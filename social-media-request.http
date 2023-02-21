@@ -25,7 +25,9 @@ POST http://localhost:9090/social-media/users/3/posts
 content-type: application/json
 
 {
-    "description": "I wang to learn GCP"
+    "description": "I wang to learn Azure",
+    "tags": "azure,cloud,devops",
+    "category": "education"
 }
 
 ### Delete a user

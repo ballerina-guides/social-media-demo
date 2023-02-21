@@ -1,6 +1,5 @@
 import ballerina/http;
 import ballerina/sql;
-import ballerina/mime;
 import ballerinax/mysql.driver as _;
 import ballerinax/mysql;
 import ballerina/log;
@@ -93,7 +92,7 @@ service /social\-media on socialMediaListener {
             return userNotFound;
         }
 
-        stream<Post, sql:Error?> postStream = self.socialMediaDb->query(`SELECT id, description FROM social_media_database.post WHERE user_id = ${id}`);
+        stream<Post, sql:Error?> postStream = self.socialMediaDb->query(`SELECT id, description, category, created_date, tags FROM social_media_database.post WHERE user_id = ${id}`);
         Post[]|error posts = from Post post in postStream
             select post;
         return posts;
@@ -114,7 +113,7 @@ service /social\-media on socialMediaListener {
         }
 
         Sentiment sentiment = check self.sentimentEndpoint->/text\-processing/api/sentiment.post(
-            { text: newPost }
+            { text: newPost.description }
         );
         if sentiment.label == "neg" {
             ErrorDetails errorDetails = buildErrorPayload(string `id: ${id}`, string `users/${id}/posts`);
@@ -125,8 +124,8 @@ service /social\-media on socialMediaListener {
         }
 
         _ = check self.socialMediaDb->execute(`
-            INSERT INTO social_media_database.post(description, user_id)
-            VALUES (${newPost.description}, ${id});`);
+            INSERT INTO social_media_database.post(description, category, created_date, tags, user_id)
+            VALUES (${newPost.description}, ${newPost.category}, CURDATE(), ${newPost.tags}, ${id});`);
         return http:CREATED;
     }
 }
