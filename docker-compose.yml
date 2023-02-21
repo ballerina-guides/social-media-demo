@@ -2,7 +2,7 @@ version: '2.14.0'
 
 services:
   social-media:
-    image: 'shafreen/ballerina-social-media:0.0.1'
+    image: 'shafreen/social-media:0.0.1'
     ports:
       - '9090:9090'
     depends_on: 
@@ -12,7 +12,7 @@ services:
     network_mode: "host"
   
   sentiment-analysis:
-    image: 'shafreen/ballerina-sentiment-api:0.0.1'
+    image: 'shafreen/sentiment-api:0.0.1'
     ports:
       - '9099:9099'
     depends_on: 
@@ -28,6 +28,6 @@ services:
     network_mode: "host"
 
   mysql-setup:
-    image: 'shafreen/ballerina-db-setup:0.0.1'
+    image: 'shafreen/db-setup:0.0.1'
     network_mode: "host"
 

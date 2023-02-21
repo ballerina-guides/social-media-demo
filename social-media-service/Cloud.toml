@@ -1,6 +1,6 @@
 [container.image]
 repository="shafreen"
-name="ballerina-social-media"
+name="social-media"
 tag="0.0.1"
 
 [[container.copy.files]]
