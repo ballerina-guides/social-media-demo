@@ -1,0 +1,13 @@
+version: '2.14.0'
+
+services:
+  mysql:
+    image: 'mysql:8-oracle'
+    ports:
+      - '3306:3306'
+    network_mode: "host"
+    environment:
+      - MYSQL_ROOT_PASSWORD=dummypassword
+      - MYSQL_DATABASE=social_media_database
+      - MYSQL_USER=social_media_user
+      - MYSQL_PASSWORD=dummypassword

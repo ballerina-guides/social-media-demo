@@ -1,0 +1,33 @@
+version: '2.14.0'
+
+services:
+  social-media:
+    image: 'shafreen/ballerina-social-media:0.0.1'
+    ports:
+      - '9090:9090'
+    depends_on: 
+      - jaeger
+      - sentiment-analysis
+      - mysql-setup
+    network_mode: "host"
+  
+  sentiment-analysis:
+    image: 'shafreen/ballerina-sentiment-api:0.0.1'
+    ports:
+      - '9099:9099'
+    depends_on: 
+      - jaeger
+    network_mode: "host"
+
+  jaeger:
+    image: 'jaegertracing/opentelemetry-all-in-one'
+    ports:
+      - '13133:13133'
+      - '16686:16686'
+      - '55680:55680'
+    network_mode: "host"
+
+  mysql-setup:
+    image: 'shafreen/ballerina-db-setup:0.0.1'
+    network_mode: "host"
+

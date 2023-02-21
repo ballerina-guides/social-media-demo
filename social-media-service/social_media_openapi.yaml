@@ -1,0 +1,289 @@
+openapi: 3.0.1
+info:
+  title: Social Media
+  version: 0.0.1
+servers:
+- url: "{server}:{port}/social-media"
+  variables:
+    server:
+      default: http://localhost
+    port:
+      default: "9090"
+paths:
+  /users:
+    get:
+      summary: Get all the users
+      operationId: getUsers
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        "500":
+          description: Found unexpected output
+          content:
+            text/plain:
+              schema:
+                type: string
+    post:
+      summary: Create a new user
+      operationId: postUsers
+      requestBody:
+        description: The user details of the new user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewUser'
+      responses:
+        "201":
+          description: Created
+        "500":
+          description: Found unexpected output
+          content:
+            text/plain:
+              schema:
+                type: string
+  /users/{id}:
+    get:
+      summary: Get a specific user
+      operationId: getUsersId
+      parameters:
+      - name: id
+        in: path
+        description: The user ID of the user to be retrived
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "404":
+          description: NotFound
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        "500":
+          description: Found unexpected output
+          content:
+            text/plain:
+              schema:
+                type: string
+    delete:
+      summary: Delete a user
+      operationId: deleteUsersId
+      parameters:
+      - name: id
+        in: path
+        description: The user ID of the user to be deleted
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "204":
+          description: NoContent
+        "500":
+          description: Found unexpected output
+          content:
+            text/plain:
+              schema:
+                type: string
+  /users/{id}/posts:
+    get:
+      summary: Get posts for a give user
+      operationId: getUsersIdPosts
+      parameters:
+      - name: id
+        in: path
+        description: The user ID for which posts are retrieved
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+        "404":
+          description: NotFound
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        "500":
+          description: Found unexpected output
+          content:
+            text/plain:
+              schema:
+                type: string
+    post:
+      summary: Create a post for a given user
+      operationId: postUsersIdPosts
+      parameters:
+      - name: id
+        in: path
+        description: The user ID for which the post is created
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewPost'
+      responses:
+        "201":
+          description: Created
+        "404":
+          description: NotFound
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        "500":
+          description: Found unexpected output
+          content:
+            text/plain:
+              schema:
+                type: string
+components:
+  schemas:
+    NewPost:
+      required:
+      - description
+      type: object
+      properties:
+        description:
+          type: string
+    User:
+      required:
+      - birthDate
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        birthDate:
+          $ref: '#/components/schemas/Date'
+    Utc:
+      type: array
+      items:
+        oneOf:
+        - type: integer
+          format: int64
+        - type: number
+          format: double
+    Post:
+      required:
+      - description
+      - id
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        description:
+          type: string
+    Seconds:
+      type: number
+      description: Holds the seconds as a decimal value.
+      format: double
+    ErrorDetails:
+      required:
+      - details
+      - message
+      - timeStamp
+      type: object
+      properties:
+        timeStamp:
+          $ref: '#/components/schemas/Utc'
+        message:
+          type: string
+        details:
+          type: string
+    OptionalTimeOfDayFields:
+      type: object
+      properties:
+        hour:
+          type: integer
+          format: int64
+        minute:
+          type: integer
+          format: int64
+        second:
+          $ref: '#/components/schemas/Seconds'
+    Date:
+      allOf:
+      - $ref: '#/components/schemas/DateFields'
+      - $ref: '#/components/schemas/OptionalTimeOfDayFields'
+      - type: object
+        properties:
+          utcOffset:
+            $ref: '#/components/schemas/ZoneOffset'
+    DateFields:
+      required:
+      - day
+      - month
+      - year
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int64
+        month:
+          type: integer
+          format: int64
+        day:
+          type: integer
+          format: int64
+    ZoneOffset:
+      required:
+      - hours
+      - minutes
+      type: object
+      properties:
+        hours:
+          type: integer
+          format: int64
+        minutes:
+          type: integer
+          format: int64
+        seconds:
+          type: number
+          format: double
+    NewUser:
+      required:
+      - birthDate
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+        birthDate:
+          $ref: '#/components/schemas/Date'

@@ -1,0 +1,4 @@
+[container.image]
+repository="shafreen"
+name="ballerina-db-setup"
+tag="0.0.1"

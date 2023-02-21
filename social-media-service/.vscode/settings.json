@@ -1,0 +1,5 @@
+{
+    "yaml.schemas": {
+        "swaggerviewer:openapi": "file:///Users/admin/Documents/source/springboot-and-ballerina/ballerina-user-rest-service/medium_openapi.yaml"
+    }
+}

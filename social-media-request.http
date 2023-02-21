@@ -1,0 +1,32 @@
+### Creat a user
+POST http://localhost:9090/social-media/users
+content-type: application/json
+
+{
+    "birthDate": {
+        "year": 1987,
+        "month": 02,
+        "day": 06
+    },
+    "name": "Rimas"
+}
+
+### Get users
+GET http://localhost:9090/social-media/users
+
+### Get a specific user
+GET http://localhost:9090/social-media/users/1
+
+### Get posts
+GET http://localhost:9090/social-media/users/3/posts
+
+### Create a post
+POST http://localhost:9090/social-media/users/3/posts
+content-type: application/json
+
+{
+    "description": "I wang to learn GCP"
+}
+
+### Delete a user
+DELETE http://localhost:9090/social-media/users/1
