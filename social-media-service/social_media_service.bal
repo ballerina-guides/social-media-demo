@@ -114,8 +114,7 @@ service /social\-media on socialMediaListener {
         }
 
         Sentiment sentiment = check self.sentimentEndpoint->/text\-processing/api/sentiment.post(
-            { text: newPost },
-            mediatype = mime:APPLICATION_FORM_URLENCODED
+            { text: newPost }
         );
         if sentiment.label == "neg" {
             ErrorDetails errorDetails = buildErrorPayload(string `id: ${id}`, string `users/${id}/posts`);

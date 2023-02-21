@@ -8,7 +8,7 @@ service /text\-processing on new http:Listener(9099) {
         log:printInfo("Sentiment analysis service started");
     }
 
-    resource function post api/sentiment(http:Request request) returns Sentiment {
+    resource function post api/sentiment(@http:Payload Post post) returns Sentiment {
         return {
             "probability": { 
                 "neg": 0.30135019761690551, 
@@ -29,5 +29,9 @@ type Probability record {
 type Sentiment record {
     Probability probability;
     string label;
+};
+
+type Post record {
+    string text;
 };
 
