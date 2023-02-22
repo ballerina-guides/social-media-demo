@@ -6,7 +6,7 @@ The sample is based on a simple API written for a social-media site (like twitte
 
 Following is the entity relationship diagram.
 
-<img src="er.png" alt="drawing" width='500'/>
+<img src="er.png" alt="drawing" width='700'/>
 
 Following are the features covered by the scenario.
 
