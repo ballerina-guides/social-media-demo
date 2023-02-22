@@ -15,14 +15,15 @@ Following are the features covered by the scenario.
 3. Configurability
 4. Data transformation with datamapper
 5. HTTP client
-6. Using connectors - twillio
-7. OpenAPI specification, client stubs and central
-8. Adding constraints/validations
-9. Security - OAuth2
-10. Error handlers
-11. Resiliency - Retry
-12. Observability - Tracing
-13. Docker image generation
+6. Writing tests
+7. Using connectors - twillio
+8. OpenAPI specification, client stubs and central
+9. Adding constraints/validations
+10. Security - OAuth2
+11. Error handlers
+12. Resiliency - Retry
+13. Observability - Tracing
+14. Docker image generation
 
 # Setup each environment
 
