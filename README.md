@@ -1,21 +1,27 @@
 # Ballerina Social Media Service
 
-The sample is based on a simple API written for a social-media site which has users and associated posts. Following is the high level component diagram.
+The sample is based on a simple API written for a social-media site (like twitter) which has users, associated posts and followers. Following is the high level component diagram.
 
 <img src="diagram.png" alt="drawing" width='500'/>
 
-Following are the features used for the implementation
+Following is the entity relationship diagram.
 
-1. Configuring verbs and URLs
-2. Error handlers for sending customized error messages
-3. Adding constraints/validations
-4. OpenAPI specification for Generating API docs
-5. Accessing database
-6. Configurability
-7. HTTP client 
-8. Resiliency - Retry
-9. Docker image generation
-10. Tracing
+<img src="er.png" alt="drawing" width='500'/>
+
+Following are the features covered by the scenario.
+
+1. Writing REST APIs with verbs, URLs, databinging and statuscodes
+2. Accessing database
+3. Configurability
+4. Data transformation with datamapper
+5. HTTP client
+6. Using connectors - twillio
+7. OpenAPI specification, client stubs and central
+8. Adding constraints/validations
+9. Error handlers
+10. Resiliency - Retry
+11. Observability - Tracing
+12. Docker image generation
 
 # Setup each environment
 
