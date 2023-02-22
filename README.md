@@ -18,10 +18,11 @@ Following are the features covered by the scenario.
 6. Using connectors - twillio
 7. OpenAPI specification, client stubs and central
 8. Adding constraints/validations
-9. Error handlers
-10. Resiliency - Retry
-11. Observability - Tracing
-12. Docker image generation
+9. Security - OAuth2
+10. Error handlers
+11. Resiliency - Retry
+12. Observability - Tracing
+13. Docker image generation
 
 # Setup each environment
 
