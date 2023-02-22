@@ -1,4 +1,4 @@
-# Ballerina Social Media Service
+# [Ballerina] Social Media Service
 
 The sample is based on a simple API written for a social-media site (like twitter) which has users, associated posts and followers. Following is the high level component diagram.
 
