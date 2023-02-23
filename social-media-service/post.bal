@@ -11,6 +11,17 @@ type Post record {|
     time:Date created_date;
 |};
 
+type PostMeta record {|
+    int id;
+    string description;
+    record {|
+        string[] tags;
+        string category;
+        @sql:Column {name: "created_date"}
+        time:Date created_date;
+    |} meta;
+|};
+
 type NewPost record {|
     string description;
     string tags;
