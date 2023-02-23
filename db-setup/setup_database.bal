@@ -47,5 +47,16 @@ public function main() returns sql:Error? {
     _ = check mysqlClient->execute(`INSERT INTO social_media_database.posts(description, category, created_date, tags, user_id)
                                     VALUES ('I want to learn multi cloud', 'education', CURDATE(), 'gcp, aws, azure, infra, learn', 3);`);
 
+    // Creates `followers` table in the database.
+    _ = check mysqlClient->execute(`CREATE TABLE social_media_database.followers (
+                                        id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                                        created_date date,
+                                        leader_id int,
+                                        follower_id int,
+                                        UNIQUE (leader_id, follower_id), 
+                                        FOREIGN KEY (leader_id) REFERENCES social_media_database.users(id) ON DELETE CASCADE,
+                                        FOREIGN KEY (follower_id) REFERENCES social_media_database.users(id) ON DELETE CASCADE
+                                    );`);
+
     check mysqlClient.close();
 }
