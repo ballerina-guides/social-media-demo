@@ -5,6 +5,10 @@ database_password = "dummypassword"
 host = "localhost"
 port = 3306
 
+enableSmsNotification = true
+accountSId = "sid1"
+authToken = "token1"
+
 [ballerina.observe]
 tracingEnabled=true
 tracingProvider="jaeger"
