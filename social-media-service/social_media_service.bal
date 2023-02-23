@@ -21,6 +21,9 @@ final mysql:Client socialMediaDb = check initDbClient();
 final http:Client sentimentEndpoint = check new ("localhost:9099",
     retryConfig = {
         interval: 3
+    },
+    secureSocket = {
+        cert: "./resources/public.crt"
     }
 );
 

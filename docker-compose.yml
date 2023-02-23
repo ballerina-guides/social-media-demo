@@ -9,6 +9,7 @@ services:
       - jaeger
       - sentiment-analysis
       - mysql-setup
+      - sts
     network_mode: "host"
   
   sentiment-analysis:
@@ -25,6 +26,12 @@ services:
       - '13133:13133'
       - '16686:16686'
       - '55680:55680'
+    network_mode: "host"
+
+  sts:
+    image: 'shafreen/sts-service:0.0.1'
+    ports:
+      - '9445:9445'
     network_mode: "host"
 
   mysql-setup:

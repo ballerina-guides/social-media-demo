@@ -2,7 +2,16 @@ import ballerina/http;
 import ballerinax/jaeger as _;
 import ballerina/log;
 
-service /text\-processing on new http:Listener(9099) {
+listener http:Listener sentiment_ls = new (9099, {
+    secureSocket: {
+        key: {
+            certFile: "./resources/public.crt",
+            keyFile: "./resources/private.key"
+        }
+    }
+});
+
+service /text\-processing on sentiment_ls {
 
     public function init() {
         log:printInfo("Sentiment analysis service started");
