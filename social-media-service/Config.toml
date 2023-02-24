@@ -1,16 +1,16 @@
 moderate = true
 
+enableSmsNotification = true
+accountSId = "sid1"
+authToken = "token1"
+messageSenderId = "1234"
+
 [databaseConfig]
 database = "social_media_database"
 user = "social_media_user"
 password = "dummypassword"
 host = "localhost"
 port = 3306
-
-enableSmsNotification = true
-accountSId = "sid1"
-authToken = "token1"
-messageSenderId = "1234"
 
 [ballerina.observe]
 tracingEnabled=true
