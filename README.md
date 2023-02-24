@@ -8,6 +8,24 @@ Following is the entity relationship diagram.
 
 <img src="er.png" alt="drawing" width='700'/>
 
+Following is the service description.
+
+```ballerina
+type SocialMedia service object {
+    *http:Service;
+
+    // users resource
+    resource function get users() returns User[]|error;
+    resource function get users/[int id]() returns User|UserNotFound|error;
+    resource function post users(@http:Payload NewUser newUser) returns http:Created|error;
+    resource function delete users/[int id]() returns http:NoContent|error;
+
+    // posts resource
+    resource function get users/[int id]/posts() returns PostMeta[]|UserNotFound|error;
+    resource function post users/[int id]/posts(@http:Payload NewPost newPost) returns http:Created|UserNotFound|PostForbidden|error;
+};
+```
+
 Following are the features covered by the scenario.
 
 1. Writing REST APIs with verbs, URLs, databinging and statuscodes
