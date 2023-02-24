@@ -8,6 +8,8 @@ type User record {|
     string name;
     @sql:Column {name: "birth_date"}
     time:Date birthDate;
+    @sql:Column {name: "mobile_number"}
+    time:Date mobileNumber;
 |};
 
 type NewUser record {|
