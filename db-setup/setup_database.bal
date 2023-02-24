@@ -28,15 +28,19 @@ public function main() returns sql:Error? {
                                     ADD FOREIGN KEY (user_id)
                                     REFERENCES social_media_database.users(id) ON DELETE CASCADE;`);
 
+    // Add new column to `users` table in the database.
+    _ = check mysqlClient->execute(`ALTER TABLE social_media_database.users
+                                    ADD mobile_number varchar(15) NOT NULL;`);
+
     // Adds the records to the `users` table.
-    _ = check mysqlClient->execute(`INSERT INTO social_media_database.users(id, birth_date, name)
-                                    VALUES(1, CURDATE(), "Ranga");`);
-    _ = check mysqlClient->execute(`INSERT INTO social_media_database.users(id, birth_date, name)
-                                    VALUES(2, CURDATE(), 'Ravi');`);
-    _ = check mysqlClient->execute(`INSERT INTO social_media_database.users(id, birth_date, name)
-                                    VALUES(3, CURDATE(), 'Satish');`);
-    _ = check mysqlClient->execute(`INSERT INTO social_media_database.users(id, birth_date, name)
-                                    VALUES(4, CURDATE(), 'Ayesh');`);                               
+    _ = check mysqlClient->execute(`INSERT INTO social_media_database.users(id, birth_date, name, mobile_number)
+                                    VALUES(1, CURDATE(), "Ranga", "+94771234001");`);
+    _ = check mysqlClient->execute(`INSERT INTO social_media_database.users(id, birth_date, name, mobile_number)
+                                    VALUES(2, CURDATE(), "Ravi", "+94771234002");`);
+    _ = check mysqlClient->execute(`INSERT INTO social_media_database.users(id, birth_date, name, mobile_number)
+                                    VALUES(3, CURDATE(), "Satish", "+94771234001");`);
+    _ = check mysqlClient->execute(`INSERT INTO social_media_database.users(id, birth_date, name, mobile_number)
+                                    VALUES(4, CURDATE(), "Ayesh", "+94768787189");`);                               
 
 
     // Adds the records to the `posts` table.
@@ -48,24 +52,6 @@ public function main() returns sql:Error? {
                                     VALUES ('I want to learn GCP', 'education', CURDATE(), 'gcp, google, learn', 2);`);
     _ = check mysqlClient->execute(`INSERT INTO social_media_database.posts(description, category, created_date, tags, user_id)
                                     VALUES ('I want to learn multi cloud', 'education', CURDATE(), 'gcp, aws, azure, infra, learn', 3);`);
-
-    // Add new column to `users` table in the database.
-    _ = check mysqlClient->execute(`ALTER TABLE social_media_database.users
-                                    ADD mobile_number varchar(15) DEFAULT NULL;`);
-
-    // Update records in `users` table with mobile number.
-    _ = check mysqlClient->execute(`UPDATE social_media_database.users
-                                    SET mobile_number = "+94771234123"
-                                    WHERE name = "Ranga";`);
-    _ = check mysqlClient->execute(`UPDATE social_media_database.users
-                                    SET mobile_number = "+94771234001"
-                                    WHERE name = "Ravi";`);
-    _ = check mysqlClient->execute(`UPDATE social_media_database.users
-                                    SET mobile_number = "+94771234002"
-                                    WHERE name = "Satish";`);                                    
-    _ = check mysqlClient->execute(`UPDATE social_media_database.users
-                                    SET mobile_number = "+94768787189"
-                                    WHERE name = "Ayesh";`);
 
     // Creates `followers` table in the database.
     _ = check mysqlClient->execute(`CREATE TABLE social_media_database.followers (
