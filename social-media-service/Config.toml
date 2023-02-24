@@ -1,5 +1,10 @@
 moderate = true
 
+enableSmsNotification = true
+accountSId = "sid1"
+authToken = "token1"
+messageSenderId = "1234"
+
 [databaseConfig]
 database = "social_media_database"
 user = "social_media_user"
