@@ -9,7 +9,7 @@ type User record {|
     @sql:Column {name: "birth_date"}
     time:Date birthDate;
     @sql:Column {name: "mobile_number"}
-    time:Date mobileNumber;
+    string mobileNumber;
 |};
 
 type NewUser record {|
@@ -18,6 +18,7 @@ type NewUser record {|
     }
     string name;
     time:Date birthDate;
+    string mobileNumber;
 |};
 
 type UserNotFound record {|
