@@ -3,6 +3,7 @@ import ballerinax/twilio;
 configurable boolean enableSmsNotification = ?;
 configurable string accountSId = ?;
 configurable string authToken = ?;
+configurable string messageSenderId = ?;
 
 twilio:ConnectionConfig twilioConfig = {
     twilioAuth: {
@@ -21,6 +22,6 @@ function sendSmsToFollowers(User leader, NewPost post) returns error? {
     // TODO: find a way to include mobile number into user information
     User[] followers = [];
     foreach User follower in followers {
-        _ = check twilioClient->sendSms("", "", "");
+        _ = check twilioClient->sendSms(messageSenderId, follower.mobileNumber, post.description);
     }
 }

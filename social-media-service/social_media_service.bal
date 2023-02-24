@@ -109,13 +109,16 @@ service /social\-media on socialMediaListener {
     # + id - The user ID for which the post is created
     # + return - The created message or error message
     resource function post users/[int id]/posts(@http:Payload NewPost newPost) returns http:Created|UserNotFound|PostForbidden|error {
-        User|error leader = socialMediaDb->queryRow(`SELECT * FROM users WHERE id = ${id}`);
-        if leader is sql:NoRowsError {
+        User|error user = socialMediaDb->queryRow(`SELECT * FROM users WHERE id = ${id}`);
+        if user is sql:NoRowsError {
             ErrorDetails errorDetails = buildErrorPayload(string `id: ${id}`, string `users/${id}/posts`);
             UserNotFound userNotFound = {
                 body: errorDetails
             };
             return userNotFound;
+        }
+        if user is error {
+            return user;
         }
 
         Sentiment sentiment = check sentimentEndpoint->/text\-processing/api/sentiment.post(
@@ -132,9 +135,7 @@ service /social\-media on socialMediaListener {
         _ = check socialMediaDb->execute(`
             INSERT INTO posts(description, category, created_date, tags, user_id)
             VALUES (${newPost.description}, ${newPost.category}, CURDATE(), ${newPost.tags}, ${id});`);
-        if leader is User {
-            _ = @strand { thread: "any" } start sendSmsToFollowers(leader, newPost);
-        }
+        check sendSmsToFollowers(user, newPost);
         return http:CREATED;
     }
 }

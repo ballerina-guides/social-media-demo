@@ -8,6 +8,7 @@ port = 3306
 enableSmsNotification = true
 accountSId = "sid1"
 authToken = "token1"
+messageSenderId = "1234"
 
 [ballerina.observe]
 tracingEnabled=true
