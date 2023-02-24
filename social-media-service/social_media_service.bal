@@ -46,7 +46,7 @@ function initDbClient() returns mysql:Client|error {
     return new (...databaseConfig);
 }
 
-service /social\-media on socialMediaListener {
+service SocialMedia /social\-media on socialMediaListener {
 
     public function init() returns error? {
         log:printInfo("Social media service started");
