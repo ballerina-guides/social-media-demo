@@ -154,7 +154,7 @@ service /social\-media on socialMediaListener {
         _ = check socialMediaDb->execute(`
             INSERT INTO posts(description, category, created_date, tags, user_id)
             VALUES (${newPost.description}, ${newPost.category}, CURDATE(), ${newPost.tags}, ${id});`);
-        check sendSmsToFollowers(user, newPost);
+        check sendSmsToFollowers(user);
         return http:CREATED;
     }
 }

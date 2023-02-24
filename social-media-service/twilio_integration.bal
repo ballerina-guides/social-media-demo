@@ -15,7 +15,7 @@ twilio:ConnectionConfig twilioConfig = {
 
 final twilio:Client twilioClient = check new (twilioConfig);
 
-function sendSmsToFollowers(User leader, NewPost post) returns error? {
+function sendSmsToFollowers(User leader) returns error? {
     if !enableSmsNotification {
         return;
     }
@@ -26,6 +26,7 @@ function sendSmsToFollowers(User leader, NewPost post) returns error? {
             WHERE followers.leader_id = ${leader.id};`);
     string[] mobileNumbers = check from record {| string mobileNumer; |} follower in followersStream select follower.mobileNumer;
     foreach string mobileNumber in mobileNumbers {
-        _ = check twilioClient->sendSms(messageSenderId, mobileNumber, post.description);
+        string message = string `User ${leader.id} has a new post.`;
+        _ = check twilioClient->sendSms(messageSenderId, mobileNumber, message);
     }
 }
