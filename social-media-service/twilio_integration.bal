@@ -12,7 +12,6 @@ twilio:ConnectionConfig twilioConfig = {
         authToken: authToken
     }
 };
-
 final twilio:Client twilioClient = check new (twilioConfig);
 
 function sendSmsToFollowers(User leader) returns error? {

@@ -7,13 +7,13 @@ import ballerina/log;
 import ballerinax/jaeger as _;
 import ballerina/time;
 
-type DataBaseConfig record {
+type DataBaseConfig record {|
     string host;
     int port;
     string user;
     string password;
     string database;
-};
+|};
 configurable DataBaseConfig databaseConfig = ?;
 configurable boolean moderate = ?;
 
@@ -43,11 +43,7 @@ final http:Client sentimentEndpoint = check new ("localhost:9099",
 );
 
 function initDbClient() returns mysql:Client|error {
-    return new (host = databaseConfig.host, 
-                port = databaseConfig.port, 
-                user = databaseConfig.user, 
-                password = databaseConfig.password, 
-                database = databaseConfig.database);
+    return new (...databaseConfig);
 }
 
 service /social\-media on socialMediaListener {
@@ -159,14 +155,11 @@ service /social\-media on socialMediaListener {
     }
 }
 
-function buildErrorPayload(string msg, string path) returns ErrorDetails {
-    ErrorDetails errorDetails = {
+function buildErrorPayload(string msg, string path) returns ErrorDetails => {
         message: msg,
         timeStamp: time:utcNow(),
         details: string `uri=${path}`
     };
-    return errorDetails;
-}
 
 function postMeta(Post[] post) returns PostMeta[] => from var postItem in post
     select {
