@@ -21,8 +21,7 @@ function sendSmsToFollowers(User leader) returns error? {
     }
     stream<record {| string mobileNumer; |}, sql:Error?> followersStream = socialMediaDb->query(`
             SELECT mobile_number 
-            FROM 
-            users JOIN followers ON users.id = followers.follower_id
+            FROM users JOIN followers ON users.id = followers.follower_id
             WHERE followers.leader_id = ${leader.id};`);
     string[] mobileNumbers = check from record {| string mobileNumer; |} follower in followersStream select follower.mobileNumer;
     foreach string mobileNumber in mobileNumbers {
