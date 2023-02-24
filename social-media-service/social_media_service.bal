@@ -7,11 +7,15 @@ import ballerina/log;
 import ballerinax/jaeger as _;
 import ballerina/time;
 
+type DataBaseConfig record {
+    string host;
+    int port;
+    string user;
+    string password;
+    string database;
+};
+configurable DataBaseConfig databaseConfig = ?;
 configurable boolean moderate = ?;
-configurable string database_user = ?;
-configurable string database_password = ?;
-configurable string host = ?;
-configurable int port = ?;
 
 listener http:Listener socialMediaListener = new (9090,
     interceptors = [new ResponseErrorInterceptor()]
@@ -22,13 +26,28 @@ final http:Client sentimentEndpoint = check new ("localhost:9099",
     retryConfig = {
         interval: 3
     },
+    auth = {
+        refreshUrl: "https://localhost:9445/oauth2/token",
+        refreshToken: "24f19603-8565-4b5f-a036-88a945e1f272",
+        clientId: "FlfJYKBD2c925h4lkycqNZlC2l4a",
+        clientSecret: "PJz0UhTJMrHOo68QQNpvnqAY_3Aa",
+        clientConfig: {
+            secureSocket: {
+                cert: "./resources/public.crt"
+            }
+        }
+    },
     secureSocket = {
         cert: "./resources/public.crt"
     }
 );
 
 function initDbClient() returns mysql:Client|error {
-    return new (host = host, port = port, user = database_user, password = database_password, database = "social_media_database");
+    return new (host = databaseConfig.host, 
+                port = databaseConfig.port, 
+                user = databaseConfig.user, 
+                password = databaseConfig.password, 
+                database = databaseConfig.database);
 }
 
 service /social\-media on socialMediaListener {
