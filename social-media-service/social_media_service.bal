@@ -88,8 +88,8 @@ service /social\-media on socialMediaListener {
     # + return - The created message or error message
     resource function post users(@http:Payload NewUser newUser) returns http:Created|error {
         _ = check socialMediaDb->execute(`
-            INSERT INTO users(birth_date, name)
-            VALUES (${newUser.birthDate}, ${newUser.name});`);
+            INSERT INTO users(birth_date, name, mobile_number)
+            VALUES (${newUser.birthDate}, ${newUser.name}, ${newUser.mobileNumber});`);
         return http:CREATED;
     }
 
