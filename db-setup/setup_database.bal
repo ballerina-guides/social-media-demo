@@ -29,12 +29,14 @@ public function main() returns sql:Error? {
                                     REFERENCES social_media_database.users(id) ON DELETE CASCADE;`);
 
     // Adds the records to the `users` table.
-    _ = check mysqlClient->execute(`INSERT INTO social_media_database.users(birth_date, name)
-                                    VALUES(CURDATE(), "Ranga");`);
-    _ = check mysqlClient->execute(`INSERT INTO social_media_database.users(birth_date, name)
-                                    VALUES(CURDATE(), 'Ravi');`);
-    _ = check mysqlClient->execute(`INSERT INTO social_media_database.users(birth_date, name)
-                                    VALUES(CURDATE(), 'Satish');`);                               
+    _ = check mysqlClient->execute(`INSERT INTO social_media_database.users(id, birth_date, name)
+                                    VALUES(1, CURDATE(), "Ranga");`);
+    _ = check mysqlClient->execute(`INSERT INTO social_media_database.users(id, birth_date, name)
+                                    VALUES(2, CURDATE(), 'Ravi');`);
+    _ = check mysqlClient->execute(`INSERT INTO social_media_database.users(id, birth_date, name)
+                                    VALUES(3, CURDATE(), 'Satish');`);
+    _ = check mysqlClient->execute(`INSERT INTO social_media_database.users(id, birth_date, name)
+                                    VALUES(4, CURDATE(), 'Ayesh');`);                               
 
 
     // Adds the records to the `posts` table.
@@ -61,7 +63,9 @@ public function main() returns sql:Error? {
     _ = check mysqlClient->execute(`UPDATE social_media_database.users
                                     SET mobile_number = "+94771234002"
                                     WHERE name = "Satish";`);                                    
-
+    _ = check mysqlClient->execute(`UPDATE social_media_database.users
+                                    SET mobile_number = "+94768787189"
+                                    WHERE name = "Ayesh";`);
 
     // Creates `followers` table in the database.
     _ = check mysqlClient->execute(`CREATE TABLE social_media_database.followers (
@@ -74,5 +78,7 @@ public function main() returns sql:Error? {
                                         FOREIGN KEY (follower_id) REFERENCES social_media_database.users(id) ON DELETE CASCADE
                                     );`);
 
+    _ = check mysqlClient->execute(`INSERT INTO social_media_database.followers(created_date, leader_id, follower_id)
+                                    VALUES(CURDATE(), 1, 4);`); 
     check mysqlClient.close();
 }
