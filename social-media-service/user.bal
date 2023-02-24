@@ -18,6 +18,7 @@ type NewUser record {|
     }
     string name;
     time:Date birthDate;
+    string mobileNumber;
 |};
 
 type UserNotFound record {|
