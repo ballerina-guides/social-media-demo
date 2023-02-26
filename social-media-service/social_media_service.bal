@@ -7,6 +7,8 @@ import ballerina/log;
 import ballerinax/jaeger as _;
 import ballerina/time;
 
+configurable boolean moderate = ?;
+
 type DataBaseConfig record {|
     string host;
     int port;
@@ -15,13 +17,9 @@ type DataBaseConfig record {|
     string database;
 |};
 configurable DataBaseConfig databaseConfig = ?;
-configurable boolean moderate = ?;
-
-listener http:Listener socialMediaListener = new (9090,
-    interceptors = [new ResponseErrorInterceptor()]
-);
-
 final mysql:Client socialMediaDb = check initDbClient();
+function initDbClient() returns mysql:Client|error => new (...databaseConfig);
+
 final http:Client sentimentEndpoint = check new ("localhost:9099",
     retryConfig = {
         interval: 3
@@ -42,10 +40,9 @@ final http:Client sentimentEndpoint = check new ("localhost:9099",
     }
 );
 
-function initDbClient() returns mysql:Client|error {
-    return new (...databaseConfig);
-}
-
+listener http:Listener socialMediaListener = new (9090,
+    interceptors = [new ResponseErrorInterceptor()]
+);
 service SocialMedia /social\-media on socialMediaListener {
 
     public function init() returns error? {
@@ -103,7 +100,7 @@ service SocialMedia /social\-media on socialMediaListener {
     #
     # + id - The user ID for which posts are retrieved
     # + return - A list of posts or error message
-    resource function get users/[int id]/posts() returns PostMeta[]|UserNotFound|error {
+    resource function get users/[int id]/posts() returns PostWithMeta[]|UserNotFound|error {
         User|error result = socialMediaDb->queryRow(`SELECT * FROM users WHERE id = ${id}`);
         if result is sql:NoRowsError {
             ErrorDetails errorDetails = buildErrorPayload(string `id: ${id}`, string `users/${id}/posts`);
@@ -116,7 +113,7 @@ service SocialMedia /social\-media on socialMediaListener {
         stream<Post, sql:Error?> postStream = socialMediaDb->query(`SELECT id, description, category, created_date, tags FROM posts WHERE user_id = ${id}`);
         Post[]|error posts = from Post post in postStream
             select post;
-        return postMeta(check posts);
+        return mapPostToPostWithMeta(check posts);
     }
 
     # Create a post for a given user
@@ -161,7 +158,7 @@ function buildErrorPayload(string msg, string path) returns ErrorDetails => {
         details: string `uri=${path}`
     };
 
-function postMeta(Post[] post) returns PostMeta[] => from var postItem in post
+function mapPostToPostWithMeta(Post[] post) returns PostWithMeta[] => from var postItem in post
     select {
         id: postItem.id,
         description: postItem.description,

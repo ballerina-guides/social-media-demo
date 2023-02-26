@@ -13,7 +13,7 @@ type SocialMedia service object {
     resource function delete users/[int id]() returns http:NoContent|error;
 
     // posts resource
-    resource function get users/[int id]/posts() returns PostMeta[]|UserNotFound|error;
+    resource function get users/[int id]/posts() returns PostWithMeta[]|UserNotFound|error;
     resource function post users/[int id]/posts(@http:Payload NewPost newPost) returns http:Created|UserNotFound|PostForbidden|error;
 };
 
@@ -48,7 +48,7 @@ type Post record {|
     @sql:Column {name: "created_date"}
     time:Date created_date;
 |};
-type PostMeta record {|
+type PostWithMeta record {|
     int id;
     string description;
     record {|
