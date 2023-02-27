@@ -9,11 +9,6 @@ password = "dummypassword"
 host = "localhost"
 port = 3306
 
-[twilioConfig]
-accountSid = "sid1"
-authToken = "token1"
-messageSenderId = "1234"
-
 [ballerina.observe]
 tracingEnabled=true
 tracingProvider="jaeger"

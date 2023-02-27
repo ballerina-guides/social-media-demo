@@ -2,7 +2,9 @@ import ballerinax/mysql.driver as _;
 import ballerinax/mysql;
 import ballerina/sql;
 import ballerinax/twilio;
+import ballerina/log;
 import ballerinax/nats;
+import ballerinax/jaeger as _;
 
 configurable string natsUrl = ?;
 
@@ -30,6 +32,10 @@ final twilio:Client twilioClient = check new (config = {
 });
 
 service "ballerina.social.media" on new nats:Listener(natsUrl) {
+    public function init() returns error? {
+        log:printInfo("SMS sender service started");
+    }
+
     remote function onMessage(int leaderId) returns error? {
         check sendSms(leaderId);
     }
