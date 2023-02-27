@@ -18,7 +18,7 @@ final twilio:Client twilioClient = check new (config = {
     }
 });
 
-type SmsDispatchEvent record {|
+type SmsSendEvent record {|
     int leaderId;
     string[] followerNumbers;
 |};
@@ -28,12 +28,12 @@ service "ballerina.social.media" on new nats:Listener(natsUrl) {
         log:printInfo("SMS sender service started");
     }
 
-    remote function onMessage(SmsDispatchEvent event) returns error? {
+    remote function onMessage(SmsSendEvent event) returns error? {
         check sendSms(event);
     }
 }
 
-function sendSms(SmsDispatchEvent event) returns error? {
+function sendSms(SmsSendEvent event) returns error? {
     foreach string mobileNumber in event.followerNumbers {
         string message = string `User ${event.leaderId} has a new post.`;
         _ = check twilioClient->sendSms(twilioConfig.messageSenderId, mobileNumber, message);
