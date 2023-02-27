@@ -40,8 +40,10 @@ Following are the features covered by the scenario.
 10. Adding validations
 11. Security - OAuth2
 12. Error handlers
-13. Observability - Tracing
-14. Docker image generation
+13. Ballerina concurrency
+14. Integrating a message broker
+15. Observability - Tracing
+16. Docker image generation
 
 # Setup each environment
 
