@@ -1,0 +1,13 @@
+natsUrl = "nats://localhost:4222"
+
+[databaseConfig]
+database = "social_media_database"
+user = "social_media_user"
+password = "dummypassword"
+host = "localhost"
+port = 3306
+
+[twilioConfig]
+accountSid = "sid1"
+authToken = "token1"
+messageSenderId = "1234"
