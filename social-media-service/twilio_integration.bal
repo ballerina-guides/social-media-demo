@@ -2,17 +2,20 @@ import ballerinax/twilio;
 import ballerina/sql;
 
 configurable boolean enableSmsNotification = ?;
-configurable string accountSId = ?;
-configurable string authToken = ?;
-configurable string messageSenderId = ?;
 
-twilio:ConnectionConfig twilioConfig = {
+type TwilioConfig record {|
+    string accountSid;
+    string authToken;
+    string messageSenderId;
+|};
+configurable TwilioConfig twilioConfig = ?;
+
+final twilio:Client twilioClient = check new ({
     twilioAuth: {
-        accountSId: accountSId,
-        authToken: authToken
+        accountSId: twilioConfig.accountSid,
+        authToken: twilioConfig.authToken
     }
-};
-final twilio:Client twilioClient = check new (twilioConfig);
+});
 
 function sendSmsToFollowers(User leader) returns error? {
     if !enableSmsNotification {
@@ -25,6 +28,6 @@ function sendSmsToFollowers(User leader) returns error? {
     string[] mobileNumbers = check from record {| string mobileNumer; |} follower in followersStream select follower.mobileNumer;
     foreach string mobileNumber in mobileNumbers {
         string message = string `User ${leader.id} has a new post.`;
-        _ = check twilioClient->sendSms(messageSenderId, mobileNumber, message);
+        _ = check twilioClient->sendSms(twilioConfig.messageSenderId, mobileNumber, message);
     }
 }
