@@ -9,7 +9,7 @@ host = "localhost"
 port = 3306
 
 [twilioConfig]
-accountSId = "sid1"
+accountSid = "sid1"
 authToken = "token1"
 messageSenderId = "1234"
 

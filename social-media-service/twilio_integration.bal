@@ -21,11 +21,11 @@ function sendSmsToFollowers(User leader) returns error? {
     if !enableSmsNotification {
         return;
     }
-    stream<record {| string mobileNumer; |}, sql:Error?> followersStream = socialMediaDb->query(`
+    stream<record {| string mobileNumber; |}, sql:Error?> followersStream = socialMediaDb->query(`
             SELECT mobile_number 
             FROM users JOIN followers ON users.id = followers.follower_id
             WHERE followers.leader_id = ${leader.id};`);
-    string[] mobileNumbers = check from record {| string mobileNumer; |} follower in followersStream select follower.mobileNumer;
+    string[] mobileNumbers = check from var follower in followersStream select follower.mobileNumber;
     foreach string mobileNumber in mobileNumbers {
         string message = string `User ${leader.id} has a new post.`;
         _ = check twilioClient->sendSms(twilioConfig.messageSenderId, mobileNumber, message);
