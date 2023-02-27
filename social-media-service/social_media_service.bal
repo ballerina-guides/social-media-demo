@@ -1,3 +1,4 @@
+import ballerinax/nats;
 import ballerina/regex;
 import ballerina/http;
 import ballerina/sql;
@@ -8,6 +9,7 @@ import ballerinax/jaeger as _;
 import ballerina/time;
 
 configurable boolean moderate = ?;
+configurable boolean enableSmsNotification = ?;
 
 type DataBaseConfig record {|
     string host;
@@ -16,33 +18,43 @@ type DataBaseConfig record {|
     string password;
     string database;
 |};
+
 configurable DataBaseConfig databaseConfig = ?;
 final mysql:Client socialMediaDb = check initDbClient();
+
 function initDbClient() returns mysql:Client|error => new (...databaseConfig);
 
 final http:Client sentimentEndpoint = check new ("localhost:9099",
-    retryConfig = {
-        interval: 3
-    },
-    auth = {
-        refreshUrl: "https://localhost:9445/oauth2/token",
-        refreshToken: "24f19603-8565-4b5f-a036-88a945e1f272",
-        clientId: "FlfJYKBD2c925h4lkycqNZlC2l4a",
-        clientSecret: "PJz0UhTJMrHOo68QQNpvnqAY_3Aa",
-        clientConfig: {
-            secureSocket: {
-                cert: "./resources/public.crt"
-            }
+retryConfig = {
+    interval: 3
+},
+auth = {
+    refreshUrl: "https://localhost:9445/oauth2/token",
+    refreshToken: "24f19603-8565-4b5f-a036-88a945e1f272",
+    clientId: "FlfJYKBD2c925h4lkycqNZlC2l4a",
+    clientSecret: "PJz0UhTJMrHOo68QQNpvnqAY_3Aa",
+    clientConfig: {
+        secureSocket: {
+            cert: "./resources/public.crt"
         }
-    },
+    }
+},
     secureSocket = {
         cert: "./resources/public.crt"
     }
 );
 
+configurable string natsUrl = ?;
+final nats:Client natsClient = check new (natsUrl, retryConfig = {
+    maxReconnect: 10,
+    reconnectWait: 10,
+    connectionTimeout: 30
+});
+
 listener http:Listener socialMediaListener = new (9090,
     interceptors = [new ResponseErrorInterceptor()]
 );
+
 service SocialMedia /social\-media on socialMediaListener {
 
     public function init() returns error? {
@@ -147,16 +159,16 @@ service SocialMedia /social\-media on socialMediaListener {
         _ = check socialMediaDb->execute(`
             INSERT INTO posts(description, category, created_date, tags, user_id)
             VALUES (${newPost.description}, ${newPost.category}, CURDATE(), ${newPost.tags}, ${id});`);
-        check sendSmsToFollowers(user);
+        _ = start publishUserPostUpdate(user.id);
         return http:CREATED;
     }
 }
 
 function buildErrorPayload(string msg, string path) returns ErrorDetails => {
-        message: msg,
-        timeStamp: time:utcNow(),
-        details: string `uri=${path}`
-    };
+    message: msg,
+    timeStamp: time:utcNow(),
+    details: string `uri=${path}`
+};
 
 function mapPostToPostWithMeta(Post[] post) returns PostWithMeta[] => from var postItem in post
     select {
@@ -168,3 +180,26 @@ function mapPostToPostWithMeta(Post[] post) returns PostWithMeta[] => from var p
             created_date: postItem.created_date
         }
     };
+
+type FollowerInfo record {|
+    @sql:Column {name: "mobile_number"} 
+    string mobileNumber;
+|};
+
+function publishUserPostUpdate(int userId) returns error? {
+    if !enableSmsNotification {
+        return;
+    }
+    stream<FollowerInfo, sql:Error?> followersStream = socialMediaDb->query(`
+            SELECT mobile_number 
+            FROM users JOIN followers ON users.id = followers.follower_id
+            WHERE followers.leader_id = ${userId};`);
+    string[] mobileNumbers = check from var follower in followersStream select follower.mobileNumber;
+    check natsClient->publishMessage({
+        subject: "ballerina.social.media",
+        content: {
+            "leaderId": userId,
+            "followerNumbers": mobileNumbers
+        }
+    });
+}

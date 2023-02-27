@@ -1,9 +1,6 @@
 moderate = true
-
+natsUrl = "nats://localhost:4222"
 enableSmsNotification = true
-accountSId = "sid1"
-authToken = "token1"
-messageSenderId = "1234"
 
 [databaseConfig]
 database = "social_media_database"
