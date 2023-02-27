@@ -17,11 +17,16 @@ final twilio:Client twilioClient = check new ({
     }
 });
 
+type FollowerInfo record {|
+    @sql:Column {name: "mobile_number"} 
+    string mobileNumber;
+|};
+
 function sendSmsToFollowers(User leader) returns error? {
     if !enableSmsNotification {
         return;
     }
-    stream<record {| string mobileNumber; |}, sql:Error?> followersStream = socialMediaDb->query(`
+    stream<FollowerInfo, sql:Error?> followersStream = socialMediaDb->query(`
             SELECT mobile_number 
             FROM users JOIN followers ON users.id = followers.follower_id
             WHERE followers.leader_id = ${leader.id};`);
