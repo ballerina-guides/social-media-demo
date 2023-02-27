@@ -181,12 +181,25 @@ function mapPostToPostWithMeta(Post[] post) returns PostWithMeta[] => from var p
         }
     };
 
+type FollowerInfo record {|
+    @sql:Column {name: "mobile_number"} 
+    string mobileNumber;
+|};
+
 function publishUserPostUpdate(int userId) returns error? {
     if !enableSmsNotification {
         return;
     }
+    stream<FollowerInfo, sql:Error?> followersStream = socialMediaDb->query(`
+            SELECT mobile_number 
+            FROM users JOIN followers ON users.id = followers.follower_id
+            WHERE followers.leader_id = ${userId};`);
+    string[] mobileNumbers = check from var follower in followersStream select follower.mobileNumber;
     check natsClient->publishMessage({
         subject: "ballerina.social.media",
-        content: userId
+        content: {
+            "leaderId": userId,
+            "followerNumbers": mobileNumbers
+        }
     });
 }
