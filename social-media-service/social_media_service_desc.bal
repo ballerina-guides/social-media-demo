@@ -1,7 +1,7 @@
+import ballerina/constraint;
 import ballerina/http;
 import ballerina/sql;
 import ballerina/time;
-import ballerina/constraint;
 
 type SocialMedia service object {
     *http:Service;

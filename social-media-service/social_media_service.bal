@@ -1,12 +1,12 @@
-import ballerinax/nats;
-import ballerina/regex;
 import ballerina/http;
+import ballerina/log;
+import ballerina/regex;
 import ballerina/sql;
+import ballerina/time;
+import ballerinax/jaeger as _;
 import ballerinax/mysql.driver as _;
 import ballerinax/mysql;
-import ballerina/log;
-import ballerinax/jaeger as _;
-import ballerina/time;
+import ballerinax/nats;
 
 configurable boolean moderate = ?;
 configurable boolean enableSmsNotification = ?;

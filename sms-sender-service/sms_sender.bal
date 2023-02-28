@@ -1,7 +1,7 @@
-import ballerinax/twilio;
 import ballerina/log;
-import ballerinax/nats;
 import ballerinax/jaeger as _;
+import ballerinax/nats;
+import ballerinax/twilio;
 
 configurable string natsUrl = ?;
 
