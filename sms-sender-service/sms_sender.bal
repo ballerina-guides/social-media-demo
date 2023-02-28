@@ -34,8 +34,9 @@ service "ballerina.social.media" on new nats:Listener(natsUrl) {
 }
 
 function sendSms(SmsSendEvent event) returns error? {
+    string message = string `User ${event.leaderId} has a new post.`;
+    string messageSenderId = twilioConfig.messageSenderId;
     foreach string mobileNumber in event.followerNumbers {
-        string message = string `User ${event.leaderId} has a new post.`;
-        _ = check twilioClient->sendSms(twilioConfig.messageSenderId, mobileNumber, message);
+        _ = check twilioClient->sendSms(messageSenderId, mobileNumber, message);
     }
 }
