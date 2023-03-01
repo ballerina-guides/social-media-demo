@@ -45,13 +45,13 @@ public function main() returns sql:Error? {
 
     // Adds the records to the `posts` table.
     _ = check mysqlClient->execute(`INSERT INTO social_media_database.posts(description, category, created_date, tags, user_id)
-                                    VALUES ('I want to learn AWS', 'education', CURDATE(), 'aws, cloud, learn',1);`);
+                                    VALUES ('I want to learn AWS', 'education', CURDATE(), 'aws,cloud,learn',1);`);
     _ = check mysqlClient->execute(`INSERT INTO social_media_database.posts(description, category, created_date, tags, user_id)
-                                    VALUES ('I want to learn DevOps', 'education', CURDATE(), 'devops, infra, learn', 1);`);
+                                    VALUES ('I want to learn DevOps', 'education', CURDATE(), 'devops,infra,learn', 1);`);
     _ = check mysqlClient->execute(`INSERT INTO social_media_database.posts(description, category, created_date, tags, user_id)
-                                    VALUES ('I want to learn GCP', 'education', CURDATE(), 'gcp, google, learn', 2);`);
+                                    VALUES ('I want to learn GCP', 'education', CURDATE(), 'gcp,google,learn', 2);`);
     _ = check mysqlClient->execute(`INSERT INTO social_media_database.posts(description, category, created_date, tags, user_id)
-                                    VALUES ('I want to learn multi cloud', 'education', CURDATE(), 'gcp, aws, azure, infra, learn', 3);`);
+                                    VALUES ('I want to learn multi cloud', 'education', CURDATE(), 'gcp,aws,azure,infra,learn', 3);`);
 
     // Creates `followers` table in the database.
     _ = check mysqlClient->execute(`CREATE TABLE social_media_database.followers (
