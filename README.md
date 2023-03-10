@@ -28,14 +28,14 @@ type SocialMedia service object {
 
 Following are the features covered by the scenario.
 
-1. Writing REST APIs with verbs, URLs, databinging and statuscodes
-2. Accessing database
+1. Writing REST APIs with verbs, URLs, data binding and status codes
+2. Accessing databases
 3. Configurability
-4. Data transformation with datamapper
+4. Data transformation with the data mapper
 5. HTTP client
 6. Resiliency - Retry
 7. Writing tests
-8. Using connectors - Twillio
+8. Using connectors - Twilio
 9. OpenAPI specification, client stubs and central
 10. Adding validations
 11. Security - OAuth2

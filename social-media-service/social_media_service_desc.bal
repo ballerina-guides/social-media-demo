@@ -1,7 +1,7 @@
+import ballerina/constraint;
 import ballerina/http;
 import ballerina/sql;
 import ballerina/time;
-import ballerina/constraint;
 
 type SocialMedia service object {
     *http:Service;
@@ -26,6 +26,7 @@ type User record {|
     @sql:Column {name: "mobile_number"}
     string mobileNumber;
 |};
+
 type NewUser record {|
     @constraint:String {
         minLength: 2
@@ -34,6 +35,7 @@ type NewUser record {|
     time:Date birthDate;
     string mobileNumber;
 |};
+
 type UserNotFound record {|
     *http:NotFound;
     ErrorDetails body;
@@ -48,6 +50,7 @@ type Post record {|
     @sql:Column {name: "created_date"}
     time:Date created_date;
 |};
+
 type PostWithMeta record {|
     int id;
     string description;
@@ -58,11 +61,13 @@ type PostWithMeta record {|
         time:Date created_date;
     |} meta;
 |};
+
 type NewPost record {|
     string description;
     string tags;
     string category;
 |};
+
 type PostForbidden record {|
     *http:Forbidden;
     ErrorDetails body;

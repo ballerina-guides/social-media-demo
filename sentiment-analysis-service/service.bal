@@ -1,6 +1,6 @@
 import ballerina/http;
-import ballerinax/jaeger as _;
 import ballerina/log;
+import ballerinax/jaeger as _;
 
 listener http:Listener sentiment_ls = new (9099, {
     secureSocket: {
