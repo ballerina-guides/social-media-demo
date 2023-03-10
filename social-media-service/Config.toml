@@ -1,6 +1,13 @@
 moderate = true
-natsUrl = "nats://localhost:4222"
 enableSmsNotification = true
+
+[natsConfig]
+url = "nats://localhost:4222"
+
+[natsConfig.retryConfig]
+maxReconnect = 10
+reconnectWait = 10.0
+connectionTimeout = 30.0
 
 [databaseConfig]
 database = "social_media_database"
@@ -8,6 +15,16 @@ user = "social_media_user"
 password = "dummypassword"
 host = "localhost"
 port = 3306
+
+[sentimentEndpointSecConfig]
+endpointUrl = "localhost:9099"
+retryInterval = 3.0
+
+[sentimentEndpointSecConfig.authConfig]
+refreshUrl = "https://localhost:9445/oauth2/token"
+refreshToken = "24f19603-8565-4b5f-a036-88a945e1f272"
+clientId = "FlfJYKBD2c925h4lkycqNZlC2l4a"
+clientSecret = "PJz0UhTJMrHOo68QQNpvnqAY_3Aa"
 
 [ballerina.observe]
 tracingEnabled=true

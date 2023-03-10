@@ -18,38 +18,52 @@ type DataBaseConfig record {|
     string password;
     string database;
 |};
-
 configurable DataBaseConfig databaseConfig = ?;
 final mysql:Client socialMediaDb = check initDbClient();
-
 function initDbClient() returns mysql:Client|error => new (...databaseConfig);
 
-final http:Client sentimentEndpoint = check new ("localhost:9099",
-retryConfig = {
-    interval: 3
-},
-auth = {
-    refreshUrl: "https://localhost:9445/oauth2/token",
-    refreshToken: "24f19603-8565-4b5f-a036-88a945e1f272",
-    clientId: "FlfJYKBD2c925h4lkycqNZlC2l4a",
-    clientSecret: "PJz0UhTJMrHOo68QQNpvnqAY_3Aa",
-    clientConfig: {
-        secureSocket: {
-            cert: "./resources/public.crt"
+type SentimentEndpointConfig record {|
+    string endpointUrl;
+    decimal retryInterval;
+    record {|
+        string refreshUrl;
+        string clientId;
+        string clientSecret;
+        string refreshToken;
+    |} authConfig;
+|};
+configurable SentimentEndpointConfig sentimentEndpointSecConfig = ?;
+final http:Client sentimentEndpoint = check new (sentimentEndpointSecConfig.endpointUrl,
+    retryConfig = {
+        interval: sentimentEndpointSecConfig.retryInterval
+    },
+    auth = {
+        ...sentimentEndpointSecConfig.authConfig,
+        clientConfig: {
+            secureSocket: {
+                cert: "./resources/public.crt"
+            }
         }
-    }
-},
+    },
     secureSocket = {
         cert: "./resources/public.crt"
     }
 );
 
-configurable string natsUrl = ?;
-final nats:Client natsClient = check new (natsUrl, retryConfig = {
-    maxReconnect: 10,
-    reconnectWait: 10,
-    connectionTimeout: 30
-});
+type NatsConfig record {|
+    record {|
+        int maxReconnect;
+        decimal reconnectWait;
+        decimal connectionTimeout;
+    |} retryConfig;
+    string url;
+|};
+configurable NatsConfig natsConfig = ?;
+final nats:Client natsClient = check new (natsConfig.url, 
+    retryConfig = {
+        ...natsConfig.retryConfig
+    }
+);
 
 listener http:Listener socialMediaListener = new (9090,
     interceptors = [new ResponseErrorInterceptor()]

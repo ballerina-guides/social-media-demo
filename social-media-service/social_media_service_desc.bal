@@ -27,7 +27,7 @@ type User record {|
     string mobileNumber;
 |};
 
-type NewUser record {|
+public type NewUser record {|
     @constraint:String {
         minLength: 2
     }
@@ -62,7 +62,7 @@ type PostWithMeta record {|
     |} meta;
 |};
 
-type NewPost record {|
+public type NewPost record {|
     string description;
     string tags;
     string category;
