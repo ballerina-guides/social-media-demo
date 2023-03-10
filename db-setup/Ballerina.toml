@@ -1,8 +1,0 @@
-[package]
-org = "admin"
-name = "ballerina_db_setup"
-version = "0.1.0"
-distribution = "2201.3.2"
-
-[build-options]
-observabilityIncluded = true
