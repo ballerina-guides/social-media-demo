@@ -72,3 +72,9 @@ type PostForbidden record {|
     *http:Forbidden;
     ErrorDetails body;
 |};
+
+type ErrorDetails record {|
+    time:Utc timeStamp;
+    string message;
+    string details;
+|};
