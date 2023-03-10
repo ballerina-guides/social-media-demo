@@ -33,3 +33,10 @@ content-type: application/json
 
 ### Delete a user
 DELETE http://localhost:9090/social-media/users/1
+
+### Sentiment Analysis endpoint
+POST http://localhost:9099/text-processing/api/sentiment
+
+{
+    "text": "I love this product"
+}
