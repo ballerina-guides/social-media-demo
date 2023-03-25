@@ -1,0 +1,6 @@
+moderate = true
+
+database_user = "social_media_user"
+database_password = "dummypassword"
+host = "localhost"
+port = 3306

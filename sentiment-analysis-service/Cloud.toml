@@ -1,0 +1,16 @@
+[container.image]
+repository="shafreen"
+name="sentiment-api"
+tag="0.0.1"
+
+[[container.copy.files]]
+sourceFile="./Config.toml"
+target="./Config.toml"
+
+[[container.copy.files]]
+sourceFile="./resources/private.key"
+target="./resources/private.key"
+
+[[container.copy.files]]
+sourceFile="./resources/public.crt"
+target="./resources/public.crt"

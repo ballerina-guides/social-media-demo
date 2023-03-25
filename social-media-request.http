@@ -1,0 +1,42 @@
+### Creat a user
+POST http://localhost:9090/social-media/users
+content-type: application/json
+
+{
+    "birthDate": {
+        "year": 1987,
+        "month": 02,
+        "day": 06
+    },
+    "name": "Rimas",
+    "mobileNumber": "+94718923456"
+}
+
+### Get users
+GET http://localhost:9090/social-media/users
+
+### Get a specific user
+GET http://localhost:9090/social-media/users/1
+
+### Get posts
+GET http://localhost:9090/social-media/users/3/posts
+
+### Create a post
+POST http://localhost:9090/social-media/users/3/posts
+content-type: application/json
+
+{
+    "description": "I want to learn Azure",
+    "tags": "azure,cloud,devops",
+    "category": "education"
+}
+
+### Delete a user
+DELETE http://localhost:9090/social-media/users/1
+
+### Sentiment Analysis endpoint
+POST http://localhost:9099/text-processing/api/sentiment
+
+{
+    "text": "I love this product"
+}

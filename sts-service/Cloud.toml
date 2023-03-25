@@ -1,0 +1,12 @@
+[container.image]
+repository="shafreen"
+name="sts-service"
+tag="0.0.1"
+
+[[container.copy.files]]
+sourceFile="./resources/private.key"
+target="./resources/private.key"
+
+[[container.copy.files]]
+sourceFile="./resources/public.crt"
+target="./resources/public.crt"
