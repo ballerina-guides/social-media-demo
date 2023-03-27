@@ -1,0 +1,12 @@
+[container.image]
+repository="shafreen"
+name="social-media"
+tag="0.0.1"
+
+[[container.copy.files]]
+sourceFile="./Config.toml"
+target="./Config.toml"
+
+[[container.copy.files]]
+sourceFile="./resources/public.crt"
+target="./resources/public.crt"

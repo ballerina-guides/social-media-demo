@@ -1,0 +1,8 @@
+[container.image]
+repository="shafreen"
+name="sms-sender-service"
+tag="0.0.1"
+
+[[container.copy.files]]
+sourceFile="./Config.toml"
+target="./Config.toml"
