@@ -2,7 +2,7 @@
 
 The sample is based on a simple API written for a social-media site (like twitter) which has users, associated posts and followers. Following is the high level component diagram.
 
-<img src="diagram.png" alt="drawing" width='500'/>
+<img src="diagram.jpg" alt="drawing" width='500'/>
 
 Following is the entity relationship diagram.
 
@@ -42,14 +42,28 @@ Following are the features covered by the scenario.
 12. Error handlers
 13. Ballerina concurrency
 14. Integrating a message broker
-15. Observability - Tracing
-16. Docker image generation
 
-# Setup each environment
+# Setup environment
 
-You can use the below docker compose commands.
-1. docker compose up
+## With Docker Compose
+1. Checkout the code base and move to the root folder
+2. Execute `docker compose up`
+
+## Without Docker Compose
+
+### To complete up to feature 4
+1. Setup a MySQL database
+2. Execute the script `init.sql` in db-setup
+
+### To complete up to feature 7
+1. Move to `sentiment-analysis-service` and execute `bal run` to start sentiment analysis service
+
+### To complete up to feature 11
+1. Move to `sts-service` and execute `bal run` to start the Security Token Service (STS) service
+
+### To complete up to feature 14
+1. Setup a NATS server
 
 # Try out
+- To start the completed setup run `docker compose up -f docker-compose-complete.yml`
 - To send request open `social-media-request.http` file using VS Code with `REST Client` extension
-- Jaeger URL - http://localhost:16686/search
