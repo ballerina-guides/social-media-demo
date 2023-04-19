@@ -3,7 +3,6 @@ import ballerina/log;
 import ballerina/regex;
 import ballerina/sql;
 import ballerina/time;
-import ballerinax/jaeger as _;
 import ballerinax/mysql.driver as _;
 
 configurable boolean moderate = ?;

@@ -4,10 +4,3 @@ natsUrl = "nats://localhost:4222"
 accountSid = "sid1"
 authToken = "token1"
 messageSenderId = "1234"
-
-[ballerina.observe]
-tracingEnabled=true
-tracingProvider="jaeger"
-
-[ballerinax.jaeger]
-samplerParam=1.0

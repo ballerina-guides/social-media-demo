@@ -49,6 +49,8 @@ Following are the features covered by the scenario.
 1. Checkout the code base and move to the root folder
 2. Execute `docker compose up`
 
+>Note: When trying out feature 11 use port `9098` for the sentiment analysis endpoint.
+
 ## Without Docker Compose
 
 ### To complete up to feature 4
