@@ -1,6 +1,6 @@
 [package]
 org = "com_example"
-name = "sentiment_api"
+name = "sentiment_api_secured"
 version = "0.1.0"
 distribution = "2201.3.1"
 
