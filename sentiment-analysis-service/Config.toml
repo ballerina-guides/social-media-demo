@@ -1,6 +1,0 @@
-[ballerina.observe]
-tracingEnabled=true
-tracingProvider="jaeger"
-
-[ballerinax.jaeger]
-samplerParam=1.0

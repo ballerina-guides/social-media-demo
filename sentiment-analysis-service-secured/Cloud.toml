@@ -1,6 +1,6 @@
 [container.image]
 repository="shafreen"
-name="sentiment-api"
+name="sentiment-api-secured"
 tag="0.0.1"
 
 [[container.copy.files]]
