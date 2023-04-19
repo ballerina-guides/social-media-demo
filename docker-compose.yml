@@ -5,8 +5,12 @@ services:
     image: 'shafreen/sentiment-api:0.0.1'
     ports:
       - '9099:9099'
-    depends_on: 
-      - jaeger
+    network_mode: "host"
+
+  sentiment-analysis-secured:
+    image: 'shafreen/sentiment-api-secured:0.0.1'
+    ports:
+      - '9098:9098'
     network_mode: "host"
 
   sts:

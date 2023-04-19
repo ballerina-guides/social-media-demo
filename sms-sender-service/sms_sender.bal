@@ -1,5 +1,4 @@
 import ballerina/log;
-import ballerinax/jaeger as _;
 import ballerinax/nats;
 import ballerinax/twilio;
 

@@ -1,7 +1,7 @@
 import ballerina/http;
 import ballerina/log;
 
-listener http:Listener sentiment_ls = new (9099, {
+listener http:Listener sentiment_ls = new (9098, {
     secureSocket: {
         key: {
             certFile: "./resources/public.crt",
