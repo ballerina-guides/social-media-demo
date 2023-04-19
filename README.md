@@ -62,8 +62,9 @@ Following are the features covered by the scenario.
 
 ### To complete up to feature 11
 1. Move to `sts-service` and execute `bal run` to start the Security Token Service (STS) service
-2. Stop `sentiment-analysis-service`
-3. Move to `sentiment-analysis-service-secured` and execute `bal run` to start secured sentiment analysis service
+2. Move to `sentiment-analysis-service-secured` and execute `bal run` to start secured sentiment analysis service
+
+>Note: When trying out feature 11 use port `9098` for the sentiment analysis endpoint.
 
 ### To complete up to feature 14
 1. Setup a NATS server
