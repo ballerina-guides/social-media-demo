@@ -1,5 +1,5 @@
 moderate = true
-enableSmsNotification = true
+enableSlackNotification = true
 
 [natsConfig]
 url = "nats://localhost:4222"
