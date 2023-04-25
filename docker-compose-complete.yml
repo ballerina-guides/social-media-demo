@@ -16,15 +16,13 @@ services:
           condition: service_healthy
     network_mode: "host"
 
-  sms-sender:
-    image: 'shafreen/sms-sender-service:0.0.1'
+  slack-message-sender:
+    image: 'shafreen/slack-message-sender:0.0.1'
     depends_on: 
       jaeger: 
           condition: service_started
       nats: 
           condition: service_started
-      mysql: 
-          condition: service_healthy
     network_mode: "host"
 
   sentiment-analysis:
