@@ -21,7 +21,7 @@ type NotificationEvent record {|
 
 service "ballerina.social.media" on new nats:Listener(natsUrl) {
     public function init() returns error? {
-        log:printInfo("SMS sender service started");
+        log:printInfo("Slack message sender service started");
     }
 
     remote function onMessage(NotificationEvent event) returns error? {
