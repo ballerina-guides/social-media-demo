@@ -1,0 +1,5 @@
+natsUrl = "nats://localhost:4222"
+
+[slackConfig]
+authToken = "token123"
+channelName = "follower-notification"

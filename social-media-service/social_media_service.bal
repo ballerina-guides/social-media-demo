@@ -6,7 +6,7 @@ import ballerina/time;
 import ballerinax/mysql.driver as _;
 
 configurable boolean moderate = ?;
-configurable boolean enableSmsNotification = ?;
+configurable boolean enableSlackNotification = ?;
 
 listener http:Listener socialMediaListener = new (9090,
     interceptors = [new ResponseErrorInterceptor()]
@@ -138,25 +138,14 @@ function mapPostToPostWithMeta(Post[] post) returns PostWithMeta[] => from var p
         }
     };
 
-type FollowerInfo record {|
-    @sql:Column {name: "mobile_number"} 
-    string mobileNumber;
-|};
-
 function publishUserPostUpdate(int userId) returns error? {
-    if !enableSmsNotification {
+    if !enableSlackNotification {
         return;
     }
-    stream<FollowerInfo, sql:Error?> followersStream = socialMediaDb->query(`
-            SELECT mobile_number 
-            FROM users JOIN followers ON users.id = followers.follower_id
-            WHERE followers.leader_id = ${userId};`);
-    string[] mobileNumbers = check from var follower in followersStream select follower.mobileNumber;
     check natsClient->publishMessage({
         subject: "ballerina.social.media",
         content: {
-            "leaderId": userId,
-            "followerNumbers": mobileNumbers
+            "leaderId": userId
         }
     });
 }
