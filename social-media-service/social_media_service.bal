@@ -48,7 +48,7 @@ service SocialMedia /social\-media on socialMediaListener {
     #
     # + newUser - The user details of the new user
     # + return - The created message or error message
-    resource function post users(@http:Payload NewUser newUser) returns http:Created|error {
+    resource function post users(NewUser newUser) returns http:Created|error {
         _ = check socialMediaDb->execute(`
             INSERT INTO users(birth_date, name, mobile_number)
             VALUES (${newUser.birthDate}, ${newUser.name}, ${newUser.mobileNumber});`);
@@ -89,7 +89,7 @@ service SocialMedia /social\-media on socialMediaListener {
     #
     # + id - The user ID for which the post is created
     # + return - The created message or error message
-    resource function post users/[int id]/posts(@http:Payload NewPost newPost) returns http:Created|UserNotFound|PostForbidden|error {
+    resource function post users/[int id]/posts(NewPost newPost) returns http:Created|UserNotFound|PostForbidden|error {
         User|error user = socialMediaDb->queryRow(`SELECT * FROM users WHERE id = ${id}`);
         if user is sql:NoRowsError {
             ErrorDetails errorDetails = buildErrorPayload(string `id: ${id}`, string `users/${id}/posts`);
