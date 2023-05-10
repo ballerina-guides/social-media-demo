@@ -9,12 +9,12 @@ type SocialMedia service object {
     // users resource
     resource function get users() returns User[]|error;
     resource function get users/[int id]() returns User|UserNotFound|error;
-    resource function post users(@http:Payload NewUser newUser) returns http:Created|error;
+    resource function post users(NewUser newUser) returns http:Created|error;
     resource function delete users/[int id]() returns http:NoContent|error;
 
     // posts resource
     resource function get users/[int id]/posts() returns PostWithMeta[]|UserNotFound|error;
-    resource function post users/[int id]/posts(@http:Payload NewPost newPost) returns http:Created|UserNotFound|PostForbidden|error;
+    resource function post users/[int id]/posts(NewPost newPost) returns http:Created|UserNotFound|PostForbidden|error;
 };
 
 // user representations
