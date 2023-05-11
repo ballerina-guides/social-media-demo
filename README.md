@@ -17,12 +17,12 @@ type SocialMedia service object {
     // users resource
     resource function get users() returns User[]|error;
     resource function get users/[int id]() returns User|UserNotFound|error;
-    resource function post users(@http:Payload NewUser newUser) returns http:Created|error;
+    resource function post users(NewUser newUser) returns http:Created|error;
     resource function delete users/[int id]() returns http:NoContent|error;
 
     // posts resource
     resource function get users/[int id]/posts() returns PostMeta[]|UserNotFound|error;
-    resource function post users/[int id]/posts(@http:Payload NewPost newPost) returns http:Created|UserNotFound|PostForbidden|error;
+    resource function post users/[int id]/posts(NewPost newPost) returns http:Created|UserNotFound|PostForbidden|error;
 };
 ```
 
@@ -35,7 +35,7 @@ Following are the features covered by the scenario.
 5. HTTP client
 6. Resiliency - Retry
 7. Writing tests
-8. Using connectors - Twilio
+8. Using connectors - Slack
 9. OpenAPI specification, client stubs and central
 10. Adding validations
 11. Security - OAuth2
