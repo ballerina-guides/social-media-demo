@@ -1,18 +1,10 @@
 import ballerina/http;
 import ballerina/log;
-import ballerina/regex;
 import ballerina/sql;
 import ballerina/time;
 import ballerinax/mysql.driver as _;
 
-configurable boolean moderate = ?;
-configurable boolean enableSlackNotification = ?;
-
-listener http:Listener socialMediaListener = new (9090,
-    interceptors = [new ResponseErrorInterceptor()]
-);
-
-service SocialMedia /social\-media on socialMediaListener {
+service SocialMedia /social\-media on new http:Listener(9090) {
 
     public function init() returns error? {
         log:printInfo("Social media service started");
@@ -69,7 +61,7 @@ service SocialMedia /social\-media on socialMediaListener {
     #
     # + id - The user ID for which posts are retrieved
     # + return - A list of posts or error message
-    resource function get users/[int id]/posts() returns PostWithMeta[]|UserNotFound|error {
+    resource function get users/[int id]/posts() returns Post[]|UserNotFound|error {
         User|error result = socialMediaDb->queryRow(`SELECT * FROM users WHERE id = ${id}`);
         if result is sql:NoRowsError {
             ErrorDetails errorDetails = buildErrorPayload(string `id: ${id}`, string `users/${id}/posts`);
@@ -82,7 +74,7 @@ service SocialMedia /social\-media on socialMediaListener {
         stream<Post, sql:Error?> postStream = socialMediaDb->query(`SELECT id, description, category, created_date, tags FROM posts WHERE user_id = ${id}`);
         Post[]|error posts = from Post post in postStream
             select post;
-        return mapPostToPostWithMeta(check posts);
+        return posts;
     }
 
     # Create a post for a given user
@@ -101,22 +93,9 @@ service SocialMedia /social\-media on socialMediaListener {
         if user is error {
             return user;
         }
-
-        Sentiment sentiment = check sentimentEndpoint->/text\-processing/api/sentiment.post(
-            {text: newPost.description}
-        );
-        if sentiment.label == "neg" {
-            ErrorDetails errorDetails = buildErrorPayload(string `id: ${id}`, string `users/${id}/posts`);
-            PostForbidden postForbidden = {
-                body: errorDetails
-            };
-            return postForbidden;
-        }
-
         _ = check socialMediaDb->execute(`
             INSERT INTO posts(description, category, created_date, tags, user_id)
             VALUES (${newPost.description}, ${newPost.category}, CURDATE(), ${newPost.tags}, ${id});`);
-        _ = start publishUserPostUpdate(user.id);
         return http:CREATED;
     }
 }
@@ -126,26 +105,3 @@ function buildErrorPayload(string msg, string path) returns ErrorDetails => {
     timeStamp: time:utcNow(),
     details: string `uri=${path}`
 };
-
-function mapPostToPostWithMeta(Post[] post) returns PostWithMeta[] => from var postItem in post
-    select {
-        id: postItem.id,
-        description: postItem.description,
-        meta: {
-            tags: regex:split(postItem.tags, ","),
-            category: postItem.category,
-            created_date: postItem.created_date
-        }
-    };
-
-function publishUserPostUpdate(int userId) returns error? {
-    if !enableSlackNotification {
-        return;
-    }
-    check natsClient->publishMessage({
-        subject: "ballerina.social.media",
-        content: {
-            "leaderId": userId
-        }
-    });
-}

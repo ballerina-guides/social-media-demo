@@ -13,7 +13,7 @@ type SocialMedia service object {
     resource function delete users/[int id]() returns http:NoContent|error;
 
     // posts resource
-    resource function get users/[int id]/posts() returns PostWithMeta[]|UserNotFound|error;
+    resource function get users/[int id]/posts() returns Post[]|UserNotFound|error;
     resource function post users/[int id]/posts(NewPost newPost) returns http:Created|UserNotFound|PostForbidden|error;
 };
 
@@ -49,17 +49,6 @@ type Post record {|
     string category;
     @sql:Column {name: "created_date"}
     time:Date created_date;
-|};
-
-type PostWithMeta record {|
-    int id;
-    string description;
-    record {|
-        string[] tags;
-        string category;
-        @sql:Column {name: "created_date"}
-        time:Date created_date;
-    |} meta;
 |};
 
 public type NewPost record {|
