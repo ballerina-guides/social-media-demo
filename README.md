@@ -61,8 +61,12 @@ Following are the features covered by the scenario.
 1. Move to `sentiment-analysis-service` and execute `bal run` to start sentiment analysis service
 
 ### To complete up to feature 11
-1. Move to `sts-service` and execute `bal run` to start the Security Token Service (STS) service
-2. Move to `sentiment-analysis-service-secured` and execute `bal run` to start secured sentiment analysis service
+1. Move to `sts-service` and execute `bal run` to start the Security Token Service (STS) service. The URL of the service is `https://localhost:9445/oauth2/token`
+2. Move to `sentiment-analysis-service-secured` and execute `bal run` to start secured sentiment analysis service. Following are the OAuth2 details.
+
+   clientId: `FlfJYKBD2c925h4lkycqNZlC2l4a`  
+   clientSecret: `PJz0UhTJMrHOo68QQNpvnqAY_3Aa`  
+   scope: `admin`  
 
 >Note: When trying out feature 11 use port `9098` for the sentiment analysis endpoint.
 
