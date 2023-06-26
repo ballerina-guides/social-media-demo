@@ -1,5 +1,5 @@
 [package]
-org = "com_comparision"
+org = "wso2"
 name = "social_media"
 version = "0.0.1"
 distribution = "2201.3.1"

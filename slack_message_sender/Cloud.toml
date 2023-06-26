@@ -1,5 +1,5 @@
 [container.image]
-repository="shafreen"
+repository="wso2"
 name="slack-message-sender"
 tag="0.0.1"
 

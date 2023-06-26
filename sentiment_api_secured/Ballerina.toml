@@ -1,5 +1,5 @@
 [package]
-org = "com_example"
+org = "wso2"
 name = "sentiment_api_secured"
 version = "0.1.0"
 distribution = "2201.3.1"
