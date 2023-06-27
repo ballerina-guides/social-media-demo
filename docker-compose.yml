@@ -1,16 +1,44 @@
 version: '2.14.0'
 
 services:
-  sentiment-analysis:
-    image: 'wso2/sentiment-api:0.0.1'
+  social-media:
+    image: 'wso2/social-media:0.0.1'
     ports:
-      - '9099:9099'
+      - '9090:9090'
+    depends_on: 
+      jaeger: 
+          condition: service_started
+      sentiment-analysis: 
+          condition: service_started
+      sts: 
+          condition: service_started
+      mysql: 
+          condition: service_healthy
     network_mode: "host"
 
-  sentiment-analysis-secured:
+  slack-message-sender:
+    image: 'wso2/slack-message-sender:0.0.1'
+    depends_on: 
+      jaeger: 
+          condition: service_started
+      nats: 
+          condition: service_started
+    network_mode: "host"
+
+  sentiment-analysis:
     image: 'wso2/sentiment-api-secured:0.0.1'
     ports:
       - '9098:9098'
+    depends_on: 
+      - jaeger
+    network_mode: "host"
+
+  jaeger:
+    image: 'jaegertracing/opentelemetry-all-in-one'
+    ports:
+      - '13133:13133'
+      - '16686:16686'
+      - '55680:55680'
     network_mode: "host"
 
   sts:
