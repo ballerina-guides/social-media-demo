@@ -2,7 +2,7 @@
 org = "wso2"
 name = "sentiment_api"
 version = "0.1.0"
-distribution = "2201.3.1"
+distribution = "2201.6.0"
 
 [build-options]
 observabilityIncluded = true
