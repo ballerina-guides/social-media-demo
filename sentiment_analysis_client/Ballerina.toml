@@ -1,5 +1,5 @@
 [package]
-org = "wso2"
+org = "balguides"
 name = "sentiment_analysis_client"
 version = "0.1.0"
 distribution = "2201.6.0"
