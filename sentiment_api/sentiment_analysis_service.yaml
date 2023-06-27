@@ -1,0 +1,62 @@
+openapi: 3.0.1
+info:
+  title: Text Processing
+  version: 0.1.0
+servers:
+- url: "{server}:{port}/text-processing"
+  variables:
+    server:
+      default: http://localhost
+    port:
+      default: "9000"
+paths:
+  /api/sentiment:
+    post:
+      operationId: postApiSentiment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Post'
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sentiment'
+components:
+  schemas:
+    Post:
+      required:
+      - text
+      type: object
+      properties:
+        text:
+          type: string
+    Probability:
+      required:
+      - neg
+      - neutral
+      - pos
+      type: object
+      properties:
+        neg:
+          type: number
+          format: double
+        neutral:
+          type: number
+          format: double
+        pos:
+          type: number
+          format: double
+    Sentiment:
+      required:
+      - label
+      - probability
+      type: object
+      properties:
+        probability:
+          $ref: '#/components/schemas/Probability'
+        label:
+          type: string
