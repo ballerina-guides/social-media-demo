@@ -1,6 +1,6 @@
 import ballerinax/mysql;
-import ballerina/http;
 import ballerinax/nats;
+import balguides/sentiment_analysis as sentiment;
 
 type DataBaseConfig record {|
     string host;
@@ -24,20 +24,22 @@ type SentimentEndpointConfig record {|
     |} authConfig;
 |};
 configurable SentimentEndpointConfig sentimentEndpointSecConfig = ?;
-final http:Client sentimentEndpoint = check new (sentimentEndpointSecConfig.endpointUrl,
-    retryConfig = {
-        interval: sentimentEndpointSecConfig.retryInterval
-    },
-    auth = {
-        ...sentimentEndpointSecConfig.authConfig,
-        clientConfig: {
-            secureSocket: {
-                cert: "./resources/public.crt"
+final sentiment:Client sentimentEndpoint = check new (serviceUrl = sentimentEndpointSecConfig.endpointUrl,
+    config = {
+        retryConfig: {
+            interval: sentimentEndpointSecConfig.retryInterval
+        },
+        auth: {
+            ...sentimentEndpointSecConfig.authConfig,
+            clientConfig: {
+                secureSocket: {
+                    cert: "./resources/public.crt"
+                }
             }
+        },
+        secureSocket: {
+            cert: "./resources/public.crt"
         }
-    },
-    secureSocket = {
-        cert: "./resources/public.crt"
     }
 );
 
