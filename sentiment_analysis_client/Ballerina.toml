@@ -1,5 +1,5 @@
 [package]
 org = "balguides"
 name = "sentiment_analysis"
-version = "1.0.0"
+version = "1.0.1"
 distribution = "2201.6.0"
