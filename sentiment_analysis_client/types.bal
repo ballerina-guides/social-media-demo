@@ -19,6 +19,8 @@ public type ConnectionConfig record {|
     http:CacheConfig cache?;
     # Specifies the way of handling compression (`accept-encoding`) header
     http:Compression compression = http:COMPRESSION_AUTO;
+    # Configurations related to client authentication
+    http:ClientAuthConfig? auth = ();
     # Configurations associated with the behaviour of the Circuit Breaker
     http:CircuitBreakerConfig circuitBreaker?;
     # Configurations associated with retrying
