@@ -1,6 +1,6 @@
 [container.image]
-repository="shafreen"
-name="sms-sender-service"
+repository="wso2"
+name="slack-message-sender"
 tag="0.0.1"
 
 [[container.copy.files]]

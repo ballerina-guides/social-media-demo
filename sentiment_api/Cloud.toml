@@ -1,0 +1,4 @@
+[container.image]
+repository="wso2"
+name="sentiment-api"
+tag="0.0.1"

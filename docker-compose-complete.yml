@@ -2,7 +2,7 @@ version: '2.14.0'
 
 services:
   social-media:
-    image: 'shafreen/social-media:0.0.1'
+    image: 'wso2/social-media:0.0.1'
     ports:
       - '9090:9090'
     depends_on: 
@@ -17,7 +17,7 @@ services:
     network_mode: "host"
 
   slack-message-sender:
-    image: 'shafreen/slack-message-sender:0.0.1'
+    image: 'wso2/slack-message-sender:0.0.1'
     depends_on: 
       jaeger: 
           condition: service_started
@@ -26,7 +26,7 @@ services:
     network_mode: "host"
 
   sentiment-analysis:
-    image: 'shafreen/sentiment-api:0.0.1'
+    image: 'wso2/sentiment-api:0.0.1'
     ports:
       - '9099:9099'
     depends_on: 
@@ -42,7 +42,7 @@ services:
     network_mode: "host"
 
   sts:
-    image: 'shafreen/sts-service:0.0.1'
+    image: 'wso2/sts-service:0.0.1'
     ports:
       - '9445:9445'
     network_mode: "host"

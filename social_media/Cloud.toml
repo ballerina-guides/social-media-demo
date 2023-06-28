@@ -1,11 +1,11 @@
 [container.image]
-repository="shafreen"
-name="sentiment-api-secured"
+repository="wso2"
+name="social-media"
 tag="0.0.1"
 
 [[container.copy.files]]
-sourceFile="./resources/private.key"
-target="./resources/private.key"
+sourceFile="./Config.toml"
+target="./Config.toml"
 
 [[container.copy.files]]
 sourceFile="./resources/public.crt"
