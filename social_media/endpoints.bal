@@ -16,7 +16,7 @@
 
 import ballerinax/mysql;
 import ballerinax/nats;
-import balguides/sentiment_analysis as sentiment;
+import balguides/sentiment.analysis;
 
 type DataBaseConfig record {|
     string host;
@@ -40,7 +40,7 @@ type SentimentEndpointConfig record {|
     |} authConfig;
 |};
 configurable SentimentEndpointConfig sentimentEndpointSecConfig = ?;
-final sentiment:Client sentimentEndpoint = check new (serviceUrl = sentimentEndpointSecConfig.endpointUrl,
+final analysis:Client sentimentEndpoint = check new (serviceUrl = sentimentEndpointSecConfig.endpointUrl,
     config = {
         retryConfig: {
             interval: sentimentEndpointSecConfig.retryInterval
