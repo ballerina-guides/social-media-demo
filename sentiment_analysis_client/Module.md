@@ -9,11 +9,11 @@ results for a given content.
 
 ### Create sentiment analysis client
 
-An `sentiment_analysis:Client` can be created as follows.
+An `sentiment.analysis:Client` can be created as follows.
 ```ballerina
-import balguides/sentiment_analysis as sentiment;
+import balguides/sentiment.analysis;
 
 public function main() return error? {
-    sentiment:Client sentimentClient = check new ();
+    analysis:Client sentimentClient = check new ();
 }
 ```
