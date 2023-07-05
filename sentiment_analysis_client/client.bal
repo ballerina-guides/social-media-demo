@@ -29,6 +29,9 @@ public isolated client class Client {
             if config.proxy is http:ProxyConfig {
                 httpClientConfig.proxy = check config.proxy.ensureType(http:ProxyConfig);
             }
+            if config.auth is http:ClientAuthConfig {
+                httpClientConfig.auth = check config.auth.ensureType();
+            }
         }
         http:Client httpEp = check new (serviceUrl, httpClientConfig);
         self.clientEp = httpEp;
