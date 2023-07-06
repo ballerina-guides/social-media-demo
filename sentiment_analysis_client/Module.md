@@ -13,7 +13,7 @@ An `sentiment.analysis:Client` can be created as follows.
 ```ballerina
 import balguides/sentiment.analysis;
 
-public function main() return error? {
+public function main() returns error? {
     analysis:Client sentimentClient = check new ();
 }
 ```
