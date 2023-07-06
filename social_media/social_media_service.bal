@@ -20,6 +20,7 @@ import ballerina/regex;
 import ballerina/sql;
 import ballerina/time;
 import ballerinax/mysql.driver as _;
+import balguides/sentiment.analysis;
 
 configurable boolean moderate = ?;
 configurable boolean enableSlackNotification = ?;
@@ -118,7 +119,7 @@ service SocialMedia /social\-media on socialMediaListener {
             return user;
         }
 
-        Sentiment sentiment = check sentimentEndpoint->/text\-processing/api/sentiment.post(
+        analysis:Sentiment sentiment = check sentimentEndpoint->/api/sentiment.post(
             {text: newPost.description}
         );
         if sentiment.label == "neg" {
