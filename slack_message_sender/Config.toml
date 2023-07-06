@@ -1,4 +1,4 @@
-natsUrl = "nats://localhost:4222"
+natsUrl = "nats://nats:4222"
 
 [slackConfig]
 authToken = "token123"
