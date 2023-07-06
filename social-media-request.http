@@ -40,3 +40,11 @@ POST http://localhost:9099/text-processing/api/sentiment
 {
     "text": "I love this product"
 }
+
+### Create a follower
+POST http://localhost:9090/social-media/users/2/followers
+content-type: application/json
+
+{
+    "id": 3
+}
