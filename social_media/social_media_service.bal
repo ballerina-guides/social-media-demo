@@ -178,6 +178,7 @@ service SocialMedia /social\-media on socialMediaListener {
         _ = check socialMediaDb->execute(`
             INSERT INTO followers(created_date, leader_id, follower_id)
             VALUES (CURDATE(), ${id}, ${follower.id});`);
+        _ = start publishNotification(id, follower.id);
         return http:CREATED;
     }
 }
@@ -208,5 +209,12 @@ function publishUserPostUpdate(int userId) returns error? {
         content: {
             "leaderId": userId
         }
+    });
+}
+
+function publishNotification(int userId, int followerId) returns error? {
+    _ = check notificationPublisher->publishUpdate(hubConfig.topic, {
+        "userId": userId,
+        "followerId": followerId
     });
 }
