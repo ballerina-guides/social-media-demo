@@ -141,10 +141,19 @@ service SocialMedia /social\-media on socialMediaListener {
     #
     # + follower - Details of the follower
     # + return - The created message or error message
-    resource function post users/[int id]/followers(Follower follower) returns http:Created|UserNotFound|error {
+    resource function post users/[int id]/followers(Follower follower) returns http:Created|FollowerConflict|UserNotFound|error {
+        if id == follower.id {
+            ErrorDetails errorDetails = buildErrorPayload(
+                string `follower id: ${follower.id} conflicts with user id: ${id}`, string `users/${id}/followers`);
+            FollowerConflict 'conflict = {
+                body: errorDetails
+            };
+            return 'conflict;
+        }
+
         User|error user = socialMediaDb->queryRow(`SELECT * FROM users WHERE id = ${id}`);
         if user is sql:NoRowsError {
-            ErrorDetails errorDetails = buildErrorPayload(string `id: ${id}`, string `users/${id}/posts`);
+            ErrorDetails errorDetails = buildErrorPayload(string `id: ${id}`, string `users/${id}/followers`);
             UserNotFound userNotFound = {
                 body: errorDetails
             };
@@ -156,7 +165,7 @@ service SocialMedia /social\-media on socialMediaListener {
 
         User|error followerDetails = socialMediaDb->queryRow(`SELECT * FROM users WHERE id = ${follower.id}`);
         if followerDetails is sql:NoRowsError {
-            ErrorDetails errorDetails = buildErrorPayload(string `id: ${follower.id}`, string `users/${follower.id}/posts`);
+            ErrorDetails errorDetails = buildErrorPayload(string `id: ${follower.id}`, string `users/${follower.id}/followers`);
             UserNotFound userNotFound = {
                 body: errorDetails
             };
