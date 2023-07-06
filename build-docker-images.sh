@@ -15,5 +15,6 @@
 #
 ( cd sts_service ; bal clean ; bal build)
 ( cd sentiment_api_secured ; bal clean ; bal build)
+( cd notification_hub ; bal clean ; bal build)
 ( cd social_media ; bal clean ; bal build)
 ( cd slack_message_sender ; bal clean ; bal build)

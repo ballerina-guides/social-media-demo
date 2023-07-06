@@ -12,6 +12,8 @@ services:
           condition: service_started
       sts: 
           condition: service_started
+      notification-hub:
+          condition: service_started
       mysql: 
           condition: service_healthy
     network_mode: "host"
@@ -45,6 +47,12 @@ services:
     image: 'wso2/sts-service:0.0.1'
     ports:
       - '9445:9445'
+    network_mode: "host"
+
+  notification-hub:
+    image: 'wso2/notification-hub:0.0.1'
+    ports:
+      - '9091:9091'
     network_mode: "host"
 
   nats:
