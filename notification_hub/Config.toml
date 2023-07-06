@@ -1,0 +1,8 @@
+# The period between retry requests
+CLIENT_RETRY_INTERVAL = 3.0
+
+# The maximum retry count
+CLIENT_RETRY_COUNT = 3
+
+# The message delivery timeout
+CLIENT_TIMEOUT = 10.0
