@@ -98,7 +98,7 @@ type ErrorDetails record {|
     string details;
 |};
 
-type Follower record {|
+public type Follower record {|
     int id;
 |};
 
