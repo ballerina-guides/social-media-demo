@@ -31,6 +31,9 @@ type SocialMedia service object {
     // posts resource
     resource function get users/[int id]/posts() returns PostWithMeta[]|UserNotFound|error;
     resource function post users/[int id]/posts(NewPost newPost) returns http:Created|UserNotFound|PostForbidden|error;
+
+    // followers resource
+    resource function post users/[int id]/followers(Follower follower) returns http:Created|UserNotFound|error;
 };
 
 // user representations
@@ -93,4 +96,8 @@ type ErrorDetails record {|
     time:Utc timeStamp;
     string message;
     string details;
+|};
+
+type Follower record {|
+    int id;
 |};

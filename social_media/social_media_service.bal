@@ -136,6 +136,41 @@ service SocialMedia /social\-media on socialMediaListener {
         _ = start publishUserPostUpdate(user.id);
         return http:CREATED;
     }
+
+    # Add a new follower for the user
+    #
+    # + follower - Details of the follower
+    # + return - The created message or error message
+    resource function post users/[int id]/followers(Follower follower) returns http:Created|UserNotFound|error {
+        User|error user = socialMediaDb->queryRow(`SELECT * FROM users WHERE id = ${id}`);
+        if user is sql:NoRowsError {
+            ErrorDetails errorDetails = buildErrorPayload(string `id: ${id}`, string `users/${id}/posts`);
+            UserNotFound userNotFound = {
+                body: errorDetails
+            };
+            return userNotFound;
+        }
+        if user is error {
+            return user;
+        }
+
+        User|error followerDetails = socialMediaDb->queryRow(`SELECT * FROM users WHERE id = ${follower.id}`);
+        if followerDetails is sql:NoRowsError {
+            ErrorDetails errorDetails = buildErrorPayload(string `id: ${follower.id}`, string `users/${follower.id}/posts`);
+            UserNotFound userNotFound = {
+                body: errorDetails
+            };
+            return userNotFound;
+        }
+        if followerDetails is error {
+            return followerDetails;
+        }
+
+        _ = check socialMediaDb->execute(`
+            INSERT INTO followers(created_date, leader_id, follower_id)
+            VALUES (CURDATE(), ${id}, ${follower.id});`);
+        return http:CREATED;
+    }
 }
 
 function buildErrorPayload(string msg, string path) returns ErrorDetails => {
