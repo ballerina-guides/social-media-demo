@@ -62,7 +62,8 @@ function dispatchContent(websubhub:VerifiedSubscription subscriber) returns erro
     });
     string receiverId = string `${subscriber.hubTopic}-${subscriber.hubCallback}`;
     do {
-        stream<websubhub:UpdateMessage, error?> eventStream = check pubsub.subscribe(subscriber.hubTopic);
+        stream<websubhub:UpdateMessage, error?> eventStream = check pubsub.subscribe(
+            subscriber.hubTopic, timeout = -1);
         while true {
             if !subscriptionAvailable(receiverId) {
                 fail error(string `Subscriber with Id ${receiverId} or topic ${subscriber.hubTopic} is invalid`);
