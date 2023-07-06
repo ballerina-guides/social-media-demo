@@ -17,7 +17,6 @@
 import ballerina/http;
 import ballerina/websubhub;
 import ballerina/log;
-import ballerina/io;
 import xlibb/pubsub;
 
 final pubsub:PubSub pubsub = new (autoCreateTopics = true);
@@ -50,7 +49,6 @@ service /hub on new websubhub:Listener(9091) {
     # + return - `websubhub:UpdateMessageError` is there is an error or else `websubhub:Acknowledgement`
     remote function onUpdateMessage(readonly & websubhub:UpdateMessage message) 
         returns websubhub:Acknowledgement|websubhub:UpdateMessageError {
-        io:println(message);
         if HUB_TOPIC != message.hubTopic {
             return error websubhub:UpdateMessageError(
                 string `Topic ${message.hubTopic} not found`, statusCode = http:STATUS_NOT_FOUND);
