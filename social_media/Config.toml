@@ -13,15 +13,15 @@ connectionTimeout = 30.0
 database = "social_media_database"
 user = "social_media_user"
 password = "dummypassword"
-host = "mysql"
+host = "localhost"
 port = 3306
 
 [sentimentEndpointSecConfig]
-endpointUrl = "https://sentiment-analysis:9098/text-processing"
+endpointUrl = "https://localhost:9098/text-processing"
 retryInterval = 3.0
 
 [sentimentEndpointSecConfig.authConfig]
-refreshUrl = "https://sts:9445/oauth2/token"
+refreshUrl = "https://localhost:9445/oauth2/token"
 refreshToken = "24f19603-8565-4b5f-a036-88a945e1f272"
 clientId = "FlfJYKBD2c925h4lkycqNZlC2l4a"
 clientSecret = "PJz0UhTJMrHOo68QQNpvnqAY_3Aa"
