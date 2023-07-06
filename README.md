@@ -47,7 +47,8 @@ Following are the features covered by the scenario.
 
 ## With Docker Compose
 1. Checkout the code base and move to the root folder
-2. Execute `docker compose up`
+2. Execute `build-docker-images.sh` script to generate the necessary docker images.
+3. Execute `docker compose up`
 
 >Note: When trying out feature 11 use port `9098` for the sentiment analysis endpoint.
 
