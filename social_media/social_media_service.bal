@@ -165,7 +165,7 @@ service SocialMedia /social\-media on socialMediaListener {
 
         User|error followerDetails = socialMediaDb->queryRow(`SELECT * FROM users WHERE id = ${follower.id}`);
         if followerDetails is sql:NoRowsError {
-            ErrorDetails errorDetails = buildErrorPayload(string `id: ${follower.id}`, string `users/${follower.id}/followers`);
+            ErrorDetails errorDetails = buildErrorPayload(string `follower-id: ${follower.id}`, string `users/${id}/followers`);
             UserNotFound userNotFound = {
                 body: errorDetails
             };
