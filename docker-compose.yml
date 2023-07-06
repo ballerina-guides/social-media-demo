@@ -55,6 +55,15 @@ services:
       - '9091:9091'
     network_mode: "host"
 
+  notification-service:
+    image: 'wso2/notification-service:0.0.1'
+    ports:
+      - '9092:9092'
+      - '10001:10001'
+    depends_on: 
+      - notification-hub
+    network_mode: "host"
+
   nats:
     image: nats:latest
     ports:

@@ -18,3 +18,4 @@
 ( cd notification_hub ; bal clean ; bal build)
 ( cd social_media ; bal clean ; bal build)
 ( cd slack_message_sender ; bal clean ; bal build)
+( cd social_media_notification ; bal clean ; bal build)
