@@ -1,0 +1,8 @@
+[container.image]
+repository="wso2"
+name="notification-hub"
+tag="0.0.1"
+
+[[container.copy.files]]
+sourceFile="./Config.toml"
+target="./Config.toml"

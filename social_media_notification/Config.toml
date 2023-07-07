@@ -1,0 +1,3 @@
+[hubConfig]
+url = "http://localhost:9091/hub"
+topic = "follower-notifications"

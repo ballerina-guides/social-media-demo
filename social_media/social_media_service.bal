@@ -136,6 +136,51 @@ service SocialMedia /social\-media on socialMediaListener {
         _ = start publishUserPostUpdate(user.id);
         return http:CREATED;
     }
+
+    # Add a new follower for the user
+    #
+    # + follower - Details of the follower
+    # + return - The created message or error message
+    resource function post users/[int id]/followers(Follower follower) returns http:Created|FollowerConflict|UserNotFound|error {
+        if id == follower.id {
+            ErrorDetails errorDetails = buildErrorPayload(
+                string `follower id: ${follower.id} conflicts with user id: ${id}`, string `users/${id}/followers`);
+            FollowerConflict 'conflict = {
+                body: errorDetails
+            };
+            return 'conflict;
+        }
+
+        User|error user = socialMediaDb->queryRow(`SELECT * FROM users WHERE id = ${id}`);
+        if user is sql:NoRowsError {
+            ErrorDetails errorDetails = buildErrorPayload(string `id: ${id}`, string `users/${id}/followers`);
+            UserNotFound userNotFound = {
+                body: errorDetails
+            };
+            return userNotFound;
+        }
+        if user is error {
+            return user;
+        }
+
+        User|error followerDetails = socialMediaDb->queryRow(`SELECT * FROM users WHERE id = ${follower.id}`);
+        if followerDetails is sql:NoRowsError {
+            ErrorDetails errorDetails = buildErrorPayload(string `follower-id: ${follower.id}`, string `users/${id}/followers`);
+            UserNotFound userNotFound = {
+                body: errorDetails
+            };
+            return userNotFound;
+        }
+        if followerDetails is error {
+            return followerDetails;
+        }
+
+        _ = check socialMediaDb->execute(`
+            INSERT INTO followers(created_date, leader_id, follower_id)
+            VALUES (CURDATE(), ${id}, ${follower.id});`);
+        _ = start publishNotification(id, follower.id);
+        return http:CREATED;
+    }
 }
 
 function buildErrorPayload(string msg, string path) returns ErrorDetails => {
@@ -164,5 +209,12 @@ function publishUserPostUpdate(int userId) returns error? {
         content: {
             "leaderId": userId
         }
+    });
+}
+
+function publishNotification(int userId, int followerId) returns error? {
+    _ = check notificationPublisher->publishUpdate(hubConfig.topic, {
+        "userId": userId,
+        "followerId": followerId
     });
 }

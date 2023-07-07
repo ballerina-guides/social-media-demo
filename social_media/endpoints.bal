@@ -16,6 +16,7 @@
 
 import ballerinax/mysql;
 import ballerinax/nats;
+import ballerina/websubhub;
 import balguides/sentiment.analysis;
 
 type DataBaseConfig record {|
@@ -73,3 +74,10 @@ final nats:Client natsClient = check new (natsConfig.url,
         ...natsConfig.retryConfig
     }
 );
+
+type NotificationHubConfig record {|
+    string url;
+    string topic;
+|};
+configurable NotificationHubConfig hubConfig = ?;
+websubhub:PublisherClient notificationPublisher = check new (hubConfig.url);
