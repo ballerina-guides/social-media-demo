@@ -45,6 +45,8 @@ Following are the features covered by the scenario.
 12. Error handlers
 13. Ballerina concurrency
 14. Integrating a message broker
+15. Creating webhooks
+16. Building websocket servers and clients
 
 # Setup environment
 
