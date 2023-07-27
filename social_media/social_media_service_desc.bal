@@ -20,7 +20,7 @@ import ballerina/sql;
 import ballerina/time;
 
 type SocialMedia service object {
-    *http:Service;
+    *http:InterceptableService;
 
     // users resource
     resource function get users() returns User[]|error;
