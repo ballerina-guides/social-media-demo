@@ -25,14 +25,17 @@ import balguides/sentiment.analysis;
 configurable boolean moderate = ?;
 configurable boolean enableSlackNotification = ?;
 
-listener http:Listener socialMediaListener = new (9090,
-    interceptors = [new ResponseErrorInterceptor()]
-);
+listener http:Listener socialMediaListener = new (9090);
 
 service SocialMedia /social\-media on socialMediaListener {
 
     public function init() returns error? {
         log:printInfo("Social media service started");
+    }
+
+    // Service-level error interceptors can handle errors occurred during the service execution.
+    public function createInterceptors() returns ResponseErrorInterceptor {
+        return new ResponseErrorInterceptor();
     }
 
     # Get all the users
