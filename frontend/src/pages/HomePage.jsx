@@ -16,7 +16,7 @@
  * under the License.
  */
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import PropTypes from "prop-types";
@@ -24,6 +24,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import PostCard from "../components/PostCard";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -59,7 +60,46 @@ function a11yProps(index) {
 }
 
 export default function HomePage() {
+  const dummyData = [
+    {
+      id: 1,
+      description: "Post 1 description",
+      meta: {
+        tags: ["tag1", "tag2"],
+        category: "Category1",
+        created_date: new Date(),
+      },
+    },
+    {
+      id: 2,
+      description: "Post 2 description",
+      meta: {
+        tags: ["tag3", "tag4"],
+        category: "Category2",
+        created_date: new Date(),
+      },
+    },
+    {
+      id: 3,
+      description: "Post 3 description",
+      meta: {
+        tags: ["tag5", "tag6"],
+        category: "Category3",
+        created_date: new Date(),
+      },
+    },
+  ];
+
+  const [data] = useState(dummyData);
+
   const [value, setValue] = React.useState(0);
+  // const [data, setData] = useState([]);
+
+  // useEffect(() => {
+  //   fetch("<<bal endpoint here>>")
+  //     .then((response) => response.json())
+  //     .then((data) => setData(data));
+  // }, []);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -76,14 +116,38 @@ export default function HomePage() {
           justifyContent: "center",
         }}
       >
-        <Tabs value={value} onChange={handleChange}>
-          <Tab label="Posts" {...a11yProps(0)} />
-          <Tab label="Profile" {...a11yProps(1)} />
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          sx={{
+            display: "flex",
+            width: "100%",
+          }}
+        >
+          <Tab
+            sx={{
+              flex: 1,
+              minWidth: 0,
+              maxWidth: "50%",
+            }}
+            label="Posts"
+            {...a11yProps(0)}
+          />
+          <Tab
+            sx={{
+              flex: 1,
+              minWidth: 0,
+              maxWidth: "50%",
+            }}
+            label="Profile"
+            {...a11yProps(1)}
+          />
         </Tabs>
       </Box>
-
       <CustomTabPanel value={value} index={0}>
-        Posts go here
+        {data.map((item, index) => (
+          <PostCard key={index} data={item} />
+        ))}
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
         Profile here
