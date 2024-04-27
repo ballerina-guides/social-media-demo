@@ -16,14 +16,41 @@
  * under the License.
  */
 
+import React from "react";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+import UserProfileButton from "../components/UserProfileButton";
+import { Stack, Button, Container } from "@mui/material";
 
 export default function ProfilesPage() {
+
+  const data = ["Hamilton", "Verstappen", "Norris", "Maryam"];
   return (
     <div>
-      <Header />
-      <h1>Profiles Page</h1>
+      <Header enableProfile={false} />
+      <Stack sx={{
+        justifyContent: "center",
+        display: "flex",
+        alignItems: "center",
+      }}>
+        <Stack>
+          {data.map((name, index) => (
+            <UserProfileButton key={index} userName={name} />
+          ))}
+        </Stack>
+        <Button
+          variant="contained"
+          color="secondary"
+          sx={{
+            padding: "1rem 2rem",
+            margin: "0.5rem",
+            borderRadius: "1rem",
+            color: "white",
+          }}
+        >
+          Add new user
+        </Button>
+      </Stack>
       <Footer />
     </div>
   );

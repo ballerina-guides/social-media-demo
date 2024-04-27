@@ -1,4 +1,5 @@
 import HomePage from "./pages/HomePage"
+import ProfilesPage from "./pages/ProfilesPage"
 import {
   BrowserRouter,
   Route,
@@ -11,6 +12,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/profiles" element={<ProfilesPage />} />
       </Routes>
     </BrowserRouter>
   )

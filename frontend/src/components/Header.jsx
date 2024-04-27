@@ -20,13 +20,14 @@ import { Box, Container, Button } from "@mui/material";
 import HeaderLogo from "../assets/logo.png";
 import { useNavigate } from "react-router-dom";
 
-export default function Header() {
+export default function Header({ enableProfile }) {
   const navigate = useNavigate();
 
   return (
     <Box
       sx={{
         borderBottom: "1px solid var(--primary-color)",
+        p: 2,
       }}
       backgroundColor="#EEEEEE"
     >
@@ -48,7 +49,8 @@ export default function Header() {
           component="img"
           sx={{
             objectFit: "cover",
-            width: "8rem",
+            width: "14rem",
+            padding: "0.5rem 2rem",
             marginLeft: {
               xs: "0",
               sm: "4rem",
@@ -61,14 +63,21 @@ export default function Header() {
           src={HeaderLogo}
           onClick={() => navigate("/")}
         />
-
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => navigate("/profiles")}
-        >
-          Profiles
-        </Button>
+        {
+          enableProfile ?
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => navigate("/profiles")}
+              sx={{
+                padding: "1rem 2rem",
+                borderRadius: "1rem",
+                color: "white",
+              }}
+            >
+              Profiles
+            </Button> : ""
+        }
       </Container>
     </Box>
   );

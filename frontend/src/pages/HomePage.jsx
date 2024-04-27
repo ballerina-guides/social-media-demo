@@ -122,7 +122,7 @@ export default function HomePage() {
 
   return (
     <div>
-      <Header />
+      <Header enableProfile={true} />
       <Box
         sx={{
           width: "100%",
