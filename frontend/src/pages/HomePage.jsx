@@ -25,7 +25,10 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import PostCard from "../components/PostCard";
-
+import UserProfile from "../components/UserProfile";
+import NewPostPopup from "../components/NewPostPopup";
+import Fab from "@mui/material/Fab";
+import AddIcon from "@mui/icons-material/Add";
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -64,6 +67,7 @@ export default function HomePage() {
     {
       id: 1,
       description: "Post 1 description",
+      author: "John Doe",
       meta: {
         tags: ["tag1", "tag2"],
         category: "Category1",
@@ -103,6 +107,17 @@ export default function HomePage() {
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+  };
+
+  // New Post
+  const [isPopupOpen, setPopupOpen] = useState(false);
+
+  const handlePopupOpen = () => {
+    setPopupOpen(true);
+  };
+
+  const handlePopupClose = () => {
+    setPopupOpen(false);
   };
 
   return (
@@ -150,9 +165,25 @@ export default function HomePage() {
         ))}
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        Profile here
+        <UserProfile data={data} />
       </CustomTabPanel>
+
       <Footer />
+      <Fab
+        color="primary"
+        aria-label="add"
+        style={{ position: "fixed", bottom: "20px", right: "20px" }}
+        onClick={handlePopupOpen}
+      >
+        <AddIcon />
+      </Fab>
+      {isPopupOpen && (
+        <NewPostPopup
+          open={isPopupOpen}
+          handleClose={handlePopupClose}
+          title="New Post"
+        />
+      )}
     </div>
   );
 }

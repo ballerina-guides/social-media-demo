@@ -17,7 +17,7 @@
  */
 
 import { Box, Container, Button } from "@mui/material";
-import HeaderLogo from "../assets/HeaderLogo.png";
+import HeaderLogo from "../assets/logo.png";
 import { useNavigate } from "react-router-dom";
 
 export default function Header() {
