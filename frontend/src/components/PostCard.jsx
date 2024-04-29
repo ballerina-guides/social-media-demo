@@ -39,10 +39,6 @@ const PostCard = ({ data }) => {
     <Card
       sx={{
         width: "100%",
-        // ":hover": {
-        //   cursor: "pointer",
-        //   background: "var(--primary-color-light1)",
-        // },
         marginBottom: "1rem",
       }}
     >
@@ -71,7 +67,7 @@ const PostCard = ({ data }) => {
             )}
 
             <Typography gutterBottom variant="p" component="p">
-              {created_date.toLocaleDateString()}
+              {created_date.year}-{created_date.month}-{created_date.day}
             </Typography>
           </Stack>
 

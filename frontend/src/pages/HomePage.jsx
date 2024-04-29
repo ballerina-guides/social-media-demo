@@ -29,6 +29,8 @@ import UserProfile from "../components/UserProfile";
 import NewPostPopup from "../components/NewPostPopup";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
+import axios from "axios";
+
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -63,47 +65,45 @@ function a11yProps(index) {
 }
 
 export default function HomePage() {
-  const dummyData = [
-    {
-      id: 1,
-      description: "Post 1 description",
-      author: "John Doe",
-      meta: {
-        tags: ["tag1", "tag2"],
-        category: "Category1",
-        created_date: new Date(),
-      },
-    },
-    {
-      id: 2,
-      description: "Post 2 description",
-      meta: {
-        tags: ["tag3", "tag4"],
-        category: "Category2",
-        created_date: new Date(),
-      },
-    },
-    {
-      id: 3,
-      description: "Post 3 description",
-      meta: {
-        tags: ["tag5", "tag6"],
-        category: "Category3",
-        created_date: new Date(),
-      },
-    },
-  ];
-
-  const [data] = useState(dummyData);
-
   const [value, setValue] = React.useState(0);
-  // const [data, setData] = useState([]);
+  const [posts, setPosts] = useState([]);
+  const [userPosts, setUserPosts] = useState([]);
+  const userData = {
+    name: "Ranga Doe",
+    birthday: "01/01/1990",
+    mobileNumber: "1234567890",
+  };
 
-  // useEffect(() => {
-  //   fetch("<<bal endpoint here>>")
-  //     .then((response) => response.json())
-  //     .then((data) => setData(data));
-  // }, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:9090/social-media/posts"
+        );
+        setPosts(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          // TODO: get user details from a variable
+          "http://localhost:9090/social-media/users/1/posts"
+        );
+        setUserPosts(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -160,12 +160,12 @@ export default function HomePage() {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        {data.map((item, index) => (
+        {posts.map((item, index) => (
           <PostCard key={index} data={item} />
         ))}
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <UserProfile data={data} />
+        <UserProfile data={{ userPosts, userData }} />
       </CustomTabPanel>
 
       <Footer />

@@ -22,6 +22,8 @@ import PostCard from "./PostCard";
 import ProfilePicture from "../assets/profile-picture.png";
 
 const UserProfile = ({ data }) => {
+  const { userData } = data;
+  const { userPosts } = data;
   return (
     <div
       style={{
@@ -35,10 +37,10 @@ const UserProfile = ({ data }) => {
         alt="Profile pic"
         style={{ width: "150px", height: "150px", borderRadius: "50%" }}
       />
-      <Typography variant="h2">John Doe</Typography>
-      <Typography variant="p">January 1, 1990</Typography>
-      <Typography variant="p">123-456-7890</Typography>
-      {data.map((item, index) => (
+      <Typography variant="h2">{userData.name}</Typography>
+      <Typography variant="p">{userData.birthday}</Typography>
+      <Typography variant="p">{userData.mobileNumber}</Typography>
+      {userPosts.map((item, index) => (
         <PostCard key={index} data={item} />
       ))}
     </div>
