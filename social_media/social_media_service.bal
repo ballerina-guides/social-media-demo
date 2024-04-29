@@ -13,13 +13,13 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
-
 import ballerina/http;
 import ballerina/log;
 import ballerina/regex;
 import ballerina/sql;
 import ballerina/time;
 import ballerinax/mysql.driver as _;
+
 import balguides/sentiment.analysis;
 
 configurable boolean moderate = ?;
@@ -27,6 +27,11 @@ configurable boolean enableSlackNotification = ?;
 
 listener http:Listener socialMediaListener = new (9090);
 
+@http:ServiceConfig {
+    cors: {
+        allowOrigins: ["*"]
+    }
+}
 service SocialMedia /social\-media on socialMediaListener {
 
     public function init() returns error? {
