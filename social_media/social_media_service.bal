@@ -103,11 +103,33 @@ service SocialMedia /social\-media on socialMediaListener {
             };
             return userNotFound;
         }
+        if result is error {
+            return result;
+        }
 
         stream<Post, sql:Error?> postStream = socialMediaDb->query(`SELECT id, description, category, created_date, tags FROM posts WHERE user_id = ${id}`);
         Post[]|error posts = from Post post in postStream
             select post;
-        return mapPostToPostWithMeta(check posts);
+        return mapPostToPostWithMeta(check posts, result.name);
+    }
+
+    # Get posts from all the users
+    #
+    # + return - A list of posts or error message
+    resource function get posts() returns PostWithMeta[]|error {
+        stream<User, sql:Error?> userStream = socialMediaDb->query(`SELECT * FROM users`);
+        PostWithMeta[] posts = [];
+        User[] users = check from User user in userStream
+            select user;
+        
+        foreach User user in users {
+            stream<Post, sql:Error?> postStream = socialMediaDb->query(`SELECT id, description, category, created_date, tags FROM posts WHERE user_id = ${user.id}`);
+            Post[]|error userPosts = from Post post in postStream
+                select post;
+            PostWithMeta[] tempPosts = mapPostToPostWithMeta(check userPosts, user.name);
+            posts.push(...tempPosts);
+        }
+        return posts;
     }
 
     # Create a post for a given user
@@ -152,10 +174,11 @@ function buildErrorPayload(string msg, string path) returns ErrorDetails => {
     details: string `uri=${path}`
 };
 
-function mapPostToPostWithMeta(Post[] post) returns PostWithMeta[] => from var postItem in post
+function mapPostToPostWithMeta(Post[] post, string author) returns PostWithMeta[] => from var postItem in post
     select {
         id: postItem.id,
         description: postItem.description,
+        author,
         meta: {
             tags: regex:split(postItem.tags, ","),
             category: postItem.category,

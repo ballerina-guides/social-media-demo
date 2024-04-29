@@ -70,6 +70,7 @@ type Post record {|
 type PostWithMeta record {|
     int id;
     string description;
+    string author;
     record {|
         string[] tags;
         string category;
