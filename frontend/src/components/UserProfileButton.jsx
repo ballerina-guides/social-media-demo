@@ -30,6 +30,7 @@ export default function UserProfileButton({ userName }) {
                 color="primary"
                 sx={{
                     padding: "1rem 2rem",
+                    minWidth: "10rem",
                     width: "100%",
                     margin: "0.5rem",
                     borderRadius: "1rem",

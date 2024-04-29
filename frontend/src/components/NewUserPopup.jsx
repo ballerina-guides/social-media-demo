@@ -17,6 +17,7 @@
  */
 
 import React from "react";
+import dayjs from 'dayjs';
 import {
   Dialog,
   DialogTitle,
@@ -28,19 +29,18 @@ import {
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { alignProperty } from "@mui/material/styles/cssUtils";
 
 const NewUserPopup = ({ open, handleClose, title }) => {
   const [userName, setUserName] = React.useState("");
-  const [dateOfBirth, setDOB] = React.useState("");
+  const [dateOfBirth, setDOB] = React.useState(dayjs('2022-04-17'));
   const [mobileNumber, setMobileNumber] = React.useState("");
 
   const handleUserNameChange = (event) => {
     setUserName(event.target.value);
   };
 
-  const handleDOBChange = (event) => {
-    setDOB(event.target.value);
+  const handleDOBChange = (newValue) => {
+    setDOB(newValue);
   };
 
   const handleMobileNumberChange = (event) => {
@@ -78,6 +78,8 @@ const NewUserPopup = ({ open, handleClose, title }) => {
               <DatePicker
                 label="Date of Birth:"
                 style={{ width: "100%" }}
+                value={dateOfBirth}
+                onChange={handleDOBChange}
               />
             </LocalizationProvider>
             <TextField
