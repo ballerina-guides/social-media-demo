@@ -16,15 +16,47 @@
  * under the License.
  */
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import UserProfileButton from "../components/UserProfileButton";
-import { Stack, Button, Container } from "@mui/material";
+import NewUserPopup from "../components/NewUserPopup";
+import { Stack, Button, Box } from "@mui/material";
+import axios from 'axios';
 
 export default function ProfilesPage() {
+  const [isPopupOpen, setPopupOpen] = useState(false);
+  const [userNames, setUserNames] = useState(["Hamilton", "Verstappen", "Norris", "Maryam", "Hamilton", "Verstappen", "Norris", "Maryam", "Hamilton", "Verstappen", "Norris", "Maryam"]);
 
-  const data = ["Hamilton", "Verstappen", "Norris", "Maryam"];
+  const handlePopupOpen = () => {
+    setPopupOpen(true);
+  };
+
+  const handlePopupClose = () => {
+    setPopupOpen(false);
+  };
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const userNames = await getUsers();
+      setUserNames(userNames);
+    };
+
+    fetchUsers();
+  }, []);
+
+  const getUsers = () => {
+    return axios.get('http://localhost:9090/social-media/users')
+      .then(response => {
+        const users = response.data;
+        return users.map(user => user.name);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }
+
+  // const userNames = getUsers();
   return (
     <div>
       <Header enableProfile={false} />
@@ -33,11 +65,18 @@ export default function ProfilesPage() {
         display: "flex",
         alignItems: "center",
       }}>
-        <Stack>
-          {data.map((name, index) => (
+        <Stack
+          style={{
+            maxHeight: "25rem",
+            overflow: 'auto',
+            width: "50%",
+          }}>
+
+          {userNames.map((name, index) => (
             <UserProfileButton key={index} userName={name} />
           ))}
         </Stack>
+
         <Button
           variant="contained"
           color="secondary"
@@ -47,11 +86,19 @@ export default function ProfilesPage() {
             borderRadius: "1rem",
             color: "white",
           }}
+          onClick={handlePopupOpen}
         >
           Add new user
         </Button>
       </Stack>
       <Footer />
+      {isPopupOpen && (
+        <NewUserPopup
+          open={isPopupOpen}
+          handleClose={handlePopupClose}
+          title="Add new user"
+        />
+      )}
     </div>
   );
 }
