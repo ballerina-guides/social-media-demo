@@ -27,6 +27,7 @@ import axios from 'axios';
 export default function ProfilesPage() {
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [users, setUserNames] = useState(["Hamilton", "Verstappen", "Norris", "Maryam", "Hamilton", "Verstappen", "Norris", "Maryam", "Hamilton", "Verstappen", "Norris", "Maryam"]);
+  const [newUser, setNewUser] = useState("");
 
   const deleteUser = (userId) => {
     console.log(`deleted user ${userId}`);
@@ -35,7 +36,6 @@ export default function ProfilesPage() {
       .then(response => {
         const users = response.data;
         return users;
-        // return users.map(user => user.name);
       })
       .catch(error => {
         console.error(error);
@@ -43,6 +43,19 @@ export default function ProfilesPage() {
 
     window.location.reload();
   };
+
+  const addUser = (user) => {
+    console.log(`added user ${JSON.stringify(user)}`);
+    axios.post(`http://localhost:9090/social-media/users/`, user).
+      then(response => {
+        console.log(response.data);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+
+    window.location.reload();
+  }
 
   const handlePopupOpen = () => {
     setPopupOpen(true);
@@ -110,7 +123,7 @@ export default function ProfilesPage() {
         <NewUserPopup
           open={isPopupOpen}
           handleClose={handlePopupClose}
-          title="Add new user"
+          addUser={addUser}
         />
       )}
     </div>

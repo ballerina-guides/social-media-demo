@@ -30,17 +30,31 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
-const NewUserPopup = ({ open, handleClose, title }) => {
+const NewUserPopup = ({ open, handleClose, addUser }) => {
   const [userName, setUserName] = React.useState("");
-  const [dateOfBirth, setDOB] = React.useState(dayjs('2022-04-17'));
+  const [dateOfBirth, setDOB] = React.useState(dayjs('2022-04-17').toDate());
   const [mobileNumber, setMobileNumber] = React.useState("");
+
+  const getUser = () => {
+    return {
+      name: userName,
+      birthDate: {
+        year: dateOfBirth.getFullYear(),
+        month: dateOfBirth.getMonth() + 1,
+        day: dateOfBirth.getDate()
+      },
+      mobileNumber: mobileNumber
+    };
+  };
 
   const handleUserNameChange = (event) => {
     setUserName(event.target.value);
   };
 
   const handleDOBChange = (newValue) => {
-    setDOB(newValue);
+    const dob = new Date(newValue);
+    console.log(dob.getDate());
+    setDOB(dob);
   };
 
   const handleMobileNumberChange = (event) => {
@@ -53,7 +67,9 @@ const NewUserPopup = ({ open, handleClose, title }) => {
 
   return (
     <Dialog open={open} onClose={handleClose} style={{ margin: "20px" }}>
-      <DialogTitle style={{ textAlign: "center" }}>{title}</DialogTitle>
+      <DialogTitle style={{ textAlign: "center" }}>
+        Add new user
+      </DialogTitle>
       <DialogContent>
         <form onSubmit={handleAddNewUser}>
           <div
@@ -78,7 +94,7 @@ const NewUserPopup = ({ open, handleClose, title }) => {
               <DatePicker
                 label="Date of Birth:"
                 style={{ width: "100%" }}
-                value={dateOfBirth}
+                value={dayjs(dateOfBirth)}
                 onChange={handleDOBChange}
               />
             </LocalizationProvider>
@@ -101,7 +117,11 @@ const NewUserPopup = ({ open, handleClose, title }) => {
               <Button onClick={handleClose} color="secondary">
                 Cancel
               </Button>
-              <Button type="submit" color="primary">
+              <Button
+                type="submit"
+                color="primary"
+                onClick={() => addUser(getUser())}
+              >
                 Add User
               </Button>
             </div>
