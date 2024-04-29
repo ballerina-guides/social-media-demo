@@ -19,7 +19,8 @@
 import { Button, Container, IconButton } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 
-export default function UserProfileButton({ userName }) {
+export default function UserProfileButton({ userName, userID, deleteUser }) {
+
     return (
         <Container sx={{
             display: "flex",
@@ -39,8 +40,12 @@ export default function UserProfileButton({ userName }) {
             >
                 {userName}
             </Button>
-            <IconButton aria-label="delete">
-                <DeleteIcon />
+            <IconButton
+                aria-label="delete"
+                onClick={() => deleteUser(userID)}
+            >
+                <DeleteIcon
+                />
             </IconButton>
         </Container>
 

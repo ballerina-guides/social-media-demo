@@ -21,12 +21,28 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 import UserProfileButton from "../components/UserProfileButton";
 import NewUserPopup from "../components/NewUserPopup";
-import { Stack, Button, Box } from "@mui/material";
+import { Stack, Button } from "@mui/material";
 import axios from 'axios';
 
 export default function ProfilesPage() {
   const [isPopupOpen, setPopupOpen] = useState(false);
-  const [userNames, setUserNames] = useState(["Hamilton", "Verstappen", "Norris", "Maryam", "Hamilton", "Verstappen", "Norris", "Maryam", "Hamilton", "Verstappen", "Norris", "Maryam"]);
+  const [users, setUserNames] = useState(["Hamilton", "Verstappen", "Norris", "Maryam", "Hamilton", "Verstappen", "Norris", "Maryam", "Hamilton", "Verstappen", "Norris", "Maryam"]);
+
+  const deleteUser = (userId) => {
+    console.log(`deleted user ${userId}`);
+
+    axios.delete(`http://localhost:9090/social-media/users/${userId}`)
+      .then(response => {
+        const users = response.data;
+        return users;
+        // return users.map(user => user.name);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+
+    window.location.reload();
+  };
 
   const handlePopupOpen = () => {
     setPopupOpen(true);
@@ -38,8 +54,7 @@ export default function ProfilesPage() {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const userNames = await getUsers();
-      setUserNames(userNames);
+      setUserNames(await getUsers());
     };
 
     fetchUsers();
@@ -49,14 +64,13 @@ export default function ProfilesPage() {
     return axios.get('http://localhost:9090/social-media/users')
       .then(response => {
         const users = response.data;
-        return users.map(user => user.name);
+        return users;
       })
       .catch(error => {
         console.error(error);
       });
   }
 
-  // const userNames = getUsers();
   return (
     <div>
       <Header enableProfile={false} />
@@ -72,8 +86,8 @@ export default function ProfilesPage() {
             width: "50%",
           }}>
 
-          {userNames.map((name, index) => (
-            <UserProfileButton key={index} userName={name} />
+          {users.map((user, index) => (
+            <UserProfileButton key={index} userName={user.name} userID={user.id} deleteUser={deleteUser} />
           ))}
         </Stack>
 
