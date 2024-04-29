@@ -16,13 +16,28 @@
  * under the License.
  */
 
-import React from "react";
+import React, { useState } from "react";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import UserProfileButton from "../components/UserProfileButton";
+import NewUserPopup from "../components/NewUserPopup";
 import { Stack, Button, Container } from "@mui/material";
 
 export default function ProfilesPage() {
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  const [isPopupOpen, setPopupOpen] = useState(false);
+
+  const handlePopupOpen = () => {
+    setPopupOpen(true);
+  };
+
+  const handlePopupClose = () => {
+    setPopupOpen(false);
+  };
+
 
   const data = ["Hamilton", "Verstappen", "Norris", "Maryam"];
   return (
@@ -47,11 +62,19 @@ export default function ProfilesPage() {
             borderRadius: "1rem",
             color: "white",
           }}
+          onClick={handlePopupOpen}
         >
           Add new user
         </Button>
       </Stack>
       <Footer />
+      {isPopupOpen && (
+        <NewUserPopup
+          open={isPopupOpen}
+          handleClose={handlePopupClose}
+          title="Add new user"
+        />
+      )}
     </div>
   );
 }
