@@ -43,19 +43,17 @@ const UserProfile = ({ data }) => {
       />
 
       <Box
+        alignItems="center"
         sx={{
           display: "flex",
           flexDirection: "column",
         }}
       >
-        <Typography variant="h2">{name}</Typography>
+        <Typography variant="h2" sx={{ textTransform: "capitalize" }} >{name}</Typography>
 
         <Stack
           direction="row"
           alignItems="center"
-          justifyContent="space-between"
-          width="100%"
-          spacing={2}
         >
           <IconButton color="primary">
             <DateRange fontSize="medium" color="secondary" />
@@ -68,9 +66,6 @@ const UserProfile = ({ data }) => {
         <Stack
           direction="row"
           alignItems="center"
-          justifyContent="space-between"
-          width="100%"
-          spacing={2}
         >
           <IconButton color="primary">
             <Phone fontSize="medium" color="secondary" />

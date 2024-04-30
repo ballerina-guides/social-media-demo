@@ -73,7 +73,6 @@ export default function HomePage() {
       const response = await axios.get(
         `http://localhost:9090/social-media/users/${userId}`
       );
-
       setUserData(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
