@@ -35,19 +35,30 @@ const NewUserPopup = ({ open, handleClose, addUser }) => {
   const [userName, setUserName] = React.useState("");
   const [dateOfBirth, setDOB] = React.useState(dayjs('2022-04-17').toDate());
   const [mobileNumber, setMobileNumber] = React.useState("");
-
+  const [userNameIsEmpty, setUserNameIsEmpty] = React.useState(false);
+  const [mobileNumberIsEmpty, setMobileNumberIsEmpty] = React.useState(false);
   const handleUserNameChange = (event) => {
+    setUserNameIsEmpty(false);
     setUserName(event.target.value);
   };
 
   const handleDOBChange = (newValue) => {
     const dob = new Date(newValue);
-    console.log(dob.getDate());
     setDOB(dob);
   };
 
   const handleMobileNumberChange = (event) => {
+    setMobileNumberIsEmpty(false);
     setMobileNumber(event.target.value);
+  };
+
+  const handleSubmit = () => {
+    setUserNameIsEmpty(!userName);
+    setMobileNumberIsEmpty(!mobileNumber || mobileNumber.length < 10);
+    if (!userName || !dateOfBirth || !mobileNumber || mobileNumber.length < 10) {
+      return;
+    }
+    addUser(getUser());
   };
 
   const getUser = () => {
@@ -84,6 +95,7 @@ const NewUserPopup = ({ open, handleClose, addUser }) => {
           }}
         >
           <TextField
+            error={userNameIsEmpty}
             label="User Name:"
             value={userName}
             onChange={handleUserNameChange}
@@ -99,6 +111,7 @@ const NewUserPopup = ({ open, handleClose, addUser }) => {
           </LocalizationProvider>
 
           <TextField
+            error={mobileNumberIsEmpty}
             label="Mobile Number:"
             value={mobileNumber}
             type="number"
@@ -142,7 +155,7 @@ const NewUserPopup = ({ open, handleClose, addUser }) => {
                 }
               }}
               size="large"
-              onClick={() => addUser(getUser())}
+              onClick={handleSubmit}
             >
               Add User
             </Button>

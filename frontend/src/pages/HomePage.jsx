@@ -70,7 +70,6 @@ export default function HomePage() {
         );
 
         setUserData(response.data);
-        console.log(userData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
