@@ -97,10 +97,20 @@ export default function ProfilesPage() {
         alignItems: "center",
         minHeight: "75vh",
       }}>
-        <Container maxWidth="md">
+        <Container
+          maxWidth="md"
+          style={{
+            maxHeight: "25rem",
+            overflow: 'auto',
+            width: "50%",
+          }}
+          sx={{
+            margin: "1rem",
+          }}
+        >
 
           {users.map((user, index) => (
-            <UserProfileButton key={index} userName={user.name} userID={user.id} deleteUser={deleteUser} />
+            <UserProfileButton key={index} user={user} deleteUser={deleteUser} />
           ))}
         </Container>
 

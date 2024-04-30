@@ -19,10 +19,8 @@
 import React, { useState, useEffect } from "react";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import PostCard from "../components/PostCard";
 import UserProfile from "../components/UserProfile";
@@ -31,6 +29,7 @@ import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import axios from "axios";
 import { Container } from "@mui/material";
+import { useLocation } from "react-router-dom";
 
 function CustomTabPanel(props) {
   const {
@@ -67,13 +66,19 @@ export default function HomePage() {
   const [value, setValue] = useState(0);
   const [posts, setPosts] = useState([]);
   const [userPosts, setUserPosts] = useState([]);
+  const location = useLocation();
+  const user = location.state.user;
+  const userDOB = `${user.birthDate.day}/${user.birthDate.month + 1}/${user.birthDate.year}`;
+
   const userData = {
-    name: "Ranga Doe",
-    birthday: "01/01/1990",
-    mobileNumber: "1234567890",
+    name: user.name,
+    birthday: userDOB,
+    mobileNumber: user.mobileNumber,
   };
 
   useEffect(() => {
+    console.log("User data: ", user.birthDate);
+
     const fetchData = async () => {
       try {
         const response = await axios.get(
@@ -92,8 +97,7 @@ export default function HomePage() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          // TODO: get user details from a variable
-          "http://localhost:9090/social-media/users/1/posts"
+          `http://localhost:9090/social-media/users/${user.id}/posts`
         );
         setUserPosts(response.data);
       } catch (error) {

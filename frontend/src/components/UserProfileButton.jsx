@@ -18,8 +18,15 @@
 
 import { Button, Container, IconButton } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
+import { useNavigate } from "react-router-dom";
 
-export default function UserProfileButton({ userName, userID, deleteUser }) {
+
+export default function UserProfileButton({ user, deleteUser }) {
+    const navigate = useNavigate();
+
+    const handleUserButtonClick = () => {
+        navigate("/", { state: { user } });
+    };
 
     return (
         <Container sx={{
@@ -38,12 +45,13 @@ export default function UserProfileButton({ userName, userID, deleteUser }) {
                     color: "white",
                     textTransform: "capitalize"
                 }}
+                onClick={handleUserButtonClick}
             >
-                {userName}
+                {user.name}
             </Button>
             <IconButton
                 aria-label="delete"
-                onClick={() => deleteUser(userID)}
+                onClick={() => deleteUser(user.id)}
             >
                 <DeleteIcon />
             </IconButton>
