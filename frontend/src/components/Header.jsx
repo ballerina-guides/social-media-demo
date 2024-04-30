@@ -55,7 +55,6 @@ export default function Header({ enableProfile }) {
           }}
           alt="Header logo"
           src={HeaderLogo}
-          // onClick={() => navigate("/")}
         />
         {enableProfile ? (
           <Button

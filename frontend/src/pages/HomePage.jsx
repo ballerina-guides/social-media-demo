@@ -30,6 +30,7 @@ import AddIcon from "@mui/icons-material/Add";
 import axios from "axios";
 import { Container } from "@mui/material";
 import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function CustomTabPanel(props) {
   const { children, value, index, other } = props;
@@ -61,58 +62,60 @@ export default function HomePage() {
   const location = useLocation();
   const userId = location.pathname.split("/")[2].toString();
   const [userData, setUserData] = useState([]);
+  const navigate = useNavigate();
+
+  const handleError = (error) => {
+    navigate("/404", { state: { errorMessage: error.message, } });
+  }
+
+  const fetchUserData = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:9090/social-media/users/${userId}`
+      );
+
+      setUserData(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      handleError(error);
+    }
+  };
+
+  const fetchAllPosts = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:9090/social-media/posts"
+      );
+      setPosts(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      handleError(error);
+    }
+  };
+
+  const fetchUserPosts = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:9090/social-media/users/${userId}/posts`
+      );
+      setUserPosts(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      handleError(error);
+    }
+  };
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:9090/social-media/users/${userId}`
-        );
-
-        setUserData(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
     fetchUserData();
+    fetchAllPosts();
+    fetchUserPosts();
   }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:9090/social-media/posts"
-        );
-        setPosts(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:9090/social-media/users/${userId}/posts`
-        );
-        setUserPosts(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  // New Post
   const [isPopupOpen, setPopupOpen] = useState(false);
 
   const handlePopupOpen = () => {

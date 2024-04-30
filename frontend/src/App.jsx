@@ -1,6 +1,6 @@
-import { useState } from "react";
 import HomePage from "./pages/HomePage";
 import ProfilesPage from "./pages/ProfilesPage";
+import ErrorPage from "./pages/ErrorPage";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 function App() {
@@ -9,6 +9,7 @@ function App() {
       <Routes>
         <Route path="/" element={<ProfilesPage />} />
         <Route path="/user/:id" element={<HomePage />} />
+        <Route path="/404" element={<ErrorPage />} />
       </Routes>
     </BrowserRouter>
   );
