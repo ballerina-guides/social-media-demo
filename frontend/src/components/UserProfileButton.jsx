@@ -34,8 +34,9 @@ export default function UserProfileButton({ userName, userID, deleteUser }) {
                     minWidth: "10rem",
                     width: "100%",
                     margin: "0.5rem",
-                    borderRadius: "1rem",
+                    borderRadius: "0.5rem",
                     color: "white",
+                    textTransform: "capitalize"
                 }}
             >
                 {userName}
@@ -44,10 +45,8 @@ export default function UserProfileButton({ userName, userID, deleteUser }) {
                 aria-label="delete"
                 onClick={() => deleteUser(userID)}
             >
-                <DeleteIcon
-                />
+                <DeleteIcon />
             </IconButton>
         </Container>
-
     );
 }

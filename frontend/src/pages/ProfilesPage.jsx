@@ -21,40 +21,42 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 import UserProfileButton from "../components/UserProfileButton";
 import NewUserPopup from "../components/NewUserPopup";
-import { Stack, Button } from "@mui/material";
+import {
+  Button,
+  Container,
+  Box
+} from "@mui/material";
 import axios from 'axios';
 
 export default function ProfilesPage() {
   const [isPopupOpen, setPopupOpen] = useState(false);
-  const [users, setUserNames] = useState(["Hamilton", "Verstappen", "Norris", "Maryam", "Hamilton", "Verstappen", "Norris", "Maryam", "Hamilton", "Verstappen", "Norris", "Maryam"]);
-  const [newUser, setNewUser] = useState("");
+  const [users, setUserNames] = useState([]);
 
   const deleteUser = (userId) => {
     console.log(`deleted user ${userId}`);
 
     axios.delete(`http://localhost:9090/social-media/users/${userId}`)
       .then(response => {
-        const users = response.data;
-        return users;
-      })
-      .catch(error => {
+        console.log(response)
+      }).catch(error => {
         console.error(error);
+      }).finally(() => {
+        getUsers().then(users => setUserNames(users));
       });
-
-    window.location.reload();
   };
 
   const addUser = (user) => {
     console.log(`added user ${JSON.stringify(user)}`);
+
     axios.post(`http://localhost:9090/social-media/users/`, user).
       then(response => {
-        console.log(response.data);
-      })
-      .catch(error => {
+        console.log(response);
+      }).catch(error => {
         console.error(error);
+      }).finally(() => {
+        getUsers().then(users => setUserNames(users));
+        setPopupOpen(false);
       });
-
-    window.location.reload();
   }
 
   const handlePopupOpen = () => {
@@ -81,51 +83,50 @@ export default function ProfilesPage() {
       })
       .catch(error => {
         console.error(error);
+        return [];
       });
   }
 
   return (
     <div>
       <Header enableProfile={false} />
-      <Stack sx={{
-        justifyContent: "center",
+      <Box sx={{
         display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
         alignItems: "center",
+        minHeight: "75vh",
       }}>
-        <Stack
-          style={{
-            maxHeight: "25rem",
-            overflow: 'auto',
-            width: "50%",
-          }}>
+        <Container maxWidth="md">
 
           {users.map((user, index) => (
             <UserProfileButton key={index} userName={user.name} userID={user.id} deleteUser={deleteUser} />
           ))}
-        </Stack>
+        </Container>
+
+        {isPopupOpen && (
+          <NewUserPopup
+            open={isPopupOpen}
+            handleClose={handlePopupClose}
+            addUser={addUser}
+          />
+        )}
 
         <Button
           variant="contained"
           color="secondary"
           sx={{
             padding: "1rem 2rem",
-            margin: "0.5rem",
-            borderRadius: "1rem",
+            borderRadius: "0.5rem",
             color: "white",
+            textTransform: "none"
           }}
           onClick={handlePopupOpen}
         >
           Add new user
         </Button>
-      </Stack>
+      </Box>
       <Footer />
-      {isPopupOpen && (
-        <NewUserPopup
-          open={isPopupOpen}
-          handleClose={handlePopupClose}
-          addUser={addUser}
-        />
-      )}
     </div>
   );
 }

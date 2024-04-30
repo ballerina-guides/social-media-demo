@@ -1,3 +1,4 @@
+import { useState } from "react"
 import HomePage from "./pages/HomePage"
 import ProfilesPage from "./pages/ProfilesPage"
 import {
@@ -7,7 +8,6 @@ import {
 } from "react-router-dom"
 
 function App() {
-
   return (
     <BrowserRouter>
       <Routes>

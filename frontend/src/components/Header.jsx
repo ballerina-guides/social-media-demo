@@ -26,10 +26,8 @@ export default function Header({ enableProfile }) {
   return (
     <Box
       sx={{
-        borderBottom: "1px solid var(--primary-color)",
-        p: 2,
+        borderBottom: "1px solid var(--primary-color)"
       }}
-      backgroundColor="#EEEEEE"
     >
       <Container
         sx={{
@@ -49,12 +47,8 @@ export default function Header({ enableProfile }) {
           component="img"
           sx={{
             objectFit: "cover",
-            width: "14rem",
+            width: "13rem",
             padding: "0.5rem 2rem",
-            marginLeft: {
-              xs: "0",
-              sm: "4rem",
-            },
             ":hover": {
               cursor: "pointer",
             },
@@ -71,8 +65,9 @@ export default function Header({ enableProfile }) {
               onClick={() => navigate("/profiles")}
               sx={{
                 padding: "1rem 2rem",
-                borderRadius: "1rem",
+                borderRadius: "0.5rem",
                 color: "white",
+                textTransform: "none"
               }}
             >
               Profiles

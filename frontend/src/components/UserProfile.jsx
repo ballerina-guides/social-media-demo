@@ -20,13 +20,20 @@ import React from "react";
 import Typography from "@mui/material/Typography";
 import PostCard from "./PostCard";
 import ProfilePicture from "../assets/profile-picture.png";
+import { Box, IconButton, Stack } from "@mui/material";
+import DateRange from "@mui/icons-material/DateRange"
+import Phone from "@mui/icons-material/Phone"
 
 const UserProfile = ({ data }) => {
-  const { userData } = data;
+  const {
+    name,
+    birthday,
+    mobileNumber } = data.userData;
   const { userPosts } = data;
+
   return (
-    <div
-      style={{
+    <Box
+      sx={{
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -37,13 +44,32 @@ const UserProfile = ({ data }) => {
         alt="Profile pic"
         style={{ width: "150px", height: "150px", borderRadius: "50%" }}
       />
-      <Typography variant="h2">{userData.name}</Typography>
-      <Typography variant="p">{userData.birthday}</Typography>
-      <Typography variant="p">{userData.mobileNumber}</Typography>
+
+      <Box sx={{
+        display: "flex",
+        flexDirection: "column",
+      }}>
+        <Typography variant="h2">{name}</Typography>
+
+        <Stack direction="row" alignItems="center" justifyContent="space-between" width="100%" spacing={2}>
+          <IconButton color="primary">
+            <DateRange fontSize="medium" color="secondary" />
+          </IconButton>
+          <Typography variant="p" color="primary">{birthday}</Typography>
+        </Stack>
+
+        <Stack direction="row" alignItems="center" justifyContent="space-between" width="100%" spacing={2}>
+          <IconButton color="primary">
+            <Phone fontSize="medium" color="secondary" />
+          </IconButton>
+          <Typography variant="p" color="primary">{mobileNumber}</Typography>
+        </Stack>
+      </Box>
+
       {userPosts.map((item, index) => (
         <PostCard key={index} data={item} />
       ))}
-    </div>
+    </Box>
   );
 };
 

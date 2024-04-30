@@ -24,15 +24,21 @@ import Stack from "@mui/material/Stack";
 import Chip from "@mui/material/Chip";
 import Avatar from "@mui/material/Avatar";
 
-const PostCard = ({ data }) => {
-  const { id, description, meta } = data;
-  const { tags, category, created_date } = meta;
+export default function PostCard({ data }) {
+  const {
+    id,
+    author,
+    description } = data;
+  const {
+    tags,
+    category,
+    created_date } = data.meta;
 
   let hashtagsArr = [];
   if (Array.isArray(tags)) {
     hashtagsArr = tags;
   } else if (typeof tags === "string") {
-    hashtagsArr = [tags];
+    hashtagsArr.push(tags);
   }
 
   return (
@@ -49,50 +55,40 @@ const PostCard = ({ data }) => {
           alignItems="baseline"
           justifyContent="space-between"
         >
-          <Stack
-            direction={"row"}
-            gap={"0.5rem"}
-            alignItems="baseline"
-            justifyContent="space-between"
+          <Typography
+            gutterBottom
+            variant="p"
+            component="p"
+            sx={{
+              wordSpacing: "8px"
+            }}
           >
-            {data.author && (
-              <Typography gutterBottom variant="p" component="p">
-                {data.author}
-              </Typography>
-            )}
-            {data.author && (
-              <Typography gutterBottom variant="p" component="p">
-                {String.fromCharCode(183)}
-              </Typography>
-            )}
-
-            <Typography gutterBottom variant="p" component="p">
-              {created_date.year}-{created_date.month}-{created_date.day}
-            </Typography>
-          </Stack>
+            <Typography variant="span" component="span" sx={{ textTransform: "capitalize" }}>{author} </Typography>
+            . {created_date.year}-{created_date.month}-{created_date.day}
+          </Typography>
 
           <Typography gutterBottom variant="p" component="p">
             {description}
           </Typography>
         </Stack>
-        <Chip
-          avatar={<Avatar>C</Avatar>}
-          variant="outlined"
-          color="primary"
-          label={category}
-        />
-        {hashtagsArr.map((tag, index) => (
+        <Stack direction={"row"} gap={"0.5rem"} flexWrap="wrap">
           <Chip
-            key={index}
-            avatar={<Avatar>#</Avatar>}
+            avatar={<Avatar>C</Avatar>}
             variant="outlined"
-            color="secondary"
-            label={tag}
+            color="primary"
+            label={category}
           />
-        ))}
+          {hashtagsArr.map((tag, index) => (
+            <Chip
+              key={index}
+              avatar={<Avatar>#</Avatar>}
+              variant="outlined"
+              color="secondary"
+              label={tag}
+            />
+          ))}
+        </Stack>
       </CardContent>
     </Card>
   );
 };
-
-export default PostCard;

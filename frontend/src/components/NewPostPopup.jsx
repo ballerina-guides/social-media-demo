@@ -24,9 +24,10 @@ import {
   DialogActions,
   Button,
   TextField,
+  Box,
 } from "@mui/material";
 
-const NewPostPopup = ({ open, handleClose, title, children }) => {
+const NewPostPopup = ({ open, handleClose, title }) => {
   const [description, setDescription] = React.useState("");
   const [category, setCategory] = React.useState("");
   const [hashtags, setHashtags] = React.useState("");
@@ -43,63 +44,93 @@ const NewPostPopup = ({ open, handleClose, title, children }) => {
     setHashtags(event.target.value);
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const handleSubmit = () => {
     // Handle the form submission logic here
   };
 
   return (
-    <Dialog open={open} onClose={handleClose} style={{ margin: "20px" }}>
-      <DialogTitle style={{ textAlign: "center" }}>{title}</DialogTitle>
+    <Dialog open={open} onClose={handleClose}>
+      <DialogTitle sx={{
+        textAlign: "center",
+        color: "primary.main",
+        fontSize: "26px"
+      }}>{title}</DialogTitle>
+
       <DialogContent>
-        <form onSubmit={handleSubmit}>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              margin: "20px",
-            }}
-          >
-            <TextField
-              label="Description"
-              value={description}
-              onChange={handleDescriptionChange}
-              style={{ margin: "10px", width: "100%" }}
-              multiline
-              rows={4}
-              inputProps={{ maxLength: 250 }}
-            />
-            <TextField
-              label="Category"
-              value={category}
-              onChange={handleCategoryChange}
-              style={{ margin: "10px", width: "100%" }}
-            />
-            <TextField
-              label="Hashtags (comma separated)"
-              value={hashtags}
-              onChange={handleHashtagsChange}
-              style={{ margin: "10px", width: "100%" }}
-            />
-          </div>
-          <DialogActions>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                margin: "20px",
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            padding: "1rem",
+            gap: "1rem",
+            width: {
+              xs: "15rem",
+              md: "30rem",
+            }
+          }}>
+          <TextField
+            label="Description"
+            value={description}
+            onChange={handleDescriptionChange}
+            fullWidth
+            multiline
+            rows={4}
+            inputProps={{ maxLength: 250 }}
+          />
+          <TextField
+            label="Category"
+            value={category}
+            onChange={handleCategoryChange}
+            fullWidth
+          />
+          <TextField
+            label="Hashtags (comma separated)"
+            value={hashtags}
+            onChange={handleHashtagsChange}
+            fullWidth
+          />
+
+          <DialogActions sx={{
+            display: "flex",
+            flexDirection: {
+              xs: "column",
+              md: "row",
+            },
+            justifyContent: "center",
+            width: "100%",
+            gap: "0.5rem"
+          }}>
+            <Button
+              color="secondary"
+              sx={{
+                width: {
+                  xs: "100%",
+                  md: "auto",
+                }
               }}
+              size="large"
+              onClick={handleClose}
             >
-              <Button onClick={handleClose} color="secondary">
-                Discard
-              </Button>
-              <Button type="submit" color="primary">
-                Submit
-              </Button>
-            </div>
+              Discard
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              sx={{
+                color: "white",
+                width: {
+                  xs: "100%",
+                  md: "auto",
+                }
+              }}
+              size="large"
+              onClick={handleSubmit}
+            >
+              Submit
+            </Button>
           </DialogActions>
-        </form>
+        </Box>
       </DialogContent>
     </Dialog>
   );

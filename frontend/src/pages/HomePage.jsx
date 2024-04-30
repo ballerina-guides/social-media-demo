@@ -30,9 +30,14 @@ import NewPostPopup from "../components/NewPostPopup";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import axios from "axios";
+import { Container } from "@mui/material";
 
 function CustomTabPanel(props) {
-  const { children, value, index, ...other } = props;
+  const {
+    children,
+    value,
+    index,
+    other } = props;
 
   return (
     <div
@@ -44,18 +49,12 @@ function CustomTabPanel(props) {
     >
       {value === index && (
         <Box sx={{ p: 2 }}>
-          <Typography>{children}</Typography>
+          {children}
         </Box>
       )}
     </div>
   );
 }
-
-CustomTabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
-};
 
 function a11yProps(index) {
   return {
@@ -65,7 +64,7 @@ function a11yProps(index) {
 }
 
 export default function HomePage() {
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
   const [posts, setPosts] = useState([]);
   const [userPosts, setUserPosts] = useState([]);
   const userData = {
@@ -121,7 +120,7 @@ export default function HomePage() {
   };
 
   return (
-    <div>
+    <Box>
       <Header enableProfile={true} />
       <Box
         sx={{
@@ -158,25 +157,22 @@ export default function HomePage() {
             {...a11yProps(1)}
           />
         </Tabs>
-      </Box>
-      <CustomTabPanel value={value} index={0}>
-        {posts.map((item, index) => (
-          <PostCard key={index} data={item} />
-        ))}
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={1}>
-        <UserProfile data={{ userPosts, userData }} />
-      </CustomTabPanel>
 
-      <Footer />
-      <Fab
-        color="primary"
-        aria-label="add"
-        style={{ position: "fixed", bottom: "20px", right: "20px" }}
-        onClick={handlePopupOpen}
-      >
-        <AddIcon />
-      </Fab>
+        <CustomTabPanel value={value} index={0}>
+          <Container>
+            {posts.map((item, index) => (
+              <PostCard key={index} data={item} />
+            ))}
+          </Container>
+        </CustomTabPanel>
+
+        <CustomTabPanel value={value} index={1}>
+          <Container>
+            <UserProfile data={{ userPosts, userData }} />
+          </Container>
+        </CustomTabPanel>
+      </Box>
+
       {isPopupOpen && (
         <NewPostPopup
           open={isPopupOpen}
@@ -184,6 +180,17 @@ export default function HomePage() {
           title="New Post"
         />
       )}
-    </div>
+
+      <Fab
+        color="primary"
+        aria-label="add"
+        sx={{ position: "fixed", bottom: "20px", right: "20px", color: "white" }}
+        onClick={handlePopupOpen}
+      >
+        <AddIcon />
+      </Fab>
+
+      <Footer />
+    </Box>
   );
 }

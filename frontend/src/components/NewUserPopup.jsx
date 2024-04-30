@@ -25,6 +25,7 @@ import {
   DialogActions,
   Button,
   TextField,
+  Box,
 } from "@mui/material";
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -34,18 +35,6 @@ const NewUserPopup = ({ open, handleClose, addUser }) => {
   const [userName, setUserName] = React.useState("");
   const [dateOfBirth, setDOB] = React.useState(dayjs('2022-04-17').toDate());
   const [mobileNumber, setMobileNumber] = React.useState("");
-
-  const getUser = () => {
-    return {
-      name: userName,
-      birthDate: {
-        year: dateOfBirth.getFullYear(),
-        month: dateOfBirth.getMonth() + 1,
-        day: dateOfBirth.getDate()
-      },
-      mobileNumber: mobileNumber
-    };
-  };
 
   const handleUserNameChange = (event) => {
     setUserName(event.target.value);
@@ -61,72 +50,104 @@ const NewUserPopup = ({ open, handleClose, addUser }) => {
     setMobileNumber(event.target.value);
   };
 
-  const handleAddNewUser = (event) => {
-    event.preventDefault();
+  const getUser = () => {
+    return {
+      name: userName,
+      birthDate: {
+        year: dateOfBirth.getFullYear(),
+        month: dateOfBirth.getMonth() + 1,
+        day: dateOfBirth.getDate()
+      },
+      mobileNumber: mobileNumber
+    };
   };
 
   return (
-    <Dialog open={open} onClose={handleClose} style={{ margin: "20px" }}>
-      <DialogTitle style={{ textAlign: "center" }}>
-        Add new user
-      </DialogTitle>
+    <Dialog open={open} onClose={handleClose}>
+      <DialogTitle sx={{
+        textAlign: "center",
+        color: "primary.main",
+        fontSize: "26px"
+      }}>Add new user</DialogTitle>
+
       <DialogContent>
-        <form onSubmit={handleAddNewUser}>
-          <div
-            style={{
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            padding: "1rem",
+            gap: "1rem",
+            width: {
+              xs: "14rem",
+              md: "30rem",
+            }
+          }}
+        >
+          <TextField
+            label="User Name:"
+            value={userName}
+            onChange={handleUserNameChange}
+            fullWidth
+          />
+
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              label="Date of Birth:"
+              value={dayjs(dateOfBirth)}
+              onChange={handleDOBChange}
+            />
+          </LocalizationProvider>
+
+          <TextField
+            label="Mobile Number:"
+            value={mobileNumber}
+            type="number"
+            onChange={handleMobileNumberChange}
+            fullWidth
+          />
+
+          <DialogActions
+            sx={{
               display: "flex",
-              flexDirection: "column",
-              alignItems: "start",
-              margin: "20px",
-              gap: "20px",
-              width: "30rem",
+              justifyContent: "center",
+              flexDirection: {
+                xs: "column",
+                md: "row",
+              },
+              gap: "0.5rem",
+              width: "100%"
             }}
           >
-            <TextField
-              label="User Name:"
-              value={userName}
-              onChange={handleUserNameChange}
-              style={{ width: "100%" }}
-            />
-            <LocalizationProvider dateAdapter={AdapterDayjs}
-              style={{ width: "100%" }}
-            >
-              <DatePicker
-                label="Date of Birth:"
-                style={{ width: "100%" }}
-                value={dayjs(dateOfBirth)}
-                onChange={handleDOBChange}
-              />
-            </LocalizationProvider>
-            <TextField
-              label="Mobile Number:"
-              value={mobileNumber}
-              type="number"
-              onChange={handleMobileNumberChange}
-              style={{ width: "100%" }}
-            />
-          </div>
-          <DialogActions>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                margin: "20px",
+            <Button
+              color="secondary"
+              sx={{
+                width: {
+                  xs: "100%",
+                  md: "auto",
+                }
               }}
+              size="large"
+              onClick={handleClose}
             >
-              <Button onClick={handleClose} color="secondary">
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                color="primary"
-                onClick={() => addUser(getUser())}
-              >
-                Add User
-              </Button>
-            </div>
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              sx={{
+                color: "white",
+                width: {
+                  xs: "100%",
+                  md: "auto",
+                }
+              }}
+              size="large"
+              onClick={() => addUser(getUser())}
+            >
+              Add User
+            </Button>
           </DialogActions>
-        </form>
+        </Box>
       </DialogContent>
     </Dialog>
   );
