@@ -26,11 +26,16 @@ import {
   TextField,
   Box,
 } from "@mui/material";
+import axios from "axios";
+import { useState } from "react";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const NewPostPopup = ({ open, handleClose, title }) => {
   const [description, setDescription] = React.useState("");
   const [category, setCategory] = React.useState("");
   const [hashtags, setHashtags] = React.useState("");
+  const userId = location.pathname.split("/")[2].toString();
+  const [loading, setLoading] = useState(false);
 
   const handleDescriptionChange = (event) => {
     setDescription(event.target.value);
@@ -44,17 +49,43 @@ const NewPostPopup = ({ open, handleClose, title }) => {
     setHashtags(event.target.value);
   };
 
-  const handleSubmit = () => {
-    // Handle the form submission logic here
+  const handleSubmit = async (event) => {
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        `http://localhost:9090/social-media/users/${userId}/posts`,
+        {
+          description: description,
+          tags: hashtags,
+          category: category,
+        }
+      );
+
+      if (response.status === 201) {
+        handleClose();
+      } else if (response.status === 400) {
+        alert("An error occurred");
+      }
+    } catch (error) {
+      console.error(error);
+      // Show popup with error
+      alert("An error occurred");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle sx={{
-        textAlign: "center",
-        color: "primary.main",
-        fontSize: "26px"
-      }}>{title}</DialogTitle>
+      <DialogTitle
+        sx={{
+          textAlign: "center",
+          color: "primary.main",
+          fontSize: "26px",
+        }}
+      >
+        {title}
+      </DialogTitle>
 
       <DialogContent>
         <Box
@@ -67,8 +98,9 @@ const NewPostPopup = ({ open, handleClose, title }) => {
             width: {
               xs: "15rem",
               md: "30rem",
-            }
-          }}>
+            },
+          }}
+        >
           <TextField
             label="Description"
             value={description}
@@ -91,23 +123,25 @@ const NewPostPopup = ({ open, handleClose, title }) => {
             fullWidth
           />
 
-          <DialogActions sx={{
-            display: "flex",
-            flexDirection: {
-              xs: "column",
-              md: "row",
-            },
-            justifyContent: "center",
-            width: "100%",
-            gap: "0.5rem"
-          }}>
+          <DialogActions
+            sx={{
+              display: "flex",
+              flexDirection: {
+                xs: "column",
+                md: "row",
+              },
+              justifyContent: "center",
+              width: "100%",
+              gap: "0.5rem",
+            }}
+          >
             <Button
               color="secondary"
               sx={{
                 width: {
                   xs: "100%",
                   md: "auto",
-                }
+                },
               }}
               size="large"
               onClick={handleClose}
@@ -122,12 +156,17 @@ const NewPostPopup = ({ open, handleClose, title }) => {
                 width: {
                   xs: "100%",
                   md: "auto",
-                }
+                },
               }}
               size="large"
               onClick={handleSubmit}
+              disabled={loading}
             >
-              Submit
+              {loading ? (
+                <CircularProgress color="inherit" size={24} />
+              ) : (
+                "Post"
+              )}
             </Button>
           </DialogActions>
         </Box>

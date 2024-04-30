@@ -59,14 +59,14 @@ export default function HomePage() {
   const [posts, setPosts] = useState([]);
   const [userPosts, setUserPosts] = useState([]);
   const location = useLocation();
-  const userId = location.pathname.split("/")[2];
+  const userId = location.pathname.split("/")[2].toString();
   const [userData, setUserData] = useState([]);
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:9090/social-media/users/${userId.toString()}`
+          `http://localhost:9090/social-media/users/${userId}`
         );
 
         setUserData(response.data);
@@ -98,7 +98,7 @@ export default function HomePage() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:9090/social-media/users/${userId.toString()}/posts`
+          `http://localhost:9090/social-media/users/${userId}/posts`
         );
         setUserPosts(response.data);
       } catch (error) {
