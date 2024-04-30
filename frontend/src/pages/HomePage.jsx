@@ -16,7 +16,7 @@
  * under the License.
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useId } from "react";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import Tabs from "@mui/material/Tabs";
@@ -29,7 +29,7 @@ import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import axios from "axios";
 import { Container } from "@mui/material";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 function CustomTabPanel(props) {
@@ -59,10 +59,10 @@ export default function HomePage() {
   const [value, setValue] = useState(0);
   const [posts, setPosts] = useState([]);
   const [userPosts, setUserPosts] = useState([]);
-  const location = useLocation();
-  const userId = location.pathname.split("/")[2].toString();
+  const { id } = useParams();
   const [userData, setUserData] = useState([]);
   const navigate = useNavigate();
+  const [enableFab, setEnableFab] = useState(true);
 
   const handleError = (error) => {
     navigate("/404", { state: { errorMessage: error.message, } });
@@ -71,7 +71,7 @@ export default function HomePage() {
   const fetchUserData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9090/social-media/users/${userId}`
+        `http://localhost:9090/social-media/users/${id}`
       );
       setUserData(response.data);
     } catch (error) {
@@ -95,7 +95,7 @@ export default function HomePage() {
   const fetchUserPosts = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9090/social-media/users/${userId}/posts`
+        `http://localhost:9090/social-media/users/${id}/posts`
       );
       setUserPosts(response.data);
     } catch (error) {
@@ -151,6 +151,7 @@ export default function HomePage() {
               maxWidth: "50%",
             }}
             label="Posts"
+            onClick={() => { setEnableFab(true) }}
             {...a11yProps(0)}
           />
           <Tab
@@ -160,6 +161,7 @@ export default function HomePage() {
               maxWidth: "50%",
             }}
             label="Profile"
+            onClick={() => { setEnableFab(false) }}
             {...a11yProps(1)}
           />
         </Tabs>
@@ -187,19 +189,22 @@ export default function HomePage() {
         />
       )}
 
-      <Fab
-        color="primary"
-        aria-label="add"
-        sx={{
-          position: "fixed",
-          bottom: "20px",
-          right: "20px",
-          color: "white",
-        }}
-        onClick={handlePopupOpen}
-      >
-        <AddIcon />
-      </Fab>
+      {enableFab &&
+        <Fab
+          color="primary"
+          aria-label="add"
+          sx={{
+            position: "fixed",
+            bottom: "20px",
+            right: "20px",
+            color: "white",
+            display: "auto",
+          }}
+          onClick={handlePopupOpen}
+        >
+          <AddIcon />
+        </Fab>
+      }
 
       <Footer />
     </Box>

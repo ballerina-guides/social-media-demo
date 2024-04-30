@@ -48,10 +48,7 @@ export default function Header({ enableProfile }) {
           sx={{
             objectFit: "cover",
             width: "13rem",
-            padding: "0.5rem 2rem",
-            ":hover": {
-              cursor: "pointer",
-            },
+            padding: "0.5rem 2rem"
           }}
           alt="Header logo"
           src={HeaderLogo}
