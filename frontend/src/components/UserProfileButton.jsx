@@ -24,7 +24,7 @@ export default function UserProfileButton({ user, deleteUser }) {
     const navigate = useNavigate();
 
     const handleUserButtonClick = () => {
-        navigate(`/user/${user.id}`, { state: { user } });
+        navigate(`/user/${user.id}`);
     };
 
     return (

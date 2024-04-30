@@ -24,7 +24,7 @@ import { useLocation } from "react-router-dom";
 
 export default function ErrorPage() {
     const location = useLocation();
-    const axiosErrorMessage = location.state.errorMessage || "An error occurred";
+    const axiosErrorMessage = location.state?.errorMessage || "An error occurred!";
 
     return (
         <Box>

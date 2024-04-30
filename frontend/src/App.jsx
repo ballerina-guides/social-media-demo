@@ -9,7 +9,7 @@ function App() {
       <Routes>
         <Route path="/" element={<ProfilesPage />} />
         <Route path="/user/:id" element={<HomePage />} />
-        <Route path="/404" element={<ErrorPage />} />
+        <Route path="/*" element={<ErrorPage />} />
       </Routes>
     </BrowserRouter>
   );
