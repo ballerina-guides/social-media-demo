@@ -33,8 +33,6 @@ export default function ProfilesPage() {
   const [users, setUserNames] = useState([]);
 
   const deleteUser = (userId) => {
-    console.log(`deleted user ${userId}`);
-
     axios.delete(`http://localhost:9090/social-media/users/${userId}`)
       .then(response => {
         console.log(response)
@@ -46,8 +44,6 @@ export default function ProfilesPage() {
   };
 
   const addUser = (user) => {
-    console.log(`added user ${JSON.stringify(user)}`);
-
     axios.post(`http://localhost:9090/social-media/users/`, user).
       then(response => {
         console.log(response);
