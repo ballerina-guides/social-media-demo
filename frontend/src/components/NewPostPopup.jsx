@@ -29,6 +29,7 @@ import {
 import axios from "axios";
 import { useState } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
+import PostFailurePopup from "./PostFailurePopup";
 
 const NewPostPopup = ({ open, handleClose, title }) => {
   const [description, setDescription] = React.useState("");
@@ -36,6 +37,8 @@ const NewPostPopup = ({ open, handleClose, title }) => {
   const [hashtags, setHashtags] = React.useState("");
   const userId = location.pathname.split("/")[2].toString();
   const [loading, setLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false); // State to control the error popup
+  const [errorMessage, setErrorMessage] = useState(""); // State to store the error message
 
   const handleDescriptionChange = (event) => {
     setDescription(event.target.value);
@@ -50,6 +53,7 @@ const NewPostPopup = ({ open, handleClose, title }) => {
   };
 
   const handleSubmit = async (event) => {
+    event.preventDefault();
     setLoading(true);
     try {
       const response = await axios.post(
@@ -65,113 +69,125 @@ const NewPostPopup = ({ open, handleClose, title }) => {
         handleClose();
       } else if (response.status === 400) {
         alert("An error occurred");
+        setErrorMessage("an error occurred. 400");
+        setIsOpen(true);
+      } else {
+        setErrorMessage("an error occured");
+        setIsOpen(true);
       }
     } catch (error) {
-      console.error(error);
-      // Show popup with error
-      alert("An error occurred");
+      console.log(error);
+      setErrorMessage(error.message);
+      setIsOpen(true);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Dialog open={open} onClose={handleClose}>
-      <DialogTitle
-        sx={{
-          textAlign: "center",
-          color: "primary.main",
-          fontSize: "26px",
-        }}
-      >
-        {title}
-      </DialogTitle>
-
-      <DialogContent>
-        <Box
+    <>
+      <PostFailurePopup
+        isOpen={isOpen}
+        errorMessage={errorMessage}
+        handleClose={() => setIsOpen(false)}
+      />
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle
           sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            padding: "1rem",
-            gap: "1rem",
-            width: {
-              xs: "15rem",
-              md: "30rem",
-            },
+            textAlign: "center",
+            color: "primary.main",
+            fontSize: "26px",
           }}
         >
-          <TextField
-            label="Description"
-            value={description}
-            onChange={handleDescriptionChange}
-            fullWidth
-            multiline
-            rows={4}
-            inputProps={{ maxLength: 250 }}
-          />
-          <TextField
-            label="Category"
-            value={category}
-            onChange={handleCategoryChange}
-            fullWidth
-          />
-          <TextField
-            label="Hashtags (comma separated)"
-            value={hashtags}
-            onChange={handleHashtagsChange}
-            fullWidth
-          />
+          {title}
+        </DialogTitle>
 
-          <DialogActions
+        <DialogContent>
+          <Box
             sx={{
               display: "flex",
-              flexDirection: {
-                xs: "column",
-                md: "row",
+              flexDirection: "column",
+              alignItems: "center",
+              padding: "1rem",
+              gap: "1rem",
+              width: {
+                xs: "15rem",
+                md: "30rem",
               },
-              justifyContent: "center",
-              width: "100%",
-              gap: "0.5rem",
             }}
           >
-            <Button
-              color="secondary"
+            <TextField
+              label="Description"
+              value={description}
+              onChange={handleDescriptionChange}
+              fullWidth
+              multiline
+              rows={4}
+              inputProps={{ maxLength: 250 }}
+            />
+            <TextField
+              label="Category"
+              value={category}
+              onChange={handleCategoryChange}
+              fullWidth
+            />
+            <TextField
+              label="Hashtags (comma separated)"
+              value={hashtags}
+              onChange={handleHashtagsChange}
+              fullWidth
+            />
+
+            <DialogActions
               sx={{
-                width: {
-                  xs: "100%",
-                  md: "auto",
+                display: "flex",
+                flexDirection: {
+                  xs: "column",
+                  md: "row",
                 },
+                justifyContent: "center",
+                width: "100%",
+                gap: "0.5rem",
               }}
-              size="large"
-              onClick={handleClose}
             >
-              Discard
-            </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              sx={{
-                color: "white",
-                width: {
-                  xs: "100%",
-                  md: "auto",
-                },
-              }}
-              size="large"
-              onClick={handleSubmit}
-              disabled={loading}
-            >
-              {loading ? (
-                <CircularProgress color="inherit" size={24} />
-              ) : (
-                "Post"
-              )}
-            </Button>
-          </DialogActions>
-        </Box>
-      </DialogContent>
-    </Dialog>
+              <Button
+                color="secondary"
+                sx={{
+                  width: {
+                    xs: "100%",
+                    md: "auto",
+                  },
+                }}
+                size="large"
+                onClick={handleClose}
+              >
+                Discard
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                sx={{
+                  color: "white",
+                  width: {
+                    xs: "100%",
+                    md: "auto",
+                  },
+                }}
+                size="large"
+                onClick={handleSubmit}
+                disabled={loading}
+              >
+                {loading ? (
+                  <CircularProgress color="inherit" size={24} />
+                ) : (
+                  "Post"
+                )}
+              </Button>
+            </DialogActions>
+          </Box>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
 
