@@ -26,7 +26,7 @@ export default function Header({ enableProfile }) {
   return (
     <Box
       sx={{
-        borderBottom: "1px solid var(--primary-color)"
+        borderBottom: "1px solid var(--primary-color)",
       }}
     >
       <Container
@@ -55,24 +55,25 @@ export default function Header({ enableProfile }) {
           }}
           alt="Header logo"
           src={HeaderLogo}
-        // onClick={() => navigate("/")}
+          // onClick={() => navigate("/")}
         />
-        {
-          enableProfile ?
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => navigate("/profiles")}
-              sx={{
-                padding: "1rem 2rem",
-                borderRadius: "0.5rem",
-                color: "white",
-                textTransform: "none"
-              }}
-            >
-              Profiles
-            </Button> : ""
-        }
+        {enableProfile ? (
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => navigate("/")}
+            sx={{
+              padding: "1rem 2rem",
+              borderRadius: "0.5rem",
+              color: "white",
+              textTransform: "none",
+            }}
+          >
+            Profiles
+          </Button>
+        ) : (
+          ""
+        )}
       </Container>
     </Box>
   );
