@@ -32,11 +32,7 @@ import { Container } from "@mui/material";
 import { useLocation } from "react-router-dom";
 
 function CustomTabPanel(props) {
-  const {
-    children,
-    value,
-    index,
-    other } = props;
+  const { children, value, index, other } = props;
 
   return (
     <div
@@ -46,11 +42,7 @@ function CustomTabPanel(props) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box sx={{ p: 2 }}>
-          {children}
-        </Box>
-      )}
+      {value === index && <Box sx={{ p: 2 }}>{children}</Box>}
     </div>
   );
 }
@@ -67,18 +59,27 @@ export default function HomePage() {
   const [posts, setPosts] = useState([]);
   const [userPosts, setUserPosts] = useState([]);
   const location = useLocation();
-  const user = location.state.user;
-  const userDOB = `${user.birthDate.day}/${user.birthDate.month + 1}/${user.birthDate.year}`;
-
-  const userData = {
-    name: user.name,
-    birthday: userDOB,
-    mobileNumber: user.mobileNumber,
-  };
+  const userId = location.pathname.split("/")[2];
+  const [userData, setUserData] = useState([]);
 
   useEffect(() => {
-    console.log("User data: ", user.birthDate);
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:9090/social-media/users/${userId.toString()}`
+        );
 
+        setUserData(response.data);
+        console.log(userData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
@@ -97,7 +98,7 @@ export default function HomePage() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:9090/social-media/users/${user.id}/posts`
+          `http://localhost:9090/social-media/users/${userId.toString()}/posts`
         );
         setUserPosts(response.data);
       } catch (error) {
@@ -188,7 +189,12 @@ export default function HomePage() {
       <Fab
         color="primary"
         aria-label="add"
-        sx={{ position: "fixed", bottom: "20px", right: "20px", color: "white" }}
+        sx={{
+          position: "fixed",
+          bottom: "20px",
+          right: "20px",
+          color: "white",
+        }}
         onClick={handlePopupOpen}
       >
         <AddIcon />

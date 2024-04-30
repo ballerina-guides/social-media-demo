@@ -17,44 +17,42 @@
  */
 
 import { Button, Container, IconButton } from "@mui/material";
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
 
-
 export default function UserProfileButton({ user, deleteUser }) {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const handleUserButtonClick = () => {
-        navigate("/", { state: { user } });
-    };
+  const handleUserButtonClick = () => {
+    navigate(`/user/${user.id}`, { state: { user } });
+  };
 
-    return (
-        <Container sx={{
-            display: "flex",
-            justifyContent: "center",
-        }}>
-            <Button
-                variant="contained"
-                color="primary"
-                sx={{
-                    padding: "1rem 2rem",
-                    minWidth: "10rem",
-                    width: "100%",
-                    margin: "0.5rem",
-                    borderRadius: "0.5rem",
-                    color: "white",
-                    textTransform: "capitalize"
-                }}
-                onClick={handleUserButtonClick}
-            >
-                {user.name}
-            </Button>
-            <IconButton
-                aria-label="delete"
-                onClick={() => deleteUser(user.id)}
-            >
-                <DeleteIcon />
-            </IconButton>
-        </Container>
-    );
+  return (
+    <Container
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+      }}
+    >
+      <Button
+        variant="contained"
+        color="primary"
+        sx={{
+          padding: "1rem 2rem",
+          minWidth: "10rem",
+          width: "100%",
+          margin: "0.5rem",
+          borderRadius: "0.5rem",
+          color: "white",
+          textTransform: "capitalize",
+        }}
+        onClick={handleUserButtonClick}
+      >
+        {user.name}
+      </Button>
+      <IconButton aria-label="delete" onClick={() => deleteUser(user.id)}>
+        <DeleteIcon />
+      </IconButton>
+    </Container>
+  );
 }
