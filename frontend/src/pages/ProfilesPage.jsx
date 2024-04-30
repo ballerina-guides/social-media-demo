@@ -17,6 +17,7 @@
  */
 
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import UserProfileButton from "../components/UserProfileButton";
@@ -31,6 +32,11 @@ import axios from 'axios';
 export default function ProfilesPage() {
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [users, setUserNames] = useState([]);
+  const navigate = useNavigate();
+
+  const handleError = (error) => {
+    navigate("/404", { state: { errorMessage: error.message, } });
+  }
 
   const deleteUser = (userId) => {
     axios.delete(`http://localhost:9090/social-media/users/${userId}`)
@@ -38,6 +44,7 @@ export default function ProfilesPage() {
         console.log(response)
       }).catch(error => {
         console.error(error);
+        handleError(error);
       }).finally(() => {
         getUsers().then(users => setUserNames(users));
       });
@@ -49,6 +56,7 @@ export default function ProfilesPage() {
         console.log(response);
       }).catch(error => {
         console.error(error);
+        handleError(error);
       }).finally(() => {
         getUsers().then(users => setUserNames(users));
         setPopupOpen(false);
