@@ -25,7 +25,7 @@ import Chip from "@mui/material/Chip";
 import Avatar from "@mui/material/Avatar";
 
 export default function PostCard({ data }) {
-  const { id, author, description } = data;
+  const { author, description } = data;
   const { tags, category, created_date } = data.meta;
 
   let hashtagsArr = [];
@@ -74,7 +74,11 @@ export default function PostCard({ data }) {
         <Stack direction={"row"} gap={"0.5rem"} flexWrap="wrap">
           {category && (
             <Chip
-              avatar={<Avatar>C</Avatar>}
+              avatar={<Avatar
+                sx={{
+                  color: "white !important",
+                }}
+              >C</Avatar>}
               variant="outlined"
               color="primary"
               label={category}
