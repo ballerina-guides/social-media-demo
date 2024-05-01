@@ -48,10 +48,12 @@ export default function Header({ enableProfile }) {
           sx={{
             objectFit: "cover",
             width: "13rem",
-            padding: "0.5rem 2rem"
+            padding: "0.5rem 2rem",
           }}
           alt="Header logo"
           src={HeaderLogo}
+          style={{ cursor: "pointer" }}
+          onClick={() => window.location.reload()}
         />
         {enableProfile ? (
           <Button

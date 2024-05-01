@@ -28,7 +28,7 @@ import NewPostPopup from "../components/NewPostPopup";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import axios from "axios";
-import { Container } from "@mui/material";
+import { Container, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
@@ -108,7 +108,7 @@ export default function HomePage() {
       fetchAllPosts();
       fetchUserPosts();
     };
-    
+
     fetchUserData();
     fetchDetails();
 
@@ -139,6 +139,7 @@ export default function HomePage() {
           borderBottom: 1,
           borderColor: "divider",
           justifyContent: "center",
+          minHeight: "75vh",
         }}
       >
         <Tabs
@@ -172,10 +173,21 @@ export default function HomePage() {
         </Tabs>
 
         <CustomTabPanel value={value} index={0}>
-          <Container>
-            {posts.map((item, index) => (
-              <PostCard key={index} data={item} />
-            ))}
+          <Container
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            {posts.length === 0 ? (
+              <Typography sx={{ margin: "1rem" }}>
+                {"No posts to display :("}
+              </Typography>
+            ) : (
+              posts.map((item, index) => <PostCard key={index} data={item} />)
+            )}
           </Container>
         </CustomTabPanel>
 

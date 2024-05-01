@@ -20,7 +20,7 @@ import React from "react";
 import Typography from "@mui/material/Typography";
 import PostCard from "./PostCard";
 import ProfilePicture from "../assets/profile-picture.png";
-import { Box, IconButton, Stack } from "@mui/material";
+import { Box, IconButton, Stack, Container } from "@mui/material";
 import DateRange from "@mui/icons-material/DateRange";
 import Phone from "@mui/icons-material/Phone";
 
@@ -39,7 +39,12 @@ const UserProfile = ({ data }) => {
       <img
         src={ProfilePicture}
         alt="Profile pic"
-        style={{ width: "150px", height: "150px", borderRadius: "50%" }}
+        style={{
+          width: "150px",
+          height: "150px",
+          borderRadius: "50%",
+          margin: "1rem",
+        }}
       />
 
       <Box
@@ -49,36 +54,47 @@ const UserProfile = ({ data }) => {
           flexDirection: "column",
         }}
       >
-        <Typography variant="h2" sx={{ textTransform: "capitalize" }} >{name}</Typography>
+        <Typography variant="h2" sx={{ textTransform: "capitalize" }}>
+          {name}
+        </Typography>
 
-        <Stack
-          direction="row"
-          alignItems="center"
-        >
-          <IconButton color="primary">
-            <DateRange fontSize="medium" color="secondary" />
-          </IconButton>
-          <Typography variant="p" color="primary">
-            {birthDate.year}-{birthDate.month}-{birthDate.day}
-          </Typography>
-        </Stack>
+        <Stack direction="row" alignItems="center">
+          <Stack direction="row" alignItems="center">
+            <IconButton color="primary">
+              <DateRange fontSize="small" color="secondary" />
+            </IconButton>
+            <Typography variant="p" color="primary">
+              {birthDate.year}-{birthDate.month}-{birthDate.day}
+            </Typography>
+          </Stack>
 
-        <Stack
-          direction="row"
-          alignItems="center"
-        >
-          <IconButton color="primary">
-            <Phone fontSize="medium" color="secondary" />
-          </IconButton>
-          <Typography variant="p" color="primary">
-            {mobileNumber}
-          </Typography>
+          <Stack direction="row" alignItems="center" margin={"0.5rem"}>
+            <IconButton color="primary">
+              <Phone fontSize="small" color="secondary" />
+            </IconButton>
+            <Typography variant="p" color="primary">
+              {mobileNumber}
+            </Typography>
+          </Stack>
         </Stack>
       </Box>
 
-      {userPosts.map((item, index) => (
-        <PostCard key={index} data={item} />
-      ))}
+      <Container
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        {userPosts.length === 0 ? (
+          <Typography sx={{ margin: "2rem" }}>
+            {"You have not posted anything yet."}
+          </Typography>
+        ) : (
+          userPosts.map((item, index) => <PostCard key={index} data={item} />)
+        )}
+      </Container>
     </Box>
   );
 };
