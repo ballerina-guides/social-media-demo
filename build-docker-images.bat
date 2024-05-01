@@ -13,7 +13,7 @@
 @REM limitations under the License.
 @REM 
 
-cd sts_service && call bal clean && call bal build
-cd ..\sentiment_api_secured && call bal clean && call bal build
-cd ..\social_media && call bal clean && call bal build
-cd ..\slack_message_sender && call bal clean && call bal build
+cd sts_service && call bal clean & call bal build
+cd ..\sentiment_api_secured && call bal clean & call bal build
+cd ..\social_media && call bal clean & call bal build
+cd ..\slack_message_sender && call bal clean & call bal build
