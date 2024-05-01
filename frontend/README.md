@@ -57,7 +57,7 @@ npm install
 npm run dev
 ```
 
-3. Open the browser and navigate to [http://localhost:3000](http://localhost:3000).
+3. Open the browser and navigate to [http://localhost:5173](http://localhost:5173).
 
 4. For deploying the application, create a production build by running the following command.
 
