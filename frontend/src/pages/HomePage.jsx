@@ -105,11 +105,11 @@ export default function HomePage() {
 
   useEffect(() => {
     const fetchDetails = () => {
-      fetchUserData();
       fetchAllPosts();
       fetchUserPosts();
     };
-
+    
+    fetchUserData();
     fetchDetails();
 
     const intervalId = setInterval(fetchDetails, 10000);
@@ -156,6 +156,7 @@ export default function HomePage() {
               maxWidth: "50%",
             }}
             label="Posts"
+            onClick={fetchAllPosts}
             {...a11yProps(0)}
           />
           <Tab
@@ -165,6 +166,7 @@ export default function HomePage() {
               maxWidth: "50%",
             }}
             label="Profile"
+            onClick={fetchUserPosts}
             {...a11yProps(1)}
           />
         </Tabs>
