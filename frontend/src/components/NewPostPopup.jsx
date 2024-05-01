@@ -52,11 +52,17 @@ const NewPostPopup = ({ open, handleClose, title }) => {
     setHashtags(event.target.value);
   };
 
+  const [descriptionIsEmpty, setDescriptionIsEmpty] = useState(false);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setDescriptionIsEmpty(!description);
+    if (!description) {
+      return;
+    }
     setLoading(true);
     try {
-      const response = await axios.post(
+      await axios.post(
         `http://localhost:9090/social-media/users/${userId}/posts`,
         {
           description: description,
@@ -64,17 +70,7 @@ const NewPostPopup = ({ open, handleClose, title }) => {
           category: category,
         }
       );
-
-      if (response.status === 201) {
-        handleClose();
-      } else if (response.status === 400) {
-        alert("An error occurred");
-        setErrorMessage("an error occurred. 400");
-        setIsOpen(true);
-      } else {
-        setErrorMessage("an error occured");
-        setIsOpen(true);
-      }
+      handleClose();
     } catch (error) {
       console.log(error);
       setErrorMessage(error.message);
@@ -118,6 +114,7 @@ const NewPostPopup = ({ open, handleClose, title }) => {
           >
             <TextField
               label="Description"
+              error={descriptionIsEmpty}
               value={description}
               onChange={handleDescriptionChange}
               fullWidth
