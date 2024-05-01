@@ -25,14 +25,8 @@ import Chip from "@mui/material/Chip";
 import Avatar from "@mui/material/Avatar";
 
 export default function PostCard({ data }) {
-  const {
-    id,
-    author,
-    description } = data;
-  const {
-    tags,
-    category,
-    created_date } = data.meta;
+  const { id, author, description } = data;
+  const { tags, category, created_date } = data.meta;
 
   let hashtagsArr = [];
   if (Array.isArray(tags)) {
@@ -60,11 +54,17 @@ export default function PostCard({ data }) {
             variant="p"
             component="p"
             sx={{
-              wordSpacing: "8px"
+              wordSpacing: "8px",
             }}
           >
-            <Typography variant="span" component="span" sx={{ textTransform: "capitalize" }}>{author} </Typography>
-            . {created_date.year}-{created_date.month}-{created_date.day}
+            <Typography
+              variant="span"
+              component="span"
+              sx={{ textTransform: "capitalize" }}
+            >
+              {author}{" "}
+            </Typography>
+            &middot; {created_date.year}-{created_date.month}-{created_date.day}
           </Typography>
 
           <Typography gutterBottom variant="p" component="p">
@@ -72,23 +72,28 @@ export default function PostCard({ data }) {
           </Typography>
         </Stack>
         <Stack direction={"row"} gap={"0.5rem"} flexWrap="wrap">
-          <Chip
-            avatar={<Avatar>C</Avatar>}
-            variant="outlined"
-            color="primary"
-            label={category}
-          />
-          {hashtagsArr.map((tag, index) => (
+          {category && (
             <Chip
-              key={index}
-              avatar={<Avatar>#</Avatar>}
+              avatar={<Avatar>C</Avatar>}
               variant="outlined"
-              color="secondary"
-              label={tag}
+              color="primary"
+              label={category}
             />
-          ))}
+          )}
+          {hashtagsArr.map(
+            (tag, index) =>
+              tag && (
+                <Chip
+                  key={index}
+                  avatar={<Avatar>#</Avatar>}
+                  variant="outlined"
+                  color="secondary"
+                  label={tag}
+                />
+              )
+          )}
         </Stack>
       </CardContent>
     </Card>
   );
-};
+}
