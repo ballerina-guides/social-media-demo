@@ -65,8 +65,8 @@ export default function HomePage() {
   const [enableFab, setEnableFab] = useState(true);
 
   const handleError = (error) => {
-    navigate("/404", { state: { errorMessage: error.message, } });
-  }
+    navigate("/404", { state: { errorMessage: error.message } });
+  };
 
   const fetchUserData = async () => {
     try {
@@ -105,11 +105,17 @@ export default function HomePage() {
   };
 
   useEffect(() => {
-    fetchUserData();
-    fetchAllPosts();
-    fetchUserPosts();
-  }, []);
+    const fetchDetails = () => {
+      fetchUserData();
+      fetchAllPosts();
+      fetchUserPosts();
+    };
+    
+    fetchDetails();
 
+    const intervalId = setInterval(fetchDetails, 10000);
+    return () => clearInterval(intervalId);
+  }, []);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -151,7 +157,9 @@ export default function HomePage() {
               maxWidth: "50%",
             }}
             label="Posts"
-            onClick={() => { setEnableFab(true) }}
+            onClick={() => {
+              setEnableFab(true);
+            }}
             {...a11yProps(0)}
           />
           <Tab
@@ -161,7 +169,9 @@ export default function HomePage() {
               maxWidth: "50%",
             }}
             label="Profile"
-            onClick={() => { setEnableFab(false) }}
+            onClick={() => {
+              setEnableFab(false);
+            }}
             {...a11yProps(1)}
           />
         </Tabs>
@@ -189,7 +199,7 @@ export default function HomePage() {
         />
       )}
 
-      {enableFab &&
+      {enableFab && (
         <Fab
           color="primary"
           aria-label="add"
@@ -204,7 +214,7 @@ export default function HomePage() {
         >
           <AddIcon />
         </Fab>
-      }
+      )}
 
       <Footer />
     </Box>
