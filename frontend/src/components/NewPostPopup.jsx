@@ -52,6 +52,13 @@ const NewPostPopup = ({ open, handleClose, title }) => {
     setHashtags(event.target.value);
   };
 
+  const handleHashtagsKeyDown = (event) => {
+    if (event.key === " ") {
+      event.preventDefault();
+      setHashtags((prevHashtags) => prevHashtags + ", ");
+    }
+  };
+
   const [descriptionIsEmpty, setDescriptionIsEmpty] = useState(false);
 
   const handleSubmit = async (event) => {
@@ -66,7 +73,7 @@ const NewPostPopup = ({ open, handleClose, title }) => {
         `http://localhost:9090/social-media/users/${userId}/posts`,
         {
           description: description,
-          tags: hashtags,
+          tags: hashtags.trim(),
           category: category,
         }
       );
@@ -121,6 +128,7 @@ const NewPostPopup = ({ open, handleClose, title }) => {
               multiline
               rows={4}
               inputProps={{ maxLength: 250 }}
+              helperText={`${description.length}/250`}
             />
             <TextField
               label="Category"
@@ -132,6 +140,7 @@ const NewPostPopup = ({ open, handleClose, title }) => {
               label="Hashtags (comma separated)"
               value={hashtags}
               onChange={handleHashtagsChange}
+              onKeyDown={handleHashtagsKeyDown}
               fullWidth
             />
 
