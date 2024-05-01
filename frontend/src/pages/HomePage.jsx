@@ -103,12 +103,12 @@ export default function HomePage() {
     }
   };
 
-  useEffect(() => {
-    const fetchDetails = () => {
-      fetchAllPosts();
-      fetchUserPosts();
-    };
+  const fetchDetails = () => {
+    fetchAllPosts();
+    fetchUserPosts();
+  };
 
+  useEffect(() => {
     fetchUserData();
     fetchDetails();
 
@@ -203,6 +203,7 @@ export default function HomePage() {
           open={isPopupOpen}
           handleClose={handlePopupClose}
           title="New Post"
+          refreshPosts={fetchDetails}
         />
       )}
 

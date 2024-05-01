@@ -31,7 +31,7 @@ import { useState } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import PostFailurePopup from "./PostFailurePopup";
 
-const NewPostPopup = ({ open, handleClose, title }) => {
+const NewPostPopup = ({ open, handleClose, title, refreshPosts }) => {
   const [description, setDescription] = React.useState("");
   const [category, setCategory] = React.useState("");
   const [hashtags, setHashtags] = React.useState("");
@@ -83,6 +83,7 @@ const NewPostPopup = ({ open, handleClose, title }) => {
       setErrorMessage(error.message);
       setIsOpen(true);
     } finally {
+      refreshPosts();
       setLoading(false);
     }
   };
