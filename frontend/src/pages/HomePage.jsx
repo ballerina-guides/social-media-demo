@@ -62,7 +62,6 @@ export default function HomePage() {
   const { id } = useParams();
   const [userData, setUserData] = useState([]);
   const navigate = useNavigate();
-  const [enableFab, setEnableFab] = useState(true);
 
   const handleError = (error) => {
     navigate("/404", { state: { errorMessage: error.message } });
@@ -110,7 +109,7 @@ export default function HomePage() {
       fetchAllPosts();
       fetchUserPosts();
     };
-    
+
     fetchDetails();
 
     const intervalId = setInterval(fetchDetails, 10000);
@@ -157,9 +156,6 @@ export default function HomePage() {
               maxWidth: "50%",
             }}
             label="Posts"
-            onClick={() => {
-              setEnableFab(true);
-            }}
             {...a11yProps(0)}
           />
           <Tab
@@ -169,9 +165,6 @@ export default function HomePage() {
               maxWidth: "50%",
             }}
             label="Profile"
-            onClick={() => {
-              setEnableFab(false);
-            }}
             {...a11yProps(1)}
           />
         </Tabs>
@@ -199,22 +192,20 @@ export default function HomePage() {
         />
       )}
 
-      {enableFab && (
-        <Fab
-          color="primary"
-          aria-label="add"
-          sx={{
-            position: "fixed",
-            bottom: "20px",
-            right: "20px",
-            color: "white",
-            display: "auto",
-          }}
-          onClick={handlePopupOpen}
-        >
-          <AddIcon />
-        </Fab>
-      )}
+      <Fab
+        color="primary"
+        aria-label="add"
+        sx={{
+          position: "fixed",
+          bottom: "20px",
+          right: "20px",
+          color: "white",
+          display: "auto",
+        }}
+        onClick={handlePopupOpen}
+      >
+        <AddIcon />
+      </Fab>
 
       <Footer />
     </Box>
