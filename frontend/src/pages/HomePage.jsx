@@ -24,6 +24,7 @@ import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import PostCard from "../components/PostCard";
 import NewPostPopup from "../components/NewPostPopup";
+import Error from "../components/Error";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import axios from "axios";
@@ -56,6 +57,7 @@ function a11yProps(index) {
 export default function HomePage() {
   const [value, setValue] = useState(0);
   const [posts, setPosts] = useState([]);
+  const [postsFetchError, setPostsFetchError] = useState(false);
   const navigate = useNavigate();
 
   const handleError = (error) => {
@@ -67,11 +69,11 @@ export default function HomePage() {
       const response = await axios.get(
         "http://localhost:9090/social-media/posts"
       );
-      console.log(response.data);
       setPosts(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
-      handleError(error);
+      setPostsFetchError(true);
+      // handleError(error);
     }
   };
 
@@ -113,6 +115,7 @@ export default function HomePage() {
           onChange={handleChange}
           sx={{
             display: "flex",
+            width: "100%",
           }}
         >
           <Tab
@@ -128,25 +131,26 @@ export default function HomePage() {
         </Tabs>
 
         <CustomTabPanel value={value} index={0}>
-          <Container
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            {posts.length === 0 ? (
-              <Typography sx={{ margin: "1rem" }}>
-                {"No posts to display :("}
-              </Typography>
-            ) : (
-              posts.map((item, index) => <PostCard key={index} data={item} />)
-            )}
-          </Container>
+          {postsFetchError ? <Error errorMessage={"Failed to Fetch Posts"} /> :
+            <Container
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              {posts.length === 0 ? (
+                <Typography sx={{ margin: "1rem" }}>
+                  {"No posts to display :("}
+                </Typography>
+              ) : (
+                posts.map((item, index) => <PostCard key={index} data={item} />)
+              )}
+            </Container>
+          }
         </CustomTabPanel>
       </Box>
-
       {isPopupOpen && (
         <NewPostPopup
           open={isPopupOpen}

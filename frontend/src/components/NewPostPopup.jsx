@@ -80,7 +80,6 @@ const NewPostPopup = ({ open, handleClose, title, refreshPosts }) => {
       );
       handleClose();
     } catch (error) {
-      console.log(error);
       setErrorMessage(error.message);
       setIsOpen(true);
     } finally {

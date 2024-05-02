@@ -22,6 +22,7 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 import UserProfileButton from "../components/UserProfileButton";
 import NewUserPopup from "../components/NewUserPopup";
+import Error from "../components/Error";
 import {
   Button,
   Container,
@@ -32,16 +33,30 @@ import axios from 'axios';
 export default function ProfilesPage() {
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [users, setUserNames] = useState([]);
+  const [usersFetchError, setUsersFetchError] = useState(false);
+
   const navigate = useNavigate();
 
   const handleError = (error) => {
     navigate("/404", { state: { errorMessage: error.message, } });
   }
 
+  const getUsers = () => {
+    return axios.get('http://localhost:9090/social-media/users')
+      .then(response => {
+        const users = response.data;
+        return users;
+      })
+      .catch(error => {
+        console.error(error);
+        setUsersFetchError(true)
+        return [];
+      });
+  }
+
   const deleteUser = (userId) => {
     axios.delete(`http://localhost:9090/social-media/users/${userId}`)
       .then(response => {
-        console.log(response)
       }).catch(error => {
         console.error(error);
         handleError(error);
@@ -53,7 +68,6 @@ export default function ProfilesPage() {
   const addUser = (user) => {
     axios.post(`http://localhost:9090/social-media/users/`, user).
       then(response => {
-        console.log(response);
       }).catch(error => {
         console.error(error);
         handleError(error);
@@ -79,17 +93,6 @@ export default function ProfilesPage() {
     fetchUsers();
   }, []);
 
-  const getUsers = () => {
-    return axios.get('http://localhost:9090/social-media/users')
-      .then(response => {
-        const users = response.data;
-        return users;
-      })
-      .catch(error => {
-        console.error(error);
-        return [];
-      });
-  }
 
   return (
     <div>
@@ -101,22 +104,23 @@ export default function ProfilesPage() {
         alignItems: "center",
         minHeight: "75vh",
       }}>
-        <Container
-          maxWidth="md"
-          style={{
-            maxHeight: "25rem",
-            overflow: 'auto',
-            width: "50%",
-          }}
-          sx={{
-            margin: "1rem",
-          }}
-        >
 
-          {users.map((user, index) => (
-            <UserProfileButton key={index} user={user} deleteUser={deleteUser} />
-          ))}
-        </Container>
+        {usersFetchError ? <Error errorMessage={"Failed to Fetch Users"} /> :
+          <Container
+            maxWidth="md"
+            style={{
+              maxHeight: "25rem",
+              overflow: 'auto',
+              width: "50%",
+            }}
+            sx={{
+              margin: "1rem",
+            }}
+          >
+            {users.map((user, index) => (
+              <UserProfileButton key={index} user={user} deleteUser={deleteUser} />
+            ))}
+          </Container>}
 
         {isPopupOpen && (
           <NewUserPopup

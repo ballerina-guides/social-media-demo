@@ -63,8 +63,9 @@ export default function Header({ enableProfile = false }) {
               <IconButton
                 color="primary"
                 onClick={() => navigate(`/user/${id}/profile`)}
+                sx={{ bgcolor: "secondary.light", ":hover": { bgcolor: "secondary.dark" } }}
               >
-                <Person fontSize="large" color="secondary" />
+                <Person fontSize="large" color="primary" />
               </IconButton> :
               <Button
                 variant="contained"
