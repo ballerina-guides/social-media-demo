@@ -1,0 +1,11 @@
+:root {
+  --primary-color: #20b6b0;
+  --primary-color-light1: #f6fefe;
+  --primary-color-light2: #eff6f6;
+  --secondary-color: #464646;
+}
+
+body {
+  margin: 0;
+  font-family: "quicksand", "sans-serif";
+}

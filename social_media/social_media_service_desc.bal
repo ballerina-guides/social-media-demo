@@ -13,7 +13,6 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
-
 import ballerina/constraint;
 import ballerina/http;
 import ballerina/sql;
@@ -63,18 +62,19 @@ type Post record {|
     string description;
     string tags;
     string category;
-    @sql:Column {name: "created_date"}
-    time:Date created_date;
+    @sql:Column {name: "created_time_stamp"}
+    time:Civil created_time_stamp;
 |};
 
 type PostWithMeta record {|
     int id;
     string description;
+    string author;
     record {|
         string[] tags;
         string category;
-        @sql:Column {name: "created_date"}
-        time:Date created_date;
+        @sql:Column {name: "created_time_stamp"}
+        time:Civil created_time_stamp;
     |} meta;
 |};
 
