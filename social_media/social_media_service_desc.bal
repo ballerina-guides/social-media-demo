@@ -78,6 +78,11 @@ type PostWithMeta record {|
     |} meta;
 |};
 
+public type FollowerStream record {|
+    @sql:Column {name: "leader_id"}
+    int leaderId;
+|};
+
 public type NewPost record {|
     string description;
     string tags;
