@@ -93,7 +93,7 @@ export default function ProfilesPage() {
 
   return (
     <div>
-      <Header enableProfile={false} />
+      <Header />
       <Box sx={{
         display: "flex",
         flexDirection: "column",
