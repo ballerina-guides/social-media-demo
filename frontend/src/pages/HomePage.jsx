@@ -28,7 +28,6 @@ import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import axios from "axios";
 import { Container, Typography } from "@mui/material";
-import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 function CustomTabPanel(props) {
@@ -79,7 +78,7 @@ export default function HomePage() {
   useEffect(() => {
     fetchAllPosts();
 
-    const intervalId = setInterval(fetchAllPosts, 10000);
+    const intervalId = setInterval(fetchAllPosts, 5000);
     return () => clearInterval(intervalId);
   }, []);
 
@@ -114,7 +113,6 @@ export default function HomePage() {
           onChange={handleChange}
           sx={{
             display: "flex",
-            width: "100%",
           }}
         >
           <Tab

@@ -28,8 +28,6 @@ export default function PostCard({ data }) {
   const { author, description } = data;
   const { tags, category, created_time_stamp } = data.meta;
 
-  console.log(created_time_stamp)
-
   let hashtagsArr = [];
   if (Array.isArray(tags)) {
     hashtagsArr = tags;

@@ -41,7 +41,7 @@ export default function ProfilePage() {
         fetchUserData();
         fetchUserPosts();
 
-        const intervalId = setInterval(fetchUserPosts, 10000);
+        const intervalId = setInterval(fetchUserPosts, 5000);
         return () => clearInterval(intervalId);
     }, [id])
 

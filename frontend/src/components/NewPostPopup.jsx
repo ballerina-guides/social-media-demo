@@ -30,12 +30,13 @@ import axios from "axios";
 import { useState } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import PostFailurePopup from "./PostFailurePopup";
+import { useParams } from "react-router-dom";
 
 const NewPostPopup = ({ open, handleClose, title, refreshPosts }) => {
   const [description, setDescription] = React.useState("");
   const [category, setCategory] = React.useState("");
   const [hashtags, setHashtags] = React.useState("");
-  const userId = location.pathname.split("/")[2].toString();
+  const { id } = useParams();
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false); // State to control the error popup
   const [errorMessage, setErrorMessage] = useState(""); // State to store the error message
@@ -70,7 +71,7 @@ const NewPostPopup = ({ open, handleClose, title, refreshPosts }) => {
     setLoading(true);
     try {
       await axios.post(
-        `http://localhost:9090/social-media/users/${userId}/posts`,
+        `http://localhost:9090/social-media/users/${id}/posts`,
         {
           description: description,
           tags: hashtags.trim(),
