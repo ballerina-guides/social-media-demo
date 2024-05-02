@@ -7,7 +7,7 @@ CREATE TABLE social_media_database.posts (
     id INT NOT NULL auto_increment PRIMARY KEY,
     description VARCHAR(255),
     category VARCHAR(255),
-    created_date DATE,
+    created_time_stamp TIMESTAMP,
     tags VARCHAR(255),
     user_id INT
 );
@@ -23,7 +23,7 @@ INSERT INTO social_media_database.users (
     )
 VALUES (
         1,
-        Curdate(),
+        CURRENT_TIMESTAMP(),
         "ranga",
         "+94771234001"
     );
@@ -35,7 +35,7 @@ INSERT INTO social_media_database.users (
     )
 VALUES (
         2,
-        Curdate(),
+        CURRENT_TIMESTAMP(),
         "ravi",
         "+94771234002"
     );
@@ -47,7 +47,7 @@ INSERT INTO social_media_database.users (
     )
 VALUES (
         3,
-        Curdate(),
+        CURRENT_TIMESTAMP(),
         "satish",
         "+94771234001"
     );
@@ -59,69 +59,69 @@ INSERT INTO social_media_database.users (
     )
 VALUES (
         4,
-        Curdate(),
+        CURRENT_TIMESTAMP(),
         "ayesh",
         "+94768787189"
     );
 INSERT INTO social_media_database.posts (
         description,
         category,
-        created_date,
+        created_time_stamp,
         tags,
         user_id
     )
 VALUES (
         'I want to learn AWS',
         'education',
-        Curdate(),
+        CURRENT_TIMESTAMP(),
         'aws,cloud,learn',
         1
     );
 INSERT INTO social_media_database.posts (
         description,
         category,
-        created_date,
+        created_time_stamp,
         tags,
         user_id
     )
 VALUES (
         'I want to learn DevOps',
         'education',
-        Curdate(),
+        CURRENT_TIMESTAMP(),
         'devops,infra,learn',
         1
     );
 INSERT INTO social_media_database.posts (
         description,
         category,
-        created_date,
+        created_time_stamp,
         tags,
         user_id
     )
 VALUES (
         'I want to learn GCP',
         'education',
-        Curdate(),
+        CURRENT_TIMESTAMP(),
         'gcp,google,learn',
         2
     );
 INSERT INTO social_media_database.posts (
         description,
         category,
-        created_date,
+        created_time_stamp,
         tags,
         user_id
     )
 VALUES (
         'I want to learn multi cloud',
         'education',
-        Curdate(),
+        CURRENT_TIMESTAMP(),
         'gcp,aws,azure,infra,learn',
         3
     );
 CREATE TABLE social_media_database.followers (
     id INT NOT NULL auto_increment PRIMARY KEY,
-    created_date DATE,
+    created_time_stamp DATE,
     leader_id INT,
     follower_id INT,
     UNIQUE (leader_id, follower_id),
@@ -129,8 +129,8 @@ CREATE TABLE social_media_database.followers (
     FOREIGN KEY (follower_id) REFERENCES social_media_database.users(id) ON DELETE CASCADE
 );
 INSERT INTO social_media_database.followers (
-        created_date,
+        created_time_stamp,
         leader_id,
         follower_id
     )
-VALUES (Curdate(), 1, 4);
+VALUES (CURRENT_TIMESTAMP(), 1, 4);

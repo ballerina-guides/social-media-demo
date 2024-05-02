@@ -84,6 +84,7 @@ export default function HomePage() {
       const response = await axios.get(
         "http://localhost:9090/social-media/posts"
       );
+      console.log(response.data);
       setPosts(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -112,7 +113,7 @@ export default function HomePage() {
     fetchUserData();
     fetchDetails();
 
-    const intervalId = setInterval(fetchDetails, 10000);
+    const intervalId = setInterval(fetchDetails, 5000);
     return () => clearInterval(intervalId);
   }, []);
 

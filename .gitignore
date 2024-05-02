@@ -37,3 +37,4 @@ target/
 
 # Ballerina related ignores
 Ballerina.lock
+Dependencies.toml

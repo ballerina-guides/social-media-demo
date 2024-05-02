@@ -90,7 +90,7 @@ service SocialMedia /social\-media on socialMediaListener {
         return http:NO_CONTENT;
     }
 
-    # Get posts for a give user
+    # Get posts for a given user
     #
     # + id - The user ID for which posts are retrieved
     # + return - A list of posts or error message
@@ -107,10 +107,11 @@ service SocialMedia /social\-media on socialMediaListener {
             return result;
         }
 
-        stream<Post, sql:Error?> postStream = socialMediaDb->query(`SELECT id, description, category, created_date, tags FROM posts WHERE user_id = ${id}`);
+        stream<Post, sql:Error?> postStream = socialMediaDb->query(`SELECT id, description, category, created_time_stamp, tags FROM posts WHERE user_id = ${id}`);
         Post[]|error posts = from Post post in postStream
             select post;
-        return mapPostToPostWithMeta(check posts, result.name);
+
+        return sortPostsByTime(mapPostToPostWithMeta(check posts, result.name));
     }
 
     # Get posts from all the users
@@ -121,15 +122,15 @@ service SocialMedia /social\-media on socialMediaListener {
         PostWithMeta[] posts = [];
         User[] users = check from User user in userStream
             select user;
-        
+
         foreach User user in users {
-            stream<Post, sql:Error?> postStream = socialMediaDb->query(`SELECT id, description, category, created_date, tags FROM posts WHERE user_id = ${user.id}`);
+            stream<Post, sql:Error?> postStream = socialMediaDb->query(`SELECT id, description, category, created_time_stamp, tags FROM posts WHERE user_id = ${user.id}`);
             Post[]|error userPosts = from Post post in postStream
                 select post;
-            PostWithMeta[] tempPosts = mapPostToPostWithMeta(check userPosts, user.name);
-            posts.push(...tempPosts);
+            PostWithMeta[] postsWithMeta = mapPostToPostWithMeta(check userPosts, user.name);
+            posts.push(...postsWithMeta);
         }
-        return posts;
+        return sortPostsByTime(posts);
     }
 
     # Create a post for a given user
@@ -161,8 +162,8 @@ service SocialMedia /social\-media on socialMediaListener {
         }
 
         _ = check socialMediaDb->execute(`
-            INSERT INTO posts(description, category, created_date, tags, user_id)
-            VALUES (${newPost.description}, ${newPost.category}, CURDATE(), ${newPost.tags}, ${id});`);
+            INSERT INTO posts(description, category, created_time_stamp, tags, user_id)
+            VALUES (${newPost.description}, ${newPost.category}, CURRENT_TIMESTAMP(), ${newPost.tags}, ${id});`);
         _ = start publishUserPostUpdate(user.id);
         return http:CREATED;
     }
@@ -174,7 +175,7 @@ function buildErrorPayload(string msg, string path) returns ErrorDetails => {
     details: string `uri=${path}`
 };
 
-function mapPostToPostWithMeta(Post[] post, string author) returns PostWithMeta[] => from var postItem in post
+function mapPostToPostWithMeta(Post[] posts, string author) returns PostWithMeta[] => from var postItem in posts
     select {
         id: postItem.id,
         description: postItem.description,
@@ -182,7 +183,7 @@ function mapPostToPostWithMeta(Post[] post, string author) returns PostWithMeta[
         meta: {
             tags: regex:split(postItem.tags, ","),
             category: postItem.category,
-            created_date: postItem.created_date
+            created_time_stamp: postItem.created_time_stamp
         }
     };
 
@@ -196,4 +197,14 @@ function publishUserPostUpdate(int userId) returns error? {
             "leaderId": userId
         }
     });
+}
+
+function sortPostsByTime(PostWithMeta[] unsortedPosts) returns PostWithMeta[]|error {
+    foreach var item in unsortedPosts {
+        item.meta.created_time_stamp.timeAbbrev = "z";
+    }
+    PostWithMeta[] sortedPosts = from var post in unsortedPosts
+        order by check time:civilToString(post.meta.created_time_stamp) descending
+        select post;
+    return sortedPosts;
 }
