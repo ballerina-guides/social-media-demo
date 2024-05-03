@@ -30,7 +30,6 @@ import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import axios from "axios";
 import { Container, Typography, Button, Stack } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 
 function CustomTabPanel(props) {
   const { children, value, index, other } = props;
@@ -66,7 +65,9 @@ export default function HomePage() {
 
   const fetchAllPosts = async () => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_SOCIAL_MEDIA_SERVICE_ENDPOINT}/posts`);
+      const response = await axios.get(
+        `${import.meta.env.VITE_SOCIAL_MEDIA_SERVICE_ENDPOINT}/posts`
+      );
       setPosts(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -77,7 +78,9 @@ export default function HomePage() {
   const fetchFollowingPosts = async () => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_SOCIAL_MEDIA_SERVICE_ENDPOINT}/users/${id}/following/posts`
+        `${
+          import.meta.env.VITE_SOCIAL_MEDIA_SERVICE_ENDPOINT
+        }/users/${id}/following/posts`
       );
       setFollowingPosts(response.data);
     } catch (error) {
@@ -101,7 +104,9 @@ export default function HomePage() {
   const fetchFollowingUsers = async () => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_SOCIAL_MEDIA_SERVICE_ENDPOINT}/users/${id}/following`
+        `${
+          import.meta.env.VITE_SOCIAL_MEDIA_SERVICE_ENDPOINT
+        }/users/${id}/following`
       );
       setFollowingUsers(response.data);
     } catch (error) {
@@ -112,7 +117,9 @@ export default function HomePage() {
   const handleFollow = async (userId) => {
     try {
       await axios.post(
-        `${import.meta.env.VITE_SOCIAL_MEDIA_SERVICE_ENDPOINT}/users/${id}/following?leaderId=${userId}`
+        `${
+          import.meta.env.VITE_SOCIAL_MEDIA_SERVICE_ENDPOINT
+        }/users/${id}/following?leaderId=${userId}`
       );
       fetchFollowingUsers();
     } catch (error) {
@@ -123,65 +130,9 @@ export default function HomePage() {
   const handleUnfollow = async (userId) => {
     try {
       await axios.delete(
-        `${import.meta.env.VITE_SOCIAL_MEDIA_SERVICE_ENDPOINT}/users/${id}/following?leaderId=${userId}`
-      );
-      fetchFollowingUsers();
-    } catch (error) {
-      console.error("Error unfollowing user:", error);
-    }
-  };
-
-  const fetchFollowingPosts = async () => {
-    try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_SOCIAL_MEDIA_SERVICE_ENDPOINT}/users/${id}/following/posts`
-      );
-      setFollowingPosts(response.data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      setPostsFetchError(true);
-      // handleError(error);
-    }
-  };
-
-  const fetchUsers = async () => {
-    try {
-      const response = await axios.get(
-        "http://localhost:9090/social-media/users"
-      );
-      setUsers(response.data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      // TODO: handle error
-    }
-  };
-
-  const fetchFollowingUsers = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:9090/social-media/users/${id}/following`
-      );
-      setFollowingUsers(response.data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
-  const handleFollow = async (userId) => {
-    try {
-      await axios.post(
-        `http://localhost:9090/social-media/users/${id}/following?leaderId=${userId}`
-      );
-      fetchFollowingUsers();
-    } catch (error) {
-      console.error("Error following user:", error);
-    }
-  };
-
-  const handleUnfollow = async (userId) => {
-    try {
-      await axios.delete(
-        `http://localhost:9090/social-media/users/${id}/following?leaderId=${userId}`
+        `${
+          import.meta.env.VITE_SOCIAL_MEDIA_SERVICE_ENDPOINT
+        }/users/${id}/following?leaderId=${userId}`
       );
       fetchFollowingUsers();
     } catch (error) {
@@ -321,7 +272,14 @@ export default function HomePage() {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                minHeight: "75vh",
+                minHeight: "65vh",
+                maxHeight: "65vh",
+                overflow: "auto",
+                width: "50%",
+                marginLeft: "auto",
+                marginRight: "auto",
+                marginTop: "3vh",
+                marginBottom: "3vh",
               }}
             >
               {users
@@ -337,7 +295,7 @@ export default function HomePage() {
                       <Typography
                         sx={{
                           textTransform: "capitalize",
-                          minWidth: "8rem", //TODO: add better css
+                          minWidth: "15rem", //TODO: add better css
                         }}
                       >
                         {user.name}
@@ -347,6 +305,9 @@ export default function HomePage() {
                         .includes(user.id) ? (
                         <Button
                           variant="outlined"
+                          sx={{
+                            width: "8rem",
+                          }}
                           onClick={() => {
                             handleUnfollow(user.id);
                           }}
@@ -356,6 +317,10 @@ export default function HomePage() {
                       ) : (
                         <Button
                           variant="contained"
+                          sx={{
+                            color: "white",
+                            width: "8rem",
+                          }}
                           onClick={() => {
                             handleFollow(user.id);
                           }}
