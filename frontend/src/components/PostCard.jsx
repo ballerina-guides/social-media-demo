@@ -60,7 +60,7 @@ export default function PostCard({ data }) {
             <Typography
               variant="span"
               component="span"
-              sx={{ textTransform: "capitalize" }}
+              sx={{ textTransform: "capitalize", wordSpacing: "0", }}
             >
               {author}{" "}
             </Typography>
