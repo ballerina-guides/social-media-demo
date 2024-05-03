@@ -72,6 +72,7 @@ export default function ProfilesPage() {
         setErrorPopup(true)
       }).finally(() => {
         getUsers().then(users => setUserNames(users));
+        setPopupOpen(false);
       });
   }
 
