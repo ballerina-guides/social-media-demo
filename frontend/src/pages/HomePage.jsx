@@ -60,9 +60,7 @@ export default function HomePage() {
 
   const fetchAllPosts = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:9095/social-media/posts"
-      );
+      const response = await axios.get(`${import.meta.env.VITE_SOCIAL_MEDIA_SERVICE_ENDPOINT}/posts`);
       setPosts(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);

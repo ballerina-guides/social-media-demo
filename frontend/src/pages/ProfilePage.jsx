@@ -26,9 +26,7 @@ export default function ProfilePage() {
 
   const fetchUserData = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:9095/social-media/users/${id}`
-      );
+      const response = await axios.get(`${import.meta.env.VITE_SOCIAL_MEDIA_SERVICE_ENDPOINT}/users/${id}`);
       setUserData(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -38,9 +36,7 @@ export default function ProfilePage() {
 
   const fetchUserPosts = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:9095/social-media/users/${id}/posts`
-      );
+      const response = await axios.get(`${import.meta.env.VITE_SOCIAL_MEDIA_SERVICE_ENDPOINT}/users/${id}/posts`);
       setUserPosts(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);

@@ -38,7 +38,7 @@ export default function ProfilesPage() {
   const [errorMessage, setErrorMessage] = React.useState("Maybe you havent implemented this feature yet"); // State to store the error message
 
   const getUsers = () => {
-    return axios.get('http://localhost:9095/social-media/users')
+    return axios.get(`${import.meta.env.VITE_SOCIAL_MEDIA_SERVICE_ENDPOINT}/users`)
       .then(response => {
         const users = response.data;
         return users;
@@ -51,7 +51,7 @@ export default function ProfilesPage() {
   }
 
   const deleteUser = (userId) => {
-    axios.delete(`http://localhost:9095/social-media/users/${userId}`)
+    axios.delete(`${import.meta.env.VITE_SOCIAL_MEDIA_SERVICE_ENDPOINT}/users/${userId}`)
       .then(response => {
       }).catch(error => {
         console.error(error);
@@ -62,8 +62,8 @@ export default function ProfilesPage() {
       });
   };
 
-  const addUser = (user) => {
-    axios.post(`http://localhost:9095/social-media/users/`, user).
+  const addUser = (user, setErrorPopup, setErrorMessage) => {
+    axios.post(`${import.meta.env.VITE_SOCIAL_MEDIA_SERVICE_ENDPOINT}/users`, user).
       then(response => {
       }).catch(error => {
         console.error(error);

@@ -30,7 +30,7 @@ type SocialMedia service object {
 
 Following are the features covered by the scenario.
 
-- Writing REST APIs with verbs, URLs, data 
+- Writing REST APIs with verbs, URLs, data
 - binding and status codes
 - Accessing databases
 - Configurability
@@ -47,6 +47,7 @@ Following are the features covered by the scenario.
 # Setup environment
 
 ## With Docker Compose
+
 1. Checkout the code base and move to the root folder
 2. Execute `build-docker-images.sh` script to generate the necessary docker images.
 3. Execute `docker compose up`
@@ -57,6 +58,7 @@ Following are the features covered by the scenario.
 2. Execute the script `init.sql` in db-setup
 
 # Try out
+
 - To start the completed setup run `docker compose up -f docker-compose-complete.yml`
 - To send request open `social-media-request.http` file using VS Code with `REST Client` extension
-- To open the frontend type `http://localhost:3000`in the browser
+- To open the frontend type `http://localhost:3001`in the browser
