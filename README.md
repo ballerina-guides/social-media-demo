@@ -24,6 +24,12 @@ type SocialMedia service object {
     resource function get posts() returns PostWithMeta[]|error;
     resource function get users/[int id]/posts() returns PostMeta[]|UserNotFound|error;
     resource function post users/[int id]/posts(NewPost newPost) returns http:Created|UserNotFound|PostForbidden|error;
+    
+    // folllowing resource
+    resource function get users/[int id]/following/posts() returns PostWithMeta[]|UserNotFound|error;
+    resource function get users/[int id]/following() returns User[]|UserNotFound|error;
+    resource function post users/[int id]/following(int leaderId) returns http:Created|UserNotFound|error;
+    resource function delete users/[int id]/following(int leaderId) returns http:NoContent|UserNotFound|error;
 };
 ```
 
