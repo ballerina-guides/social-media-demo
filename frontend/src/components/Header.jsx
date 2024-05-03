@@ -19,7 +19,7 @@
 import { Box, Container, Button, Stack, IconButton } from "@mui/material";
 import HeaderLogo from "../assets/logo.png";
 import { useNavigate, useParams } from "react-router-dom";
-import Person from "@mui/icons-material/Person";
+import ProfilePicture from "../assets/profile-picture.png";
 
 export default function Header({ enableProfile = false }) {
   const navigate = useNavigate();
@@ -60,13 +60,21 @@ export default function Header({ enableProfile = false }) {
         {id ? (
           <Stack direction="row" gap="1rem">
             {enableProfile ?
-              <IconButton
-                color="primary"
+              <Box
+                component="img"
+                sx={{
+                  objectFit: "cover",
+                  cursor: "pointer",
+                  width: "4rem",
+                  height: "4rem",
+                  ":hover": {
+                    filter: "hue-rotate(180deg)",
+                  }
+                }}
+                alt="Header logo"
+                src={ProfilePicture}
                 onClick={() => navigate(`/user/${id}/profile`)}
-                sx={{ bgcolor: "secondary.light", ":hover": { bgcolor: "secondary.dark" } }}
-              >
-                <Person fontSize="large" color="primary" />
-              </IconButton> :
+              /> :
               <Button
                 variant="contained"
                 color="primary"
