@@ -29,7 +29,7 @@ services:
     network_mode: "host"
 
   sentiment-analysis:
-    image: "wso2/sentiment-api:0.0.1"
+    image: "wso2/sentiment-api-secured:0.0.1"
     ports:
       - "9098:9098"
     network_mode: "host"

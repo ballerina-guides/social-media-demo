@@ -22,6 +22,7 @@ type SocialMedia service object {
 
     // posts resource
     resource function get posts() returns PostWithMeta[]|error;
+    resource function get posts() returns PostWithMeta[]|error;
     resource function get users/[int id]/posts() returns PostMeta[]|UserNotFound|error;
     resource function post users/[int id]/posts(NewPost newPost) returns http:Created|UserNotFound|PostForbidden|error;
 };
@@ -30,14 +31,16 @@ type SocialMedia service object {
 Following are the features covered by the scenario.
 
 - Writing REST APIs with verbs, URLs, data 
-- Data binding and status codes
+- binding and status codes
 - Accessing databases
 - Configurability
 - Debugging Ballerina programs
+- HTTP client
+- Resiliency - Retry
+- OpenAPI specification, client stubs and central
+- Handling errors
 - Writing a simple testcase
 - HTTP client
-- Handling errors
-- OpenAPI specification and client stubs
 - Deploying in docker and kubernetes
 - Generating GraalVM images
 
@@ -56,4 +59,4 @@ Following are the features covered by the scenario.
 # Try out
 - To start the completed setup run `docker compose up -f docker-compose-complete.yml`
 - To send request open `social-media-request.http` file using VS Code with `REST Client` extension
-- To open the frontend type `http://localhost:3001`in the browser
+- To open the frontend type `http://localhost:3000`in the browser

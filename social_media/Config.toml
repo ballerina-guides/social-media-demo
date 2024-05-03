@@ -8,6 +8,6 @@ host = "localhost"
 port = 3306
 
 [sentimentEndpointConfig]
-endpointUrl = "http://localhost:9098/text-processing"
+endpointUrl = "https://localhost:9098/text-processing"
 retryInterval = 3.0
 
