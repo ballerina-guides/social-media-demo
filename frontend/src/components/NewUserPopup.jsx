@@ -37,6 +37,7 @@ const NewUserPopup = ({ open, handleClose, addUser }) => {
   const [mobileNumber, setMobileNumber] = React.useState("");
   const [userNameIsEmpty, setUserNameIsEmpty] = React.useState(false);
   const [mobileNumberIsEmpty, setMobileNumberIsEmpty] = React.useState(false);
+
   const handleUserNameChange = (event) => {
     setUserNameIsEmpty(false);
     setUserName(event.target.value);
@@ -54,8 +55,8 @@ const NewUserPopup = ({ open, handleClose, addUser }) => {
 
   const handleSubmit = () => {
     setUserNameIsEmpty(!userName);
-    setMobileNumberIsEmpty(!mobileNumber || mobileNumber.length < 10);
-    if (!userName || !dateOfBirth || !mobileNumber || mobileNumber.length < 10) {
+    setMobileNumberIsEmpty(!mobileNumber);
+    if (!userName || !dateOfBirth || !mobileNumber) {
       return;
     }
     addUser(getUser());

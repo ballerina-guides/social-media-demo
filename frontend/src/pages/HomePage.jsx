@@ -29,7 +29,6 @@ import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import axios from "axios";
 import { Container, Typography } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 
 function CustomTabPanel(props) {
   const { children, value, index, other } = props;
@@ -58,28 +57,19 @@ export default function HomePage() {
   const [value, setValue] = useState(0);
   const [posts, setPosts] = useState([]);
   const [postsFetchError, setPostsFetchError] = useState(false);
-  const navigate = useNavigate();
-
-  const handleError = (error) => {
-    navigate("/404", { state: { errorMessage: error.message } });
-  };
 
   const fetchAllPosts = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:9090/social-media/posts"
-      );
+      const response = await axios.get(`${import.meta.env.VITE_SOCIAL_MEDIA_SERVICE_ENDPOINT}/posts`);
       setPosts(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
       setPostsFetchError(true);
-      // handleError(error);
     }
   };
 
   useEffect(() => {
     fetchAllPosts();
-
     const intervalId = setInterval(fetchAllPosts, 5000);
     return () => clearInterval(intervalId);
   }, []);
