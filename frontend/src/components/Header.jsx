@@ -16,14 +16,31 @@
  * under the License.
  */
 
-import { Box, Container, Button, Stack, IconButton } from "@mui/material";
+import { Box, Container, Button, Stack, IconButton, Typography } from "@mui/material";
 import HeaderLogo from "../assets/logo.png";
 import { useNavigate, useParams } from "react-router-dom";
 import ProfilePicture from "../assets/profile-picture.png";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function Header({ enableProfile = false }) {
   const navigate = useNavigate();
   const { id } = useParams();
+  const [userName, setUserName] = useState("")
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_SOCIAL_MEDIA_SERVICE_ENDPOINT}/users/${id}`);
+        setUserName(response.data.name);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setUserName("")
+      }
+    }
+
+    fetchUser()
+  }, [])
 
   return (
     <Box
@@ -60,21 +77,33 @@ export default function Header({ enableProfile = false }) {
         {id ? (
           <Stack direction="row" gap="1rem">
             {enableProfile ? (
-              <Box
-                component="img"
+              <Stack
+                direction="row"
+                alignItems="center"
+                gap="0.5rem"
+                marginLeft="0.5rem"
                 sx={{
-                  objectFit: "cover",
-                  cursor: "pointer",
-                  width: "3.5rem",
-                  height: "3.5rem",
                   ":hover": {
+                    cursor: "pointer",
                     filter: "hue-rotate(180deg)",
-                  },
+                  }
                 }}
-                alt="Header logo"
-                src={ProfilePicture}
                 onClick={() => navigate(`/user/${id}/profile`)}
-              />
+              >
+
+                <Box
+                  component="img"
+                  sx={{
+                    objectFit: "cover",
+                    cursor: "pointer",
+                    width: "3.5rem",
+                    height: "3.5rem"
+                  }}
+                  alt="Header logo"
+                  src={ProfilePicture}
+                />
+                <Typography variant="p" textTransform="capitalize">{userName}</Typography>
+              </Stack>
             ) : (
               <Button
                 variant="contained"
