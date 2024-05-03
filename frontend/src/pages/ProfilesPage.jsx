@@ -17,7 +17,6 @@
  */
 
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import UserProfileButton from "../components/UserProfileButton";
@@ -29,20 +28,17 @@ import {
   Box
 } from "@mui/material";
 import axios from 'axios';
+import PostFailurePopup from "../components/PostFailurePopup";
 
 export default function ProfilesPage() {
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [users, setUserNames] = useState([]);
   const [usersFetchError, setUsersFetchError] = useState(false);
-
-  const navigate = useNavigate();
-
-  const handleError = (error) => {
-    navigate("/404", { state: { errorMessage: error.message, } });
-  }
+  const [isOpen, setErrorPopupShown] = React.useState(false);
+  const [errorMessage, setErrorMessage] = React.useState("Maybe you havent implemented this feature yet"); // State to store the error message
 
   const getUsers = () => {
-    return axios.get('http://localhost:9095/social-media/users')
+    return axios.get(`${import.meta.env.VITE_SOCIAL_MEDIA_SERVICE_ENDPOINT}/users`)
       .then(response => {
         const users = response.data;
         return users;
@@ -55,22 +51,24 @@ export default function ProfilesPage() {
   }
 
   const deleteUser = (userId) => {
-    axios.delete(`http://localhost:9095/social-media/users/${userId}`)
+    axios.delete(`${import.meta.env.VITE_SOCIAL_MEDIA_SERVICE_ENDPOINT}/users/${userId}`)
       .then(response => {
       }).catch(error => {
         console.error(error);
-        handleError(error);
+        setErrorMessage(error.message);
+        setErrorPopupShown(true);
       }).finally(() => {
         getUsers().then(users => setUserNames(users));
       });
   };
 
-  const addUser = (user) => {
-    axios.post(`http://localhost:9095/social-media/users/`, user).
+  const addUser = (user, setErrorPopup, setErrorMessage) => {
+    axios.post(`${import.meta.env.VITE_SOCIAL_MEDIA_SERVICE_ENDPOINT}/users`, user).
       then(response => {
       }).catch(error => {
         console.error(error);
-        handleError(error);
+        setErrorMessage(error.message)
+        setErrorPopupShown(true)
       }).finally(() => {
         getUsers().then(users => setUserNames(users));
         setPopupOpen(false);
@@ -96,6 +94,11 @@ export default function ProfilesPage() {
 
   return (
     <div>
+      <PostFailurePopup
+        isOpen={isOpen}
+        errorMessage={errorMessage}
+        handleClose={() => setErrorPopupShown(false)}
+      />
       <Header />
       <Box sx={{
         display: "flex",

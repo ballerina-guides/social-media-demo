@@ -11,14 +11,18 @@ There are three ways to instantly serve up the frontend application:
 1. Serve the application using NodeJS.
 
 ```bash
-npx serve dist --single --listen 3000
+npx serve dist --single --listen 2201
 ```
+
+- Open the browser and navigate to: [http://localhost:2201](http://localhost:2201)
 
 2. Serve the application using Python.
 
 ```bash
-python -m http.server 3000 --directory dist
+python -m http.server 2201 --directory dist
 ```
+
+- Open the browser and navigate to: [http://localhost:2201](http://localhost:2201)
 
 > Note: URL rewriting is not supported when serving the production build using python. (contents of ErrorPage.jsx will not render for invalid URLs)
 
@@ -32,7 +36,7 @@ python -m http.server 3000 --directory dist
 docker compose up
 ```
 
-- Open the browser and navigate to: [http://localhost:3000](http://localhost:3000)
+- Open the browser and navigate to: [http://localhost:3001](http://localhost:3001)
 
 ## Running the Application in Development Mode
 

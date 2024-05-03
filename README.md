@@ -29,21 +29,24 @@ type SocialMedia service object {
 
 Following are the features covered by the scenario.
 
-- Writing REST APIs with verbs, URLs, data 
-- Data binding and status codes
+- Writing REST APIs with verbs, URLs, data
+- binding and status codes
 - Accessing databases
 - Configurability
 - Debugging Ballerina programs
+- HTTP client
+- Resiliency - Retry
+- OpenAPI specification, client stubs and central
+- Handling errors
 - Writing a simple testcase
 - HTTP client
-- Handling errors
-- OpenAPI specification and client stubs
 - Deploying in docker and kubernetes
 - Generating GraalVM images
 
 # Setup environment
 
 ## With Docker Compose
+
 1. Checkout the code base and move to the root folder
 2. Execute `build-docker-images.sh` script to generate the necessary docker images.
 3. Execute `docker compose up`
@@ -54,6 +57,7 @@ Following are the features covered by the scenario.
 2. Execute the script `init.sql` in db-setup
 
 # Try out
+
 - To start the completed setup run `docker compose up -f docker-compose-complete.yml`
 - To send request open `social-media-request.http` file using VS Code with `REST Client` extension
 - To open the frontend type `http://localhost:3001`in the browser
