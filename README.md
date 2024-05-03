@@ -34,12 +34,10 @@ Following are the features covered by the scenario.
 - Accessing databases
 - Configurability
 - Debugging Ballerina programs
-- HTTP client
-- Resiliency - Retry
-- OpenAPI specification, client stubs and central
-- Handling errors
 - Writing a simple testcase
 - HTTP client
+- Handling errors
+- OpenAPI specification and client stubs
 - Deploying in docker and kubernetes
 - Generating GraalVM images
 
