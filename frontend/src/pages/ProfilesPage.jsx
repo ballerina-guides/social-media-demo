@@ -62,7 +62,7 @@ export default function ProfilesPage() {
       });
   };
 
-  const addUser = (user, setErrorPopup, setErrorMessage) => {
+  const addUser = (user) => {
     axios.post(`http://localhost:9095/social-media/users/`, user).
       then(response => {
       }).catch(error => {

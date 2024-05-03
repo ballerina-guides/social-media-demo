@@ -30,7 +30,6 @@ import {
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import PostFailurePopup from "./PostFailurePopup";
 
 const NewUserPopup = ({ open, handleClose, addUser }) => {
   const [userName, setUserName] = React.useState("");
@@ -38,8 +37,6 @@ const NewUserPopup = ({ open, handleClose, addUser }) => {
   const [mobileNumber, setMobileNumber] = React.useState("");
   const [userNameIsEmpty, setUserNameIsEmpty] = React.useState(false);
   const [mobileNumberIsEmpty, setMobileNumberIsEmpty] = React.useState(false);
-  const [isOpen, setErrorPopupShown] = React.useState(false); // State to control the error popup
-  const [errorMessage, setErrorMessage] = React.useState("Maybe you havent implemented this feature yet"); // State to store the error message
 
   const handleUserNameChange = (event) => {
     setUserNameIsEmpty(false);
@@ -62,7 +59,7 @@ const NewUserPopup = ({ open, handleClose, addUser }) => {
     if (!userName || !dateOfBirth || !mobileNumber) {
       return;
     }
-    addUser(getUser(), setErrorPopupShown, setErrorMessage);
+    addUser(getUser());
   };
 
   const getUser = () => {
@@ -78,102 +75,95 @@ const NewUserPopup = ({ open, handleClose, addUser }) => {
   };
 
   return (
-    <>
-      <PostFailurePopup
-        isOpen={isOpen}
-        errorMessage={errorMessage}
-        handleClose={() => setErrorPopupShown(false)}
-      />
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle sx={{
-          textAlign: "center",
-          color: "primary.main",
-          fontSize: "26px"
-        }}>Add new user</DialogTitle>
+    <Dialog open={open} onClose={handleClose}>
+      <DialogTitle sx={{
+        textAlign: "center",
+        color: "primary.main",
+        fontSize: "26px"
+      }}>Add new user</DialogTitle>
 
-        <DialogContent>
-          <Box
+      <DialogContent>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            padding: "1rem",
+            gap: "1rem",
+            width: {
+              xs: "14rem",
+              md: "30rem",
+            }
+          }}
+        >
+          <TextField
+            error={userNameIsEmpty}
+            label="User Name:"
+            value={userName}
+            onChange={handleUserNameChange}
+            fullWidth
+          />
+
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              label="Date of Birth:"
+              value={dayjs(dateOfBirth)}
+              onChange={handleDOBChange}
+            />
+          </LocalizationProvider>
+
+          <TextField
+            error={mobileNumberIsEmpty}
+            label="Mobile Number:"
+            value={mobileNumber}
+            type="number"
+            onChange={handleMobileNumberChange}
+            fullWidth
+          />
+
+          <DialogActions
             sx={{
               display: "flex",
-              flexDirection: "column",
-              padding: "1rem",
-              gap: "1rem",
-              width: {
-                xs: "14rem",
-                md: "30rem",
-              }
+              justifyContent: "center",
+              flexDirection: {
+                xs: "column",
+                md: "row",
+              },
+              gap: "0.5rem",
+              width: "100%"
             }}
           >
-            <TextField
-              error={userNameIsEmpty}
-              label="User Name:"
-              value={userName}
-              onChange={handleUserNameChange}
-              fullWidth
-            />
-
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                label="Date of Birth:"
-                value={dayjs(dateOfBirth)}
-                onChange={handleDOBChange}
-              />
-            </LocalizationProvider>
-
-            <TextField
-              error={mobileNumberIsEmpty}
-              label="Mobile Number:"
-              value={mobileNumber}
-              type="number"
-              onChange={handleMobileNumberChange}
-              fullWidth
-            />
-
-            <DialogActions
+            <Button
+              color="secondary"
               sx={{
-                display: "flex",
-                justifyContent: "center",
-                flexDirection: {
-                  xs: "column",
-                  md: "row",
-                },
-                gap: "0.5rem",
-                width: "100%"
+                width: {
+                  xs: "100%",
+                  md: "auto",
+                }
               }}
+              size="large"
+              onClick={handleClose}
             >
-              <Button
-                color="secondary"
-                sx={{
-                  width: {
-                    xs: "100%",
-                    md: "auto",
-                  }
-                }}
-                size="large"
-                onClick={handleClose}
-              >
-                Cancel
-              </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                sx={{
-                  color: "white",
-                  width: {
-                    xs: "100%",
-                    md: "auto",
-                  }
-                }}
-                size="large"
-                onClick={handleSubmit}
-              >
-                Add User
-              </Button>
-            </DialogActions>
-          </Box>
-        </DialogContent>
-      </Dialog>
-    </>
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              sx={{
+                color: "white",
+                width: {
+                  xs: "100%",
+                  md: "auto",
+                }
+              }}
+              size="large"
+              onClick={handleSubmit}
+            >
+              Add User
+            </Button>
+          </DialogActions>
+        </Box>
+      </DialogContent>
+    </Dialog>
   );
 };
 
