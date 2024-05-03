@@ -26,7 +26,7 @@ import Avatar from "@mui/material/Avatar";
 
 export default function PostCard({ data }) {
   const { author, description } = data;
-  const { tags, category, created_date } = data.meta;
+  const { tags, category, created_time_stamp } = data.meta;
 
   let hashtagsArr = [];
   if (Array.isArray(tags)) {
@@ -64,7 +64,7 @@ export default function PostCard({ data }) {
             >
               {author}{" "}
             </Typography>
-            &middot; {created_date.year}-{created_date.month}-{created_date.day}
+            &middot; {created_time_stamp.year}-{created_time_stamp.month}-{created_time_stamp.day}   {created_time_stamp.hour}.{created_time_stamp.minute}
           </Typography>
 
           <Typography gutterBottom variant="p" component="p">

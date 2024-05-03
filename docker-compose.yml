@@ -1,66 +1,37 @@
 version: "2.14.0"
 
 services:
-  frontend:
-    build:
-      context: frontend
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    depends_on:
-      - social-media
-    network_mode: "host"
+  # frontend:
+  #   build:
+  #     context: frontend
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3001:3001"
+  #   depends_on:
+  #     - social-media
+  #   network_mode: "host"
 
   social-media:
     image: "wso2/social-media:0.0.1"
     ports:
-      - "9090:9090"
-    depends_on:
-      jaeger:
-        condition: service_started
-      sentiment-analysis:
-        condition: service_started
-      sts:
-        condition: service_started
-      mysql:
-        condition: service_healthy
-    network_mode: "host"
-
-  slack-message-sender:
-    image: "wso2/slack-message-sender:0.0.1"
-    depends_on:
-      jaeger:
-        condition: service_started
-      nats:
-        condition: service_started
+      - "9095:9095"
+    depends_on: 
+      sentiment-analysis: 
+          condition: service_started
+      mysql: 
+          condition: service_healthy
+      jaeger: 
+          condition: service_started
+      prometheus: 
+          condition: service_started
+      grafana: 
+          condition: service_started
     network_mode: "host"
 
   sentiment-analysis:
     image: "wso2/sentiment-api-secured:0.0.1"
     ports:
       - "9098:9098"
-    depends_on:
-      - jaeger
-    network_mode: "host"
-
-  jaeger:
-    image: "jaegertracing/opentelemetry-all-in-one"
-    ports:
-      - "13133:13133"
-      - "16686:16686"
-      - "55680:55680"
-    network_mode: "host"
-
-  sts:
-    image: "wso2/sts-service:0.0.1"
-    ports:
-      - "9445:9445"
-    network_mode: "host"
-
-  nats:
-    image: nats:latest
-    ports:
-      - "4222:4222"
     network_mode: "host"
 
   mysql:
@@ -79,3 +50,27 @@ services:
       retries: 10
     volumes:
       - "./db-setup/init.sql:/docker-entrypoint-initdb.d/1.sql"
+
+  jaeger:
+    image: 'jaegertracing/opentelemetry-all-in-one'
+    ports:
+      - '13133:13133'
+      - '16686:16686'
+      - '55680:55680'
+    network_mode: "host"
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus-service
+    ports:
+      - 19090:9090
+    volumes: 
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    network_mode: "host"
+  
+  grafana:
+    image: grafana/grafana
+    container_name: grafana-service
+    ports:
+      - 3000:3000
+    network_mode: "host"

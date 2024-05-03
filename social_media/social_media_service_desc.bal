@@ -13,7 +13,6 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
-
 import ballerina/constraint;
 import ballerina/http;
 import ballerina/sql;
@@ -29,6 +28,7 @@ type SocialMedia service object {
     resource function delete users/[int id]() returns http:NoContent|error;
 
     // posts resource
+    resource function get posts() returns PostWithMeta[]|error;
     resource function get users/[int id]/posts() returns PostWithMeta[]|UserNotFound|error;
     resource function post users/[int id]/posts(NewPost newPost) returns http:Created|UserNotFound|PostForbidden|error;
 };
@@ -63,8 +63,8 @@ type Post record {|
     string description;
     string tags;
     string category;
-    @sql:Column {name: "created_date"}
-    time:Date created_date;
+    @sql:Column {name: "created_time_stamp"}
+    time:Civil createdTimeStamp;
 |};
 
 type PostWithMeta record {|
@@ -74,8 +74,8 @@ type PostWithMeta record {|
     record {|
         string[] tags;
         string category;
-        @sql:Column {name: "created_date"}
-        time:Date created_date;
+        @sql:Column {name: "created_time_stamp"}
+        time:Civil createdTimeStamp;
     |} meta;
 |};
 

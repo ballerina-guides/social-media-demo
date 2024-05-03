@@ -16,20 +16,19 @@
  * under the License.
  */
 
-import React, { useState, useEffect, useId } from "react";
+import React, { useState, useEffect } from "react";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import PostCard from "../components/PostCard";
-import UserProfile from "../components/UserProfile";
 import NewPostPopup from "../components/NewPostPopup";
+import Error from "../components/Error";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import axios from "axios";
 import { Container, Typography } from "@mui/material";
-import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 function CustomTabPanel(props) {
@@ -58,61 +57,30 @@ function a11yProps(index) {
 export default function HomePage() {
   const [value, setValue] = useState(0);
   const [posts, setPosts] = useState([]);
-  const [userPosts, setUserPosts] = useState([]);
-  const { id } = useParams();
-  const [userData, setUserData] = useState([]);
+  const [postsFetchError, setPostsFetchError] = useState(false);
   const navigate = useNavigate();
 
   const handleError = (error) => {
     navigate("/404", { state: { errorMessage: error.message } });
   };
 
-  const fetchUserData = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:9090/social-media/users/${id}`
-      );
-      setUserData(response.data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      handleError(error);
-    }
-  };
-
   const fetchAllPosts = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:9090/social-media/posts"
+        "http://localhost:9095/social-media/posts"
       );
       setPosts(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
-      handleError(error);
+      setPostsFetchError(true);
+      // handleError(error);
     }
-  };
-
-  const fetchUserPosts = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:9090/social-media/users/${id}/posts`
-      );
-      setUserPosts(response.data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      handleError(error);
-    }
-  };
-
-  const fetchDetails = () => {
-    fetchAllPosts();
-    fetchUserPosts();
   };
 
   useEffect(() => {
-    fetchUserData();
-    fetchDetails();
+    fetchAllPosts();
 
-    const intervalId = setInterval(fetchDetails, 10000);
+    const intervalId = setInterval(fetchAllPosts, 5000);
     return () => clearInterval(intervalId);
   }, []);
 
@@ -154,56 +122,41 @@ export default function HomePage() {
             sx={{
               flex: 1,
               minWidth: 0,
-              maxWidth: "50%",
+              maxWidth: "100%",
             }}
             label="Posts"
             onClick={fetchAllPosts}
             {...a11yProps(0)}
           />
-          <Tab
-            sx={{
-              flex: 1,
-              minWidth: 0,
-              maxWidth: "50%",
-            }}
-            label="Profile"
-            onClick={fetchUserPosts}
-            {...a11yProps(1)}
-          />
         </Tabs>
 
         <CustomTabPanel value={value} index={0}>
-          <Container
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            {posts.length === 0 ? (
-              <Typography sx={{ margin: "1rem" }}>
-                {"No posts to display :("}
-              </Typography>
-            ) : (
-              posts.map((item, index) => <PostCard key={index} data={item} />)
-            )}
-          </Container>
-        </CustomTabPanel>
-
-        <CustomTabPanel value={value} index={1}>
-          <Container>
-            <UserProfile data={{ userPosts, userData }} />
-          </Container>
+          {postsFetchError ? <Error errorMessage={"Failed to Fetch Posts"} /> :
+            <Container
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              {posts.length === 0 ? (
+                <Typography sx={{ margin: "1rem" }}>
+                  {"No posts to display :("}
+                </Typography>
+              ) : (
+                posts.map((item, index) => <PostCard key={index} data={item} />)
+              )}
+            </Container>
+          }
         </CustomTabPanel>
       </Box>
-
       {isPopupOpen && (
         <NewPostPopup
           open={isPopupOpen}
           handleClose={handlePopupClose}
           title="New Post"
-          refreshPosts={fetchDetails}
+          refreshPosts={fetchAllPosts}
         />
       )}
 

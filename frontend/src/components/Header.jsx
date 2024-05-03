@@ -16,12 +16,14 @@
  * under the License.
  */
 
-import { Box, Container, Button } from "@mui/material";
+import { Box, Container, Button, Stack, IconButton } from "@mui/material";
 import HeaderLogo from "../assets/logo.png";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import Person from "@mui/icons-material/Person";
 
-export default function Header({ enableProfile }) {
+export default function Header({ enableProfile = false }) {
   const navigate = useNavigate();
+  const { id } = useParams();
 
   return (
     <Box
@@ -55,20 +57,44 @@ export default function Header({ enableProfile }) {
           style={{ cursor: "pointer" }}
           onClick={() => window.location.reload()}
         />
-        {enableProfile ? (
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => navigate("/")}
-            sx={{
-              padding: "1rem 2rem",
-              borderRadius: "0.5rem",
-              color: "white",
-              textTransform: "none",
-            }}
-          >
-            Profiles
-          </Button>
+        {id ? (
+          <Stack direction="row" gap="1rem">
+            {enableProfile ?
+              <IconButton
+                color="primary"
+                onClick={() => navigate(`/user/${id}/profile`)}
+                sx={{ bgcolor: "secondary.light", ":hover": { bgcolor: "secondary.dark" } }}
+              >
+                <Person fontSize="large" color="primary" />
+              </IconButton> :
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => navigate(`/user/${id}`)}
+                sx={{
+                  padding: "1rem 2rem",
+                  borderRadius: "0.5rem",
+                  color: "white",
+                  textTransform: "none",
+                }}
+              >
+                Home
+              </Button>
+            }
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => navigate(`/`)}
+              sx={{
+                padding: "1rem 2rem",
+                borderRadius: "0.5rem",
+                color: "white",
+                textTransform: "none",
+              }}
+            >
+              Switch Profile
+            </Button>
+          </Stack>
         ) : (
           ""
         )}

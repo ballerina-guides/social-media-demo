@@ -20,19 +20,16 @@ import ballerina/sql;
 import ballerina/time;
 import ballerinax/mysql.driver as _;
 
-import balguides/sentiment.analysis;
-
 configurable boolean moderate = ?;
-configurable boolean enableSlackNotification = ?;
 
-listener http:Listener socialMediaListener = new (9090);
+listener http:Listener socialMediaListener = new (9095);
 
 @http:ServiceConfig {
     cors: {
         allowOrigins: ["*"]
     }
 }
-service SocialMedia /social\-media on socialMediaListener {
+service /social\-media on socialMediaListener {
 
     public function init() returns error? {
         log:printInfo("Social media service started");
@@ -107,10 +104,11 @@ service SocialMedia /social\-media on socialMediaListener {
             return result;
         }
 
-        stream<Post, sql:Error?> postStream = socialMediaDb->query(`SELECT id, description, category, created_date, tags FROM posts WHERE user_id = ${id}`);
+        stream<Post, sql:Error?> postStream = socialMediaDb->query(`SELECT id, description, category, created_time_stamp, tags FROM posts WHERE user_id = ${id}`);
         Post[]|error posts = from Post post in postStream
             select post;
-        return mapPostToPostWithMeta(check posts, result.name);
+
+        return sortPostsByTime(mapPostToPostWithMeta(check posts, result.name));
     }
 
     # Get posts from all the users
@@ -123,13 +121,13 @@ service SocialMedia /social\-media on socialMediaListener {
             select user;
 
         foreach User user in users {
-            stream<Post, sql:Error?> postStream = socialMediaDb->query(`SELECT id, description, category, created_date, tags FROM posts WHERE user_id = ${user.id}`);
+            stream<Post, sql:Error?> postStream = socialMediaDb->query(`SELECT id, description, category, created_time_stamp, tags FROM posts WHERE user_id = ${user.id}`);
             Post[]|error userPosts = from Post post in postStream
                 select post;
-            PostWithMeta[] tempPosts = mapPostToPostWithMeta(check userPosts, user.name);
-            posts.push(...tempPosts);
+            PostWithMeta[] postsWithMeta = mapPostToPostWithMeta(check userPosts, user.name);
+            posts.push(...postsWithMeta);
         }
-        return posts;
+        return sortPostsByTime(posts);
     }
 
     # Create a post for a given user
@@ -149,7 +147,7 @@ service SocialMedia /social\-media on socialMediaListener {
             return user;
         }
 
-        analysis:Sentiment sentiment = check sentimentEndpoint->/api/sentiment.post(
+        Sentiment sentiment = check sentimentEndpoint->/api/sentiment.post(
             {text: newPost.description}
         );
         if sentiment.label == "neg" {
@@ -161,9 +159,8 @@ service SocialMedia /social\-media on socialMediaListener {
         }
 
         _ = check socialMediaDb->execute(`
-            INSERT INTO posts(description, category, created_date, tags, user_id)
-            VALUES (${newPost.description}, ${newPost.category}, CURDATE(), ${newPost.tags}, ${id});`);
-        _ = start publishUserPostUpdate(user.id);
+            INSERT INTO posts(description, category, created_time_stamp, tags, user_id)
+            VALUES (${newPost.description}, ${newPost.category}, CURRENT_TIMESTAMP(), ${newPost.tags}, ${id});`);
         return http:CREATED;
     }
 
@@ -316,7 +313,7 @@ function buildErrorPayload(string msg, string path) returns ErrorDetails => {
     details: string `uri=${path}`
 };
 
-function mapPostToPostWithMeta(Post[] post, string author) returns PostWithMeta[] => from var postItem in post
+function mapPostToPostWithMeta(Post[] posts, string author) returns PostWithMeta[] => from var postItem in posts
     select {
         id: postItem.id,
         description: postItem.description,
@@ -324,18 +321,27 @@ function mapPostToPostWithMeta(Post[] post, string author) returns PostWithMeta[
         meta: {
             tags: regex:split(postItem.tags, ","),
             category: postItem.category,
-            created_date: postItem.created_date
+            createdTimeStamp: postItem.createdTimeStamp
         }
     };
 
-function publishUserPostUpdate(int userId) returns error? {
-    if !enableSlackNotification {
-        return;
+function sortPostsByTime(PostWithMeta[] unsortedPosts) returns PostWithMeta[]|error {
+    foreach var item in unsortedPosts {
+        item.meta.createdTimeStamp.timeAbbrev = "z";
     }
-    check natsClient->publishMessage({
-        subject: "ballerina.social.media",
-        content: {
-            "leaderId": userId
-        }
-    });
+    PostWithMeta[] sortedPosts = from var post in unsortedPosts
+        order by check time:civilToString(post.meta.createdTimeStamp) descending
+        select post;
+    return sortedPosts;
 }
+
+type Probability record {
+    decimal neg;
+    decimal neutral;
+    decimal pos;
+};
+
+type Sentiment record {
+    Probability probability;
+    string label;
+};
