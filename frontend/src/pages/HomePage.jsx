@@ -17,6 +17,7 @@
  */
 
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import Tabs from "@mui/material/Tabs";
@@ -28,7 +29,7 @@ import Error from "../components/Error";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import axios from "axios";
-import { Container, Typography } from "@mui/material";
+import { Container, Typography, Button, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 function CustomTabPanel(props) {
@@ -57,6 +58,10 @@ function a11yProps(index) {
 export default function HomePage() {
   const [value, setValue] = useState(0);
   const [posts, setPosts] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [followingUsers, setFollowingUsers] = useState([]);
+  const [followingPosts, setFollowingPosts] = useState([]);
+  const { id } = useParams();
   const [postsFetchError, setPostsFetchError] = useState(false);
   const navigate = useNavigate();
 
@@ -77,10 +82,75 @@ export default function HomePage() {
     }
   };
 
-  useEffect(() => {
-    fetchAllPosts();
+  const fetchFollowingPosts = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:9090/social-media/users/${id}/following/posts`
+      );
+      setFollowingPosts(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setPostsFetchError(true);
+      // handleError(error);
+    }
+  };
 
-    const intervalId = setInterval(fetchAllPosts, 5000);
+  const fetchUsers = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:9090/social-media/users"
+      );
+      setUsers(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      // TODO: handle error
+    }
+  };
+
+  const fetchFollowingUsers = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:9090/social-media/users/${id}/following`
+      );
+      setFollowingUsers(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const handleFollow = async (userId) => {
+    try {
+      await axios.post(
+        `http://localhost:9090/social-media/users/${id}/following?leaderId=${userId}`
+      );
+      fetchFollowingUsers();
+    } catch (error) {
+      console.error("Error following user:", error);
+    }
+  };
+
+  const handleUnfollow = async (userId) => {
+    try {
+      await axios.delete(
+        `http://localhost:9090/social-media/users/${id}/following?leaderId=${userId}`
+      );
+      fetchFollowingUsers();
+    } catch (error) {
+      console.error("Error unfollowing user:", error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      fetchAllPosts();
+      fetchFollowingPosts();
+      fetchUsers();
+      fetchFollowingUsers();
+    };
+
+    fetchPosts();
+
+    const intervalId = setInterval(fetchPosts, 5000);
     return () => clearInterval(intervalId);
   }, []);
 
@@ -124,14 +194,36 @@ export default function HomePage() {
               minWidth: 0,
               maxWidth: "100%",
             }}
-            label="Posts"
+            label="For You"
             onClick={fetchAllPosts}
             {...a11yProps(0)}
+          />
+          <Tab
+            sx={{
+              flex: 1,
+              minWidth: 0,
+              maxWidth: "100%",
+            }}
+            label="Following"
+            onClick={fetchFollowingPosts}
+            {...a11yProps(1)}
+          />
+          <Tab
+            sx={{
+              flex: 1,
+              minWidth: 0,
+              maxWidth: "100%",
+            }}
+            label="Users"
+            onClick={fetchAllPosts}
+            {...a11yProps(2)}
           />
         </Tabs>
 
         <CustomTabPanel value={value} index={0}>
-          {postsFetchError ? <Error errorMessage={"Failed to Fetch Posts"} /> :
+          {postsFetchError ? (
+            <Error errorMessage={"Failed to Fetch Posts"} />
+          ) : (
             <Container
               style={{
                 display: "flex",
@@ -148,7 +240,86 @@ export default function HomePage() {
                 posts.map((item, index) => <PostCard key={index} data={item} />)
               )}
             </Container>
-          }
+          )}
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={1}>
+          {postsFetchError ? (
+            <Error errorMessage={"Failed to Fetch Posts"} />
+          ) : (
+            <Container
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              {posts.length === 0 ? (
+                <Typography sx={{ margin: "1rem" }}>
+                  {"No posts to display :("}
+                </Typography>
+              ) : (
+                followingPosts.map((item, index) => (
+                  <PostCard key={index} data={item} />
+                ))
+              )}
+            </Container>
+          )}
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={2}>
+          <Container>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                minHeight: "75vh",
+              }}
+            >
+              {users
+                .filter((user) => user.id != id)
+                .map((user, index) => (
+                  <Box key={index}>
+                    <Stack
+                      direction="row"
+                      spacing={2}
+                      margin={"1rem"}
+                      alignItems={"center"}
+                    >
+                      <Typography
+                        sx={{
+                          textTransform: "capitalize",
+                          minWidth: "8rem", //TODO: add better css
+                        }}
+                      >
+                        {user.name}
+                      </Typography>
+                      {followingUsers
+                        .map((user) => user.id)
+                        .includes(user.id) ? (
+                        <Button
+                          variant="outlined"
+                          onClick={() => {
+                            handleUnfollow(user.id);
+                          }}
+                        >
+                          Unfollow
+                        </Button>
+                      ) : (
+                        <Button
+                          variant="contained"
+                          onClick={() => {
+                            handleFollow(user.id);
+                          }}
+                        >
+                          Follow
+                        </Button>
+                      )}
+                    </Stack>
+                  </Box>
+                ))}
+            </Box>
+          </Container>
         </CustomTabPanel>
       </Box>
       {isPopupOpen && (
