@@ -30,7 +30,7 @@ type SocialMedia service object {
 Following are the features covered by the scenario.
 
 - Writing REST APIs with verbs, URLs, data 
-- binding and status codes
+- Data binding and status codes
 - Accessing databases
 - Configurability
 - Debugging Ballerina programs
