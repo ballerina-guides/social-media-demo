@@ -20,7 +20,7 @@ export default function ProfilePage() {
     const fetchUserData = async () => {
         try {
             const response = await axios.get(
-                `http://localhost:9090/social-media/users/${id}`
+                `http://localhost:9095/social-media/users/${id}`
             );
             setUserData(response.data);
         } catch (error) {
@@ -32,7 +32,7 @@ export default function ProfilePage() {
     const fetchUserPosts = async () => {
         try {
             const response = await axios.get(
-                `http://localhost:9090/social-media/users/${id}/posts`
+                `http://localhost:9095/social-media/users/${id}/posts`
             );
             setUserPosts(response.data);
         } catch (error) {

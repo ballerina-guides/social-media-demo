@@ -67,7 +67,7 @@ export default function HomePage() {
   const fetchAllPosts = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:9090/social-media/posts"
+        "http://localhost:9095/social-media/posts"
       );
       setPosts(response.data);
     } catch (error) {

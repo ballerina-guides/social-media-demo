@@ -17,7 +17,7 @@ RUN npm install -g serve
 RUN npm run build
 
 # Expose the port
-EXPOSE 3000
+EXPOSE 3001
 
 # Create a non root new user with UID 10014
 RUN addgroup -g 10014 testgroup && \

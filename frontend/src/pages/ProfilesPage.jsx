@@ -42,7 +42,7 @@ export default function ProfilesPage() {
   }
 
   const getUsers = () => {
-    return axios.get('http://localhost:9090/social-media/users')
+    return axios.get('http://localhost:9095/social-media/users')
       .then(response => {
         const users = response.data;
         return users;
@@ -55,7 +55,7 @@ export default function ProfilesPage() {
   }
 
   const deleteUser = (userId) => {
-    axios.delete(`http://localhost:9090/social-media/users/${userId}`)
+    axios.delete(`http://localhost:9095/social-media/users/${userId}`)
       .then(response => {
       }).catch(error => {
         console.error(error);
@@ -66,7 +66,7 @@ export default function ProfilesPage() {
   };
 
   const addUser = (user) => {
-    axios.post(`http://localhost:9090/social-media/users/`, user).
+    axios.post(`http://localhost:9095/social-media/users/`, user).
       then(response => {
       }).catch(error => {
         console.error(error);

@@ -7,7 +7,7 @@
     "dev": "vite --port 5173",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview --port 3000"
+    "preview": "vite preview --port 3001"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
