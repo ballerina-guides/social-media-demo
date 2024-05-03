@@ -27,4 +27,4 @@ RUN addgroup -g 10014 testgroup && \
 USER 10014
 
 # Run the application
-CMD ["serve","dist","--single", "-l","3000"]
+CMD ["serve","dist","--single", "-l","3001"]
