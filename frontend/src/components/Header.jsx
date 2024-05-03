@@ -16,31 +16,43 @@
  * under the License.
  */
 
-import { Box, Container, Button, Stack, IconButton, Typography } from "@mui/material";
+import {
+  Box,
+  Container,
+  Button,
+  Stack,
+  IconButton,
+  Typography,
+} from "@mui/material";
 import HeaderLogo from "../assets/logo.png";
 import { useNavigate, useParams } from "react-router-dom";
 import ProfilePicture from "../assets/profile-picture.png";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
 
 export default function Header({ enableProfile = false }) {
   const navigate = useNavigate();
   const { id } = useParams();
-  const [userName, setUserName] = useState("")
+  const [userName, setUserName] = useState("");
+  const location = useLocation();
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await axios.get(`${import.meta.env.VITE_SOCIAL_MEDIA_SERVICE_ENDPOINT}/users/${id}`);
-        setUserName(response.data.name);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setUserName("")
-      }
+    if (location.pathname !== "/") {
+      const fetchUser = async () => {
+        try {
+          const response = await axios.get(
+            `${import.meta.env.VITE_SOCIAL_MEDIA_SERVICE_ENDPOINT}/users/${id}`
+          );
+          setUserName(response.data.name);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+          setUserName("");
+        }
+      };
+      fetchUser();
     }
-
-    fetchUser()
-  }, [])
+  }, [location]);
 
   return (
     <Box
@@ -86,23 +98,24 @@ export default function Header({ enableProfile = false }) {
                   ":hover": {
                     cursor: "pointer",
                     filter: "hue-rotate(180deg)",
-                  }
+                  },
                 }}
                 onClick={() => navigate(`/user/${id}/profile`)}
               >
-
                 <Box
                   component="img"
                   sx={{
                     objectFit: "cover",
                     cursor: "pointer",
                     width: "3.5rem",
-                    height: "3.5rem"
+                    height: "3.5rem",
                   }}
                   alt="Header logo"
                   src={ProfilePicture}
                 />
-                <Typography variant="p" textTransform="capitalize">{userName}</Typography>
+                <Typography variant="p" textTransform="capitalize">
+                  {userName}
+                </Typography>
               </Stack>
             ) : (
               <Button
