@@ -30,6 +30,12 @@ type SocialMedia service object {
     // posts resource
     resource function get users/[int id]/posts() returns PostWithMeta[]|UserNotFound|error;
     resource function post users/[int id]/posts(NewPost newPost) returns http:Created|UserNotFound|PostForbidden|error;
+
+    // folllowing resource
+    resource function get users/[int id]/following/posts() returns PostWithMeta[]|UserNotFound|error;
+    resource function get users/[int id]/following() returns User[]|UserNotFound|error;
+    resource function post users/[int id]/following(int leaderId) returns http:Created|UserNotFound|error;
+    resource function delete users/[int id]/following(int leaderId) returns http:NoContent|UserNotFound|error;
 };
 
 // user representations
@@ -78,7 +84,7 @@ type PostWithMeta record {|
     |} meta;
 |};
 
-public type FollowerStream record {|
+public type LeaderId record {|
     @sql:Column {name: "leader_id"}
     int leaderId;
 |};

@@ -181,11 +181,11 @@ service SocialMedia /social\-media on socialMediaListener {
             return user;
         }
 
-        stream<FollowerStream, sql:Error?> followingStream = socialMediaDb->query(`SELECT leader_id FROM followers WHERE follower_id = ${id}`);
+        stream<LeaderId, sql:Error?> followingStream = socialMediaDb->query(`SELECT leader_id FROM followers WHERE follower_id = ${id}`);
         PostWithMeta[] posts = [];
-        FollowerStream[] followingArr = check from FollowerStream following in followingStream
+        LeaderId[] followingArr = check from LeaderId following in followingStream
             select following;
-        foreach FollowerStream following in followingArr {
+        foreach LeaderId following in followingArr {
             User|error userStream = socialMediaDb->queryRow(`SELECT * FROM users WHERE id = ${following.leaderId}`);
             if userStream is sql:NoRowsError {
                 ErrorDetails errorDetails = buildErrorPayload(string `id: ${following.leaderId}`, string `users/${following.leaderId}/following/posts`);
@@ -201,8 +201,7 @@ service SocialMedia /social\-media on socialMediaListener {
             stream<Post, sql:Error?> postStream = socialMediaDb->query(`SELECT id, description, category, created_time_stamp, tags FROM posts WHERE user_id = ${following.leaderId}`);
             Post[]|error userPosts = from Post post in postStream
                 select post;
-            PostWithMeta[] tempPosts = mapPostToPostWithMeta(check userPosts, userStream.name);
-            posts.push(...tempPosts);
+            posts.push(...mapPostToPostWithMeta(check userPosts, userStream.name));
         }
         return sortPostsByTime(posts);
     }
@@ -224,15 +223,12 @@ service SocialMedia /social\-media on socialMediaListener {
             return result;
         }
 
-        stream<FollowerStream, sql:Error?> followingStream = socialMediaDb->query(`SELECT leader_id FROM followers WHERE follower_id = ${id}`);
+        stream<LeaderId, sql:Error?> followingStream = socialMediaDb->query(`SELECT leader_id FROM followers WHERE follower_id = ${id}`);
         User[] followingUsers = [];
-        FollowerStream[] followings = check from FollowerStream following in followingStream
+        LeaderId[] followings = check from LeaderId following in followingStream
             select following;
-        foreach FollowerStream followingRecord in followings {
+        foreach LeaderId followingRecord in followings {
             User|error user = socialMediaDb->queryRow(`SELECT * FROM users WHERE id = ${followingRecord.leaderId}`);
-            if user is sql:NoRowsError {
-                continue;
-            }
             if user is error {
                 return user;
             }
@@ -248,15 +244,9 @@ service SocialMedia /social\-media on socialMediaListener {
     resource function post users/[int id]/following(int leaderId) returns http:Created|UserNotFound|error {
         User|error leader = socialMediaDb->queryRow(`SELECT * FROM users WHERE id = ${leaderId}`);
         User|error follower = socialMediaDb->queryRow(`SELECT * FROM users WHERE id = ${id}`);
-        if leader is sql:NoRowsError {
-            ErrorDetails errorDetails = buildErrorPayload(string `id: ${leaderId}`, string `users/${leaderId}/following`);
-            UserNotFound userNotFound = {
-                body: errorDetails
-            };
-            return userNotFound;
-        }
-        if follower is sql:NoRowsError {
-            ErrorDetails errorDetails = buildErrorPayload(string `id: ${id}`, string `users/${id}/following`);
+        if leader is sql:NoRowsError || follower is sql:NoRowsError {
+            int errorId = leader is sql:NoRowsError ? leaderId : id;
+            ErrorDetails errorDetails = buildErrorPayload(string `id: ${errorId}`, string `users/${errorId}/following`);
             UserNotFound userNotFound = {
                 body: errorDetails
             };
@@ -282,15 +272,9 @@ service SocialMedia /social\-media on socialMediaListener {
     resource function delete users/[int id]/following(int leaderId) returns http:NoContent|UserNotFound|error {
         User|error leader = socialMediaDb->queryRow(`SELECT * FROM users WHERE id = ${leaderId}`);
         User|error follower = socialMediaDb->queryRow(`SELECT * FROM users WHERE id = ${id}`);
-        if leader is sql:NoRowsError {
-            ErrorDetails errorDetails = buildErrorPayload(string `id: ${leaderId}`, string `users/${leaderId}/following`);
-            UserNotFound userNotFound = {
-                body: errorDetails
-            };
-            return userNotFound;
-        }
-        if follower is sql:NoRowsError {
-            ErrorDetails errorDetails = buildErrorPayload(string `id: ${id}`, string `users/${id}/following`);
+        if leader is sql:NoRowsError || follower is sql:NoRowsError {
+            int errorId = leader is sql:NoRowsError ? leaderId : id;
+            ErrorDetails errorDetails = buildErrorPayload(string `id: ${errorId}`, string `users/${errorId}/following`);
             UserNotFound userNotFound = {
                 body: errorDetails
             };
