@@ -58,4 +58,4 @@ Following are the features covered by the scenario.
 # Try out
 - To start the completed setup run `docker compose up -f docker-compose-complete.yml`
 - To send request open `social-media-request.http` file using VS Code with `REST Client` extension
-- To open the frontend type `http://localhost:3000`in the browser
+- To open the frontend type `http://localhost:3001`in the browser
