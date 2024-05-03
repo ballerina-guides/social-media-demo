@@ -59,22 +59,23 @@ export default function Header({ enableProfile = false }) {
         />
         {id ? (
           <Stack direction="row" gap="1rem">
-            {enableProfile ?
+            {enableProfile ? (
               <Box
                 component="img"
                 sx={{
                   objectFit: "cover",
                   cursor: "pointer",
-                  width: "4rem",
-                  height: "4rem",
+                  width: "3.5rem",
+                  height: "3.5rem",
                   ":hover": {
                     filter: "hue-rotate(180deg)",
-                  }
+                  },
                 }}
                 alt="Header logo"
                 src={ProfilePicture}
                 onClick={() => navigate(`/user/${id}/profile`)}
-              /> :
+              />
+            ) : (
               <Button
                 variant="contained"
                 color="primary"
@@ -88,7 +89,7 @@ export default function Header({ enableProfile = false }) {
               >
                 Home
               </Button>
-            }
+            )}
             <Button
               variant="contained"
               color="primary"

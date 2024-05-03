@@ -70,8 +70,7 @@ const NewPostPopup = ({ open, handleClose, title, refreshPosts }) => {
     }
     setLoading(true);
     try {
-      await axios.post(
-        `http://localhost:9090/social-media/users/${id}/posts`,
+      await axios.post(`${import.meta.env.VITE_SOCIAL_MEDIA_SERVICE_ENDPOINT}/users/${id}/posts`,
         {
           description: description,
           tags: hashtags.trim(),

@@ -63,29 +63,78 @@ export default function HomePage() {
   const [followingPosts, setFollowingPosts] = useState([]);
   const { id } = useParams();
   const [postsFetchError, setPostsFetchError] = useState(false);
-  const navigate = useNavigate();
-
-  const handleError = (error) => {
-    navigate("/404", { state: { errorMessage: error.message } });
-  };
 
   const fetchAllPosts = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:9090/social-media/posts"
-      );
+      const response = await axios.get(`${import.meta.env.VITE_SOCIAL_MEDIA_SERVICE_ENDPOINT}/posts`);
       setPosts(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
       setPostsFetchError(true);
-      // handleError(error);
     }
   };
 
   const fetchFollowingPosts = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9090/social-media/users/${id}/following/posts`
+        `${import.meta.env.VITE_SOCIAL_MEDIA_SERVICE_ENDPOINT}/users/${id}/following/posts`
+      );
+      setFollowingPosts(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setPostsFetchError(true);
+    }
+  };
+
+  const fetchUsers = async () => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_SOCIAL_MEDIA_SERVICE_ENDPOINT}/users`
+      );
+      setUsers(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      // TODO: handle error
+    }
+  };
+
+  const fetchFollowingUsers = async () => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_SOCIAL_MEDIA_SERVICE_ENDPOINT}/users/${id}/following`
+      );
+      setFollowingUsers(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const handleFollow = async (userId) => {
+    try {
+      await axios.post(
+        `${import.meta.env.VITE_SOCIAL_MEDIA_SERVICE_ENDPOINT}/users/${id}/following?leaderId=${userId}`
+      );
+      fetchFollowingUsers();
+    } catch (error) {
+      console.error("Error following user:", error);
+    }
+  };
+
+  const handleUnfollow = async (userId) => {
+    try {
+      await axios.delete(
+        `${import.meta.env.VITE_SOCIAL_MEDIA_SERVICE_ENDPOINT}/users/${id}/following?leaderId=${userId}`
+      );
+      fetchFollowingUsers();
+    } catch (error) {
+      console.error("Error unfollowing user:", error);
+    }
+  };
+
+  const fetchFollowingPosts = async () => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_SOCIAL_MEDIA_SERVICE_ENDPOINT}/users/${id}/following/posts`
       );
       setFollowingPosts(response.data);
     } catch (error) {
@@ -141,16 +190,15 @@ export default function HomePage() {
   };
 
   useEffect(() => {
-    const fetchPosts = async () => {
+    const fetchAll = async () => {
       fetchAllPosts();
       fetchFollowingPosts();
       fetchUsers();
       fetchFollowingUsers();
     };
 
-    fetchPosts();
-
-    const intervalId = setInterval(fetchPosts, 5000);
+    fetchAll();
+    const intervalId = setInterval(fetchAll, 5000);
     return () => clearInterval(intervalId);
   }, []);
 

@@ -13,7 +13,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-( cd sts_service ; bal clean ; bal build)
-( cd sentiment_api_secured ; bal clean ; bal build)
+( cd sentiment_api ; bal clean ; bal build)
 ( cd social_media ; bal clean ; bal build)
-( cd slack_message_sender ; bal clean ; bal build)

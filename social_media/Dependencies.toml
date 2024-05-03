@@ -8,18 +8,6 @@ dependencies-toml-version = "2"
 distribution-version = "2201.8.6"
 
 [[package]]
-org = "balguides"
-name = "sentiment.analysis"
-version = "2.0.1"
-dependencies = [
-	{org = "ballerina", name = "http"},
-	{org = "ballerina", name = "url"}
-]
-modules = [
-	{org = "balguides", packageName = "sentiment.analysis", moduleName = "sentiment.analysis"}
-]
-
-[[package]]
 org = "ballerina"
 name = "auth"
 version = "2.10.0"
@@ -381,24 +369,10 @@ modules = [
 ]
 
 [[package]]
-org = "ballerinax"
-name = "nats"
-version = "2.10.0"
-dependencies = [
-	{org = "ballerina", name = "crypto"},
-	{org = "ballerina", name = "jballerina.java"},
-	{org = "ballerinai", name = "observe"}
-]
-modules = [
-	{org = "ballerinax", packageName = "nats", moduleName = "nats"}
-]
-
-[[package]]
 org = "wso2"
 name = "socialmediasvc"
 version = "0.0.1"
 dependencies = [
-	{org = "balguides", name = "sentiment.analysis"},
 	{org = "ballerina", name = "cloud"},
 	{org = "ballerina", name = "constraint"},
 	{org = "ballerina", name = "http"},
@@ -409,8 +383,7 @@ dependencies = [
 	{org = "ballerina", name = "time"},
 	{org = "ballerinai", name = "observe"},
 	{org = "ballerinax", name = "mysql"},
-	{org = "ballerinax", name = "mysql.driver"},
-	{org = "ballerinax", name = "nats"}
+	{org = "ballerinax", name = "mysql.driver"}
 ]
 modules = [
 	{org = "wso2", packageName = "socialmediasvc", moduleName = "socialmediasvc"}

@@ -20,19 +20,16 @@ import ballerina/sql;
 import ballerina/time;
 import ballerinax/mysql.driver as _;
 
-import balguides/sentiment.analysis;
-
 configurable boolean moderate = ?;
-configurable boolean enableSlackNotification = ?;
 
-listener http:Listener socialMediaListener = new (9090);
+listener http:Listener socialMediaListener = new (9095);
 
 @http:ServiceConfig {
     cors: {
         allowOrigins: ["*"]
     }
 }
-service SocialMedia /social\-media on socialMediaListener {
+service /social\-media on socialMediaListener {
 
     public function init() returns error? {
         log:printInfo("Social media service started");
@@ -150,7 +147,7 @@ service SocialMedia /social\-media on socialMediaListener {
             return user;
         }
 
-        analysis:Sentiment sentiment = check sentimentEndpoint->/api/sentiment.post(
+        Sentiment sentiment = check sentimentEndpoint->/api/sentiment.post(
             {text: newPost.description}
         );
         if sentiment.label == "neg" {
@@ -164,7 +161,6 @@ service SocialMedia /social\-media on socialMediaListener {
         _ = check socialMediaDb->execute(`
             INSERT INTO posts(description, category, created_time_stamp, tags, user_id)
             VALUES (${newPost.description}, ${newPost.category}, CURRENT_TIMESTAMP(), ${newPost.tags}, ${id});`);
-        _ = start publishUserPostUpdate(user.id);
         return http:CREATED;
     }
 
@@ -307,28 +303,27 @@ function mapPostToPostWithMeta(Post[] posts, string author) returns PostWithMeta
         meta: {
             tags: regex:split(postItem.tags, ","),
             category: postItem.category,
-            created_time_stamp: postItem.created_time_stamp
+            createdTimeStamp: postItem.createdTimeStamp
         }
     };
 
-function publishUserPostUpdate(int userId) returns error? {
-    if !enableSlackNotification {
-        return;
-    }
-    check natsClient->publishMessage({
-        subject: "ballerina.social.media",
-        content: {
-            "leaderId": userId
-        }
-    });
-}
-
 function sortPostsByTime(PostWithMeta[] unsortedPosts) returns PostWithMeta[]|error {
     foreach var item in unsortedPosts {
-        item.meta.created_time_stamp.timeAbbrev = "z";
+        item.meta.createdTimeStamp.timeAbbrev = "z";
     }
     PostWithMeta[] sortedPosts = from var post in unsortedPosts
-        order by check time:civilToString(post.meta.created_time_stamp) descending
+        order by check time:civilToString(post.meta.createdTimeStamp) descending
         select post;
     return sortedPosts;
 }
+
+type Probability record {
+    decimal neg;
+    decimal neutral;
+    decimal pos;
+};
+
+type Sentiment record {
+    Probability probability;
+    string label;
+};

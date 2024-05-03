@@ -17,7 +17,7 @@
 import ballerina/http;
 import ballerina/log;
 
-service /text\-processing on new http:Listener(9000) {
+service /text\-processing on new http:Listener(9098) {
 
     public function init() {
         log:printInfo("Sentiment analysis service started");
