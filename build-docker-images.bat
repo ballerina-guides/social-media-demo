@@ -14,4 +14,4 @@
 @REM 
 
 cd sentiment_api && call bal clean & call bal build
-cd social_media && call bal clean & call bal build
+cd ../social_media && call bal clean & call bal build
