@@ -24,7 +24,7 @@ INSERT INTO social_media_database.users (
 VALUES (
         1,
         CURRENT_TIMESTAMP(),
-        "ranga",
+        "Wise Guy",
         "+94771234001"
     );
 INSERT INTO social_media_database.users (
@@ -36,7 +36,7 @@ INSERT INTO social_media_database.users (
 VALUES (
         2,
         CURRENT_TIMESTAMP(),
-        "ravi",
+        "Musk Parody",
         "+94771234002"
     );
 INSERT INTO social_media_database.users (
@@ -48,7 +48,7 @@ INSERT INTO social_media_database.users (
 VALUES (
         3,
         CURRENT_TIMESTAMP(),
-        "satish",
+        "Seneca",
         "+94771234001"
     );
 INSERT INTO social_media_database.users (
@@ -60,7 +60,7 @@ INSERT INTO social_media_database.users (
 VALUES (
         4,
         CURRENT_TIMESTAMP(),
-        "ayesh",
+        "Walter White",
         "+94768787189"
     );
 INSERT INTO social_media_database.posts (
@@ -71,10 +71,10 @@ INSERT INTO social_media_database.posts (
         user_id
     )
 VALUES (
-        'I want to learn AWS',
+        'Failing to prepare is preparing to fail!',
         'education',
         CURRENT_TIMESTAMP(),
-        'aws,cloud,learn',
+        'fail,prepare,learn',
         1
     );
 INSERT INTO social_media_database.posts (
@@ -85,10 +85,10 @@ INSERT INTO social_media_database.posts (
         user_id
     )
 VALUES (
-        'I want to learn DevOps',
+        'Plan your work and work your plan.',
         'education',
         CURRENT_TIMESTAMP(),
-        'devops,infra,learn',
+        'plan,work,learn',
         1
     );
 INSERT INTO social_media_database.posts (
@@ -99,10 +99,10 @@ INSERT INTO social_media_database.posts (
         user_id
     )
 VALUES (
-        'I want to learn GCP',
-        'education',
+        'We are going to Mars!',
+        'future',
         CURRENT_TIMESTAMP(),
-        'gcp,google,learn',
+        'space,mars,hope',
         2
     );
 INSERT INTO social_media_database.posts (
@@ -113,11 +113,25 @@ INSERT INTO social_media_database.posts (
         user_id
     )
 VALUES (
-        'I want to learn multi cloud',
-        'education',
+        'We suffer more in imagination than in reality.',
+        'quotes',
         CURRENT_TIMESTAMP(),
-        'gcp,aws,azure,infra,learn',
+        'suffer,reality,imagination,truth',
         3
+    );
+INSERT INTO social_media_database.posts (
+        description,
+        category,
+        created_time_stamp,
+        tags,
+        user_id
+    )
+VALUES (
+        'I am still alive and cooking something special!',
+        'tv',
+        CURRENT_TIMESTAMP(),
+        'shows,breakingbad,best',
+        4
     );
 CREATE TABLE social_media_database.followers (
     id INT NOT NULL auto_increment PRIMARY KEY,
