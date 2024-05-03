@@ -17,7 +17,6 @@
  */
 
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import UserProfileButton from "../components/UserProfileButton";
@@ -69,7 +68,7 @@ export default function ProfilesPage() {
       }).catch(error => {
         console.error(error);
         setErrorMessage(error.message)
-        setErrorPopup(true)
+        setErrorPopupShown(true)
       }).finally(() => {
         getUsers().then(users => setUserNames(users));
         setPopupOpen(false);
