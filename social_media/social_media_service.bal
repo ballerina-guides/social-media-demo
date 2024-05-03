@@ -188,25 +188,23 @@ service SocialMedia /social\-media on socialMediaListener {
         foreach FollowerStream following in followingArr {
             User|error userStream = socialMediaDb->queryRow(`SELECT * FROM users WHERE id = ${following.leaderId}`);
             if userStream is sql:NoRowsError {
-            ErrorDetails errorDetails = buildErrorPayload(string `id: ${following.leaderId}`, string `users/${following.leaderId}/following/posts`);
-            UserNotFound userNotFound = {
-                body: errorDetails
-            };
-            return userNotFound;
+                ErrorDetails errorDetails = buildErrorPayload(string `id: ${following.leaderId}`, string `users/${following.leaderId}/following/posts`);
+                UserNotFound userNotFound = {
+                    body: errorDetails
+                };
+                return userNotFound;
             }
             if userStream is error {
                 return userStream;
             }
 
-            stream<Post, sql:Error?> postStream = socialMediaDb->query(`SELECT id, description, category, created_date, tags FROM posts WHERE user_id = ${following.leaderId}`);
+            stream<Post, sql:Error?> postStream = socialMediaDb->query(`SELECT id, description, category, created_time_stamp, tags FROM posts WHERE user_id = ${following.leaderId}`);
             Post[]|error userPosts = from Post post in postStream
                 select post;
             PostWithMeta[] tempPosts = mapPostToPostWithMeta(check userPosts, userStream.name);
             posts.push(...tempPosts);
-
-            // TODO: add sorting logic here
         }
-        return posts;
+        return sortPostsByTime(posts);
     }
 
     # Get following for a given user
@@ -272,8 +270,8 @@ service SocialMedia /social\-media on socialMediaListener {
         }
 
         _ = check socialMediaDb->execute(`
-                INSERT INTO followers(created_date, leader_id, follower_id)
-                VALUES (CURDATE(), ${leaderId}, ${id});`);
+                INSERT INTO followers(created_time_stamp, leader_id, follower_id)
+                VALUES (CURRENT_TIMESTAMP(), ${leaderId}, ${id});`);
         return http:CREATED;
     }
 
