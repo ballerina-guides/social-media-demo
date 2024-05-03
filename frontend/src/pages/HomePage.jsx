@@ -94,7 +94,8 @@ export default function HomePage() {
       const response = await axios.get(
         `${import.meta.env.VITE_SOCIAL_MEDIA_SERVICE_ENDPOINT}/users`
       );
-      setUsers(response.data);
+      const filteredUsers = response.data.filter((user) => user.id != id);
+      setUsers(filteredUsers);
     } catch (error) {
       console.error("Error fetching data:", error);
       // TODO: handle error
@@ -253,9 +254,11 @@ export default function HomePage() {
                 alignItems: "center",
               }}
             >
-              {posts.length === 0 ? (
+              {followingPosts.length === 0 ? (
                 <Typography sx={{ margin: "1rem" }}>
-                  {"No posts to display :("}
+                  No following posts to display. {":("}
+                  <br />
+                  Follow more users to see posts.
                 </Typography>
               ) : (
                 followingPosts.map((item, index) => (
@@ -282,9 +285,12 @@ export default function HomePage() {
                 marginBottom: "3vh",
               }}
             >
-              {users
-                .filter((user) => user.id != id)
-                .map((user, index) => (
+              {users.length === 0 ? (
+                <Typography sx={{ margin: "1rem" }}>
+                  {"No users to follow."}
+                </Typography>
+              ) : (
+                users.map((user, index) => (
                   <Box key={index}>
                     <Stack
                       direction="row"
@@ -295,7 +301,7 @@ export default function HomePage() {
                       <Typography
                         sx={{
                           textTransform: "capitalize",
-                          minWidth: "15rem", //TODO: add better css
+                          minWidth: "15rem",
                         }}
                       >
                         {user.name}
@@ -330,7 +336,8 @@ export default function HomePage() {
                       )}
                     </Stack>
                   </Box>
-                ))}
+                ))
+              )}
             </Box>
           </Container>
         </CustomTabPanel>
