@@ -58,11 +58,6 @@ export default function HomePage() {
   const [value, setValue] = useState(0);
   const [posts, setPosts] = useState([]);
   const [postsFetchError, setPostsFetchError] = useState(false);
-  const navigate = useNavigate();
-
-  const handleError = (error) => {
-    navigate("/404", { state: { errorMessage: error.message } });
-  };
 
   const fetchAllPosts = async () => {
     try {
@@ -73,7 +68,6 @@ export default function HomePage() {
     } catch (error) {
       console.error("Error fetching data:", error);
       setPostsFetchError(true);
-      // handleError(error);
     }
   };
 

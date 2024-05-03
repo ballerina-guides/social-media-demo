@@ -27,7 +27,7 @@ const PostFailurePopup = ({ isOpen, errorMessage, handleClose }) => {
         {"Failed to post"}
       </DialogTitle>
       <DialogContent>
-        <DialogContentText id="alert-dialog-description">
+        <DialogContentText id="alert-dialog-description" sx={{ textAlign: "center" }}>
           {errorMessage}
         </DialogContentText>
       </DialogContent>
