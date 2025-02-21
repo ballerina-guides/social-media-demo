@@ -45,6 +45,9 @@ Following are the features covered by the scenario.
 
 # Setup environment
 
+## Ballerina
+- Install **Ballerina SL 2201.10.x** or higher. Please refer to the official [installation guide](https://ballerina.io/downloads/installation-options/).
+
 ## With Docker Compose
 1. Checkout the code base and move to the root folder
 2. Execute `build-docker-images.sh` script to generate the necessary docker images.

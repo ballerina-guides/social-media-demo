@@ -25,7 +25,7 @@ type SlackConfig record {|
     string channelName;
 |};
 configurable SlackConfig slackConfig = ?;
-final slack:Client slackClient = check new({
+final slack:Client slack = check new({
     auth: {
         token: slackConfig.authToken
     }
@@ -46,9 +46,10 @@ service "ballerina.social.media" on new nats:Listener(natsUrl) {
 }
 
 function sendSlackMessage(NotificationEvent event) returns error? {
-    slack:Message message = {
-        channelName: slackConfig.channelName,
-        text: string `User ${event.leaderId} has a new post.`
-    };
-    _ = check slackClient->postMessage(message);
+    _ = check slack->/chat\.postMessage.post(
+        {
+            channel: slackConfig.channelName, 
+            text: string `User ${event.leaderId} has a new post.`
+        }
+    );
 }

@@ -2,4 +2,3 @@
 org = "balguides"
 name = "sentiment.analysis"
 version = "2.0.1"
-distribution = "2201.6.0"
