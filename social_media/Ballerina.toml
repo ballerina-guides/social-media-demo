@@ -2,7 +2,6 @@
 org = "wso2"
 name = "socialmediasvc"
 version = "0.0.1"
-distribution = "2201.7.0"
 
 [build-options]
 cloud="docker"
